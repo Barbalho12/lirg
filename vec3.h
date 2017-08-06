@@ -41,10 +41,12 @@ class vec3 {
         inline vec3& operator*=( const value_type );
         inline vec3& operator/=( const value_type );
         inline value_type length( void ) const {
-            // TODO
+            value_type length = (e[X] * e[X]) + (e[Y] * e[Y]) + (e[Z] * e[Z]);
+            return sqrt(length);
         }
         inline value_type squared_length( void ) const {
-            // TODO
+            value_type length = (e[X] * e[X]) + (e[Y] * e[Y]) + (e[Z] * e[Z]);
+            return length;
         }
         inline void make_unit_vector( void );
 };
