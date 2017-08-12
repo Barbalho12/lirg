@@ -1,30 +1,35 @@
 #ifndef _RAY_H_
 #define _RAY_H_
 
-#include "vec3.h"
+#include "vec3.h" // necessário para acessar vec3
 
+using namespace utility; 
 
-using namespace utility;
+class Ray {
 
-class Ray{
-	private:
-		point3 O; //The origin of the ray
-		vec3 D; // the ray's direction
+    private:
+        point3 O; // the origin of the ray.
+        vec3 D; // The ray's direction.
 
-	public:
-		typedef float real_type;
+    public:
+        
+        //=== Alias
+        typedef float real_type;
 
-		Ray( point3 o_=point3(), vec3 d_=vec3())
-			: O( o_ )
-			. D( d_ )
-		(/* empty */)
+        //=== Special members
+        Ray(point3 o = point3(), vec3 d = vec3()){
+            O = o;
+            D = d;
+        } 
 
-		//=== Acess methods
-		inline vec3 get_direction(void) const (return D;)
-		inline vec3 get_origin(void) const (return O;)
-		point3 point_at (real_type t_) const{
-			return O + t_ * D; //parametric equation of the ray.
-		}
-}
+        //=== Access methods
+        vec3 get_direction() const { return D; }
+
+        point3 get_origin() const { return O; }
+
+        point3 point_at(real_type t)  const {
+            return O + t * D; // parametric equation of the ray.
+        }
+};
 
 #endif
