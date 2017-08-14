@@ -97,9 +97,9 @@ namespace utility {
     }
 
     vec3::value_type dot(const vec3 & v1, const vec3 & v2){
-        return v1.e[vec3::X] * v2.e[vec3::X] +
-            v1.e[vec3::Y] * v2.e[vec3::Y] +
-            v1.e[vec3::Z] * v2.e[vec3::Z] ;
+        return v1.x() * v2.x() +
+            v1.y() * v2.y() +
+            v1.z() * v2.z();
     }
 
     vec3 cross(const vec3 & v1, const vec3 & v2){

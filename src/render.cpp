@@ -22,14 +22,23 @@ using namespace utility;
 // }
 // #endif
 
-bool hit_sphere(const Ray & r_, const point3 & c_, float radius_){
-    auto oc = r_.get_origin() - c_;
-    auto a = dot(r_.get_direction(), r_.get_direction());
-    auto b = 2 * dot(oc, r_.get_direction());
-    auto c = dot(oc, oc) - (radius_* radius_);
-    return (b*b - 4*a*c) >= 0;
+// bool hit_sphere(const Ray & r_, const point3 & c_, float radius_){
+//     auto oc = r_.get_origin() - c_;
+//     float a = dot(r_.get_direction(), r_.get_direction());
+//     float b = 2.0 * dot(oc, r_.get_direction());
+//     float c = dot(oc, oc) - (radius_* radius_);
+//     return (b*b - 4.0*a*c) >= 0;
+// }
+
+float euclidian_distance(point3 p, point3 pc){
+    float w =   pow (p.x() - pc.x(), 2) + 
+                pow (p.y() - pc.y(), 2) + 
+                pow (p.z() - pc.z(), 2);
+    float distance = sqrt(w);
+    return distance;
 }
 
+point3 p_center = point3(-1,-0.5,-1);
 
 rgb color(const Ray & r_){
 
@@ -38,27 +47,25 @@ rgb color(const Ray & r_){
     rgb top_right (1,1,0);
     rgb bottom_right (1,0,0);
 
-    // rgb top (0.5, 0.7, 1);
-    // rgb bottom(1,1,1);
     
-    // if(hit_sphere(r_, point3(0.5,0,-1), 0.5))
-    //     return rgb(1,0,0);
-
-    // if(hit_sphere(r_, point3(0,0,-1), 0.5))
-    //     return rgb(1,0,1);
-
-    // if(hit_sphere(r_, point3(-0.5,0,-1), 0.5))
-    //     return rgb(1,1,0);
+    // if(hit_sphere(r_, point3(0.5,0,-1), 0.5)){
+    //     float h = euclidian_distance(r_.get_direction(), p_center);
+    //     return rgb(1-h,1-h,1-h);
+    // }
 
     // auto unit_ray = utility::unit_vector(r_.get_direction());
     auto unit_ray = r_.get_direction();
 
-    auto unit_ray_y = unit_ray.y();
 
-    auto unit_ray_x = unit_ray.x();
+    point3 p1 = point3(unit_ray.x(), unit_ray.y(), unit_ray.z());
+    float n = euclidian_distance(p1, p_center);
+    if(n <= 0.4){
+        float h = euclidian_distance(r_.get_direction(), p_center);
+        return rgb(1-h,1-h,1-h);
+    }
 
-    auto t = 0.5*unit_ray_y+0.5;
-    auto u = 0.25*unit_ray_x+0.5;
+    float t = 0.5 * unit_ray.y() + 0.5;
+    float u = 0.25 * unit_ray.x() + 0.5;
 
 
     // rgb result = bottom_left*(1-ty) + top_left*ty;
@@ -76,10 +83,9 @@ rgb color(const Ray & r_){
     return result; // Stub, replace it accordingly
 }
 
-int main(void){
-
-    int n_cols = 1280;
-    int n_rows = 720;
+int makeImage(){
+    int n_cols = 800;
+    int n_rows = 400;
 
     std::cout << "P3\n"
               << n_cols << " " << n_rows << "\n"
@@ -127,4 +133,35 @@ int main(void){
     }
 
     return 0;
+}
+
+int main(int argc, char* argv[]){
+
+    int x = 0;
+    int y = 0;
+    if(argc > 1){
+        x = atoi(argv[1]);
+    }
+    if(argc > 2){
+        y = atoi(argv[2]);
+    }
+
+    // float ny = -1.0+(2*y*0.1);
+    // if(ny >= 1.0){
+    //     ny = 1.0 - (ny - 1.0);
+    // }
+    // if(ny < -1.0){
+    //     ny = -1.0 + (-ny + 1.0);
+    // }
+    // p_center = point3(-2.0+(x*0.1),ny,p_center.z());
+ 
+    p_center = point3(p_center.x()+x*0.1,p_center.y()+y*0.1,p_center.z());
+
+
+    makeImage();
+    // float x = -1;
+    // float x = -1;
+    // while
+
+    
 }
