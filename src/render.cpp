@@ -22,7 +22,7 @@ using namespace utility;
 // }
 // #endif
 
-// bool hit_sphere(const Ray & r_, const point3 & c_, float radius_){
+// bool hit_sphere(const Ray &r_, const point3 & c_, float radius_){
 //     auto oc = r_.get_origin() - c_;
 //     float a = dot(r_.get_direction(), r_.get_direction());
 //     float b = 2.0 * dot(oc, r_.get_direction());
@@ -30,7 +30,35 @@ using namespace utility;
 //     return (b*b - 4.0*a*c) >= 0;
 // }
 
+// bool hit_sphere(const Ray &ray, const point3 & center, float radius){
+//     point3 origin = ray.get_origin();
+//     vec3 t = -2 dot(origin - center);
+//     vec3 d = r_.get_direction();
+    
+//     auto oc = r_.get_origin() - c_;
+//     float a = dot(r_.get_direction(), r_.get_direction());
+//     float b = 2.0 * dot(oc, r_.get_direction());
+//     float c = dot(oc, oc) - (radius_* radius_);
+//     return (b*b - 4.0*a*c) >= 0;
+// }
+
+
+
 float euclidian_distance(point3 p, point3 pc){
+    // *cor = rgb(255,255,255);
+    float w =   pow (p.x() - pc.x(), 2) + 
+                pow (p.y() - pc.y(), 2) + 
+                pow (p.z() - pc.z(), 2);
+    float distance = sqrt(w);
+    return distance;
+}
+
+float euclidian_distance(point3 p, point3 pc, rgb *cor){
+    // *cor = rgb(1-fabs(p.x() - pc.x()),1-fabs(p.y() - pc.y()),1-fabs(p.z() - pc.z()));
+    *cor = rgb( 1-(fabs(p.x() - pc.x())+1)/2,
+                1-(fabs(p.y() - pc.y())+1)/2,
+                1-(fabs(p.z() - pc.z())+1)/2);
+    // *cor = rgb(255,255,255);
     float w =   pow (p.x() - pc.x(), 2) + 
                 pow (p.y() - pc.y(), 2) + 
                 pow (p.z() - pc.z(), 2);
@@ -42,14 +70,19 @@ point3 p_center = point3(-1,-0.5,-1);
 
 rgb color(const Ray & r_){
 
-    rgb top_left (0,1,0);
-    rgb bottom_left(0,0,0);
-    rgb top_right (1,1,0);
-    rgb bottom_right (1,0,0);
+    // rgb top_left (0,1,0);
+    // rgb bottom_left(0,0,0);
+    // rgb top_right (1,1,0);
+    // rgb bottom_right (1,0,0);
+
+    rgb top_left (0,0,1);
+    rgb bottom_left(1,1,1);
+    rgb top_right (0,0,1);
+    rgb bottom_right (1,1,1);
 
     
     // if(hit_sphere(r_, point3(0.5,0,-1), 0.5)){
-    //     float h = euclidian_distance(r_.get_direction(), p_center);
+    //     float h = euclidian_distance(r_.get_direction(), point3(0.5,0,-1));
     //     return rgb(1-h,1-h,1-h);
     // }
 
@@ -58,10 +91,23 @@ rgb color(const Ray & r_){
 
 
     point3 p1 = point3(unit_ray.x(), unit_ray.y(), unit_ray.z());
-    float n = euclidian_distance(p1, p_center);
+    rgb cor;
+    float n = euclidian_distance(p1, p_center, &cor);
     if(n <= 0.4){
-        float h = euclidian_distance(r_.get_direction(), p_center);
-        return rgb(1-h,1-h,1-h);
+        // float h = euclidian_distance(r_.get_direction(), p_center);
+        // return rgb(1-h,1-h,1-h);
+        return cor;
+        // return rgb(p1.r()-p_center.r(),p1.g()-p_center.g(),p1.b()-p_center.b());
+    }
+
+    point3 p2 = point3(unit_ray.x()-0.6, unit_ray.y()-0.4, unit_ray.z()+0.2);
+    rgb cor2;
+    float n2 = euclidian_distance(p2, p_center, &cor2);
+    if(n2 <= 0.4){
+        // float h = euclidian_distance(r_.get_direction(), p_center);
+        // return rgb(1-h,1-h,1-h);
+        return cor;
+        // return rgb(p1.r()-p_center.r(),p1.g()-p_center.g(),p1.b()-p_center.b());
     }
 
     float t = 0.5 * unit_ray.y() + 0.5;
@@ -135,16 +181,16 @@ int makeImage(){
     return 0;
 }
 
-int main(int argc, char* argv[]){
+int main(/*int argc, char* argv[]*/){
 
-    int x = 0;
-    int y = 0;
-    if(argc > 1){
-        x = atoi(argv[1]);
-    }
-    if(argc > 2){
-        y = atoi(argv[2]);
-    }
+    // int x = 0;
+    // int y = 0;
+    // if(argc > 1){
+    //     x = atoi(argv[1]);
+    // }
+    // if(argc > 2){
+    //     y = atoi(argv[2]);
+    // }
 
     // float ny = -1.0+(2*y*0.1);
     // if(ny >= 1.0){
@@ -155,7 +201,7 @@ int main(int argc, char* argv[]){
     // }
     // p_center = point3(-2.0+(x*0.1),ny,p_center.z());
  
-    p_center = point3(p_center.x()+x*0.1,p_center.y()+y*0.1,p_center.z());
+    // p_center = point3(p_center.x()+x*0.1,p_center.y()+y*0.1,p_center.z());
 
 
     makeImage();
