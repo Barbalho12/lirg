@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
+#include "../utility/sphere.h"
 
 using namespace utility;
 
@@ -42,6 +43,35 @@ using namespace utility;
 //     return (b*b - 4.0*a*c) >= 0;
 // }
 
+bool sphere_hit(Sphere s, Ray r){
+    // float p = dot((r.get_direction().x() - s.get_center().x()), (r.get_direction().x() - s.get_center().x())) +
+    //           dot((r.get_direction().y() - s.get_center().y()), (r.get_direction().y() - s.get_center().y())) +
+    //           dot((r.get_direction().z() - s.get_center().z()), (r.get_direction().z() - s.get_center().z())) -
+    //           (s.get_radius() * s.get_radius());
+
+    float p = (r.get_direction() - s.get_center()).length() - s.get_radius();
+
+    if(p < 2.0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+vec3 hit_sphere(Sphere s, Ray r){
+    vec3 a = dot(r.get_direction(), r.get_direction());
+    vec3 b = dot(((r.get_origin() - s.get_center())), r.get_direction());
+    vec3 c = dot(((r.get_origin() - s.get_center())), ((r.get_origin() - s.get_center()))) - (s.get_radius() * s.get_radius());
+
+    vec3 t1 = (-b + sqrt(dot(b, b) - (dot(a,c))))/a;
+    vec3 t2 = (-b - sqrt(dot(b, b) - (dot(a,c))))/a;
+
+    if(t1 == t2 || t1.z() < t2.z()){
+        return t1;
+    }else{
+        return t2;
+    }
+}
 
 
 float euclidian_distance(point3 p, point3 pc){
@@ -68,6 +98,59 @@ float euclidian_distance(point3 p, point3 pc, rgb *cor){
 
 point3 p_center = point3(-1,-0.5,-1);
 
+rgb color2(Ray r_){
+    // rgb top_left (0,1,0);
+    // rgb bottom_left(0,0,0);
+    // rgb top_right (1,1,0);
+    // rgb bottom_right (1,0,0);
+
+    rgb top_left (0.5,0.7,1);
+    rgb bottom_left(1,1,1);
+    rgb top_right (0.5,0.7,1);
+    rgb bottom_right (1,1,1);
+
+    point3 sphere_center = point3(0, 0, 1);
+    Sphere s = Sphere(sphere_center, 0.4);
+
+    
+    // if(hit_sphere(r_, point3(0.5,0,-1), 0.5)){
+    //     float h = euclidian_distance(r_.get_direction(), point3(0.5,0,-1));
+    //     return rgb(1-h,1-h,1-h);
+    // }
+
+    // auto unit_ray = utility::unit_vector(r_.get_direction());
+    auto unit_ray = r_.get_direction();
+
+    rgb cor;
+
+    if(sphere_hit(s, r_)){
+        vec3 v = hit_sphere(s, r_);
+        //cor = rgb(1, 0, 0);
+        cor = rgb( 1-v.x(),
+                   1-v.y(),
+                   1-v.z());
+        return cor;
+    }
+
+    float t = 0.5 * unit_ray.y() + 0.5;
+    float u = 0.25 * unit_ray.x() + 0.5;
+
+
+    // rgb result = bottom_left*(1-ty) + top_left*ty;
+    rgb result = bottom_left*(1-t)*(1-u) + 
+                 top_left*t*(1-u) + 
+                 bottom_right*u*(1-t) + 
+                 top_right*t*u;
+    // rgb result = (1-tx)*(bottom_left*(1-ty) + top_left*ty) + tx*(bottom_right*(1-ty) + top_right*ty);
+
+    // TODO: determine the background color, which is an linear interpolation between bottom->top.
+    // The interpolation is based on where the ray hits the background.
+    // Imagine that the background is attached to the view-plane; in other words,
+    // the virtual world we want to visualize is empty!
+
+    return result; // Stub, replace it accordingly
+}
+
 rgb color(const Ray & r_){
 
     // rgb top_left (0,1,0);
@@ -75,9 +158,9 @@ rgb color(const Ray & r_){
     // rgb top_right (1,1,0);
     // rgb bottom_right (1,0,0);
 
-    rgb top_left (0,0,1);
+    rgb top_left (0.5,0.7,1);
     rgb bottom_left(1,1,1);
-    rgb top_right (0,0,1);
+    rgb top_right (0.5,0.7,1);
     rgb bottom_right (1,1,1);
 
     
@@ -168,7 +251,7 @@ int makeImage(){
             Ray r(origin, end_point - origin);
 
             // Determine the color of the ray, as it travels through the virtual space.
-            rgb c = color(r);
+            rgb c = color2(r);
 
             int ir = int(255.99f * c.r());
             int ig = int(255.99f * c.g());
@@ -202,7 +285,6 @@ int main(/*int argc, char* argv[]*/){
     // p_center = point3(-2.0+(x*0.1),ny,p_center.z());
  
     // p_center = point3(p_center.x()+x*0.1,p_center.y()+y*0.1,p_center.z());
-
 
     makeImage();
     // float x = -1;
