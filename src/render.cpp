@@ -1,9 +1,11 @@
 #include <iostream>
+#include <vector>
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
 #include "../utility/sphere.h"
 
 using namespace utility;
+using namespace std;
 
 /*
  *  In the near future we'll want to refactor our project to become
@@ -53,15 +55,38 @@ rgb make_background_point(const Ray &r_){
 
 rgb color(const Ray &r_){
 
-    point3 sphere_center = point3(0, 0, -1);
-    Sphere s = Sphere(sphere_center, 0.4);
+    vector<Sphere> spheres;
+
+    // point3 sphere_center = point3(0, 0, -1);
+    Sphere s1 = Sphere( point3(0,-100.5,-3), 99.f);
+    Sphere s2 = Sphere( point3( 0.3 , 0 , -1 ),0.4);
+    Sphere s3 = Sphere( point3( 0 , 1 , -2 ),0.6);
+    Sphere s4 = Sphere( point3(-0.4 , 0 , -3 ),0.7);
+
+    spheres.push_back(s1);
+    spheres.push_back(s2);
+    spheres.push_back(s3);
+    spheres.push_back(s4);
 
     rgb cor;
-    float t1 = hit_sphere(s, r_);
 
-    if(t1 <= 1.0){
-        point3 p = r_.point_at(t1);
-        vec3 v = unit_vector(p - sphere_center);
+    point3 center;
+
+    float t = 1001; 
+
+    for(int i = 0; i < spheres.size(); i++){
+        float t_aux = hit_sphere(spheres[i], r_);
+        if(t > t_aux && t_aux > -1){
+            t = t_aux;
+            center = spheres[i].get_center();
+
+        }
+    }
+
+    //-1 é a posição da câmera e 1000 é o limite de profundidade
+    if( t > -1 && t <= 1000){
+        point3 p = r_.point_at(t);
+        vec3 v = unit_vector(p - center);
 
         cor = rgb( (v.x()+1)/2.0,
                    (v.y()+1)/2.0,
@@ -73,8 +98,8 @@ rgb color(const Ray &r_){
 }
 
 int makeImage(){
-    int n_cols = 800;
-    int n_rows = 400;
+    int n_cols = 1200;
+    int n_rows = 600;
 
     std::cout << "P3\n"
               << n_cols << " " << n_rows << "\n"
@@ -97,16 +122,8 @@ int makeImage(){
             float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
             float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
 
-            // Determine the ray's direction, based on the pixel coordinate (col,row).
-            // We are mapping (matching) the view plane (vp) to the image.
-            // To create a ray we need: (a) an origin, and (b) an end point.
-            //
-            // (a) The ray's origin is the origin of the camera frame (which is the same as the world's frame).
-            //
-            // (b) To get the end point of ray we just have to 'walk' from the
-            // vp's origin + horizontal displacement (proportional to 'col') +
-            // vertical displacement (proportional to 'row').
             point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+            
             // The ray:
             Ray r(origin, end_point - origin);
 

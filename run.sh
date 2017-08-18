@@ -1,20 +1,23 @@
 
-mkdir -p out
-mkdir -p out_convrt
-rm -f out/*
-rm -f out_convrt/*
-make && 
+make && ./render > background.ppm
+make clean
 
-# i=-1.0
-i=0
-limit=12
-while [ $i -lt $limit ]
-do
-	./render $i $i > out/i$i.ppm
-	convert out/i$i.ppm out_convrt/i$i.jpg
-	i=$[ $i + 1 ]
+# mkdir -p out
+# mkdir -p out_convrt
+# rm -f out/*
+# rm -f out_convrt/*
+# make && 
 
-done
+# # i=-1.0
+# i=0
+# limit=12
+# while [ $i -lt $limit ]
+# do
+# 	./render $i $i > out/i$i.ppm
+# 	convert out/i$i.ppm out_convrt/i$i.jpg
+# 	i=$[ $i + 1 ]
+
+# done
 
 # ./render 0 > out/i0.ppm
 # convert out/i0.ppm out_convrt/i0.jpg
@@ -60,7 +63,7 @@ done
 # ./render 15 > out/i15.ppm
 # convert out/i15.ppm out_convrt/i15.jpg
 
-rm out/*
+# rm out/*
 
 
-convert -resize 20% -delay 14 -loop 0 out_convrt/i{0..11}.jpg image.gif
+# convert -resize 20% -delay 14 -loop 0 out_convrt/i{0..11}.jpg image.gif
