@@ -54,6 +54,10 @@ rgb make_background_point(const Ray &r_){
 }
 
 rgb color(const Ray &r_){
+    rgb depth_foreground = rgb(0, 0, 0);
+    rgb depth_background = rgb(1, 1, 1);
+    float max_depht = 3;
+
 
     vector<Sphere> spheres;
 
@@ -72,29 +76,36 @@ rgb color(const Ray &r_){
 
     point3 center;
 
-    float t = 1001; 
-
+    float t = max_depht; 
     for(int i = 0; i < spheres.size(); i++){
         float t_aux = hit_sphere(spheres[i], r_);
         if(t > t_aux && t_aux > -1){
             t = t_aux;
             center = spheres[i].get_center();
-
         }
     }
 
-    //-1 é a posição da câmera e 1000 é o limite de profundidade
-    if( t > -1 && t <= 1000){
-        point3 p = r_.point_at(t);
-        vec3 v = unit_vector(p - center);
-
-        cor = rgb( (v.x()+1)/2.0,
-                   (v.y()+1)/2.0,
-                   (v.z()+1)/2.0);
-        return cor;
+    if (t >= 0 && t <= max_depht) {
+        t = t/max_depht;
+        cor = ((1-t) * depth_foreground) + (t*depth_background);
     }else{
-        return make_background_point(r_);
+        cor = depth_background;
     }
+
+    return cor;
+
+    //-1 é a posição da câmera e 1000 é o limite de profundidade
+    // if( t > -1 && t <= 1000){
+    //     point3 p = r_.point_at(t);
+    //     vec3 v = unit_vector(p - center);
+
+    //     cor = rgb( (v.x()+1)/2.0,
+    //                (v.y()+1)/2.0,
+    //                (v.z()+1)/2.0);
+    //     return cor;
+    // }else{
+    //     return make_background_point(r_);
+    // }
 }
 
 int makeImage(){
