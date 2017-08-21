@@ -14,6 +14,6 @@ class RayTrace{
 	color()
 
 
-}
+};
 
 #endif
