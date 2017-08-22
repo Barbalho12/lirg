@@ -1,11 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
 #include "../utility/sphere.h"
 #include "../utility/camera.h"
+#include "../utility/header.h"
 
+// using namespace std::chrono;
 using namespace utility;
 using namespace std;
 
@@ -141,17 +146,17 @@ rgb colorSoftened(int col, int row, int n_cols, int n_rows, int n_samples, Camer
     return c / n_samples;
 }
 
-int makeImage(){
-
-    int n_cols = 1200;
-    int n_rows = 600;
+int makeImage(Header header){
     int n_samples = 100; // Number of ray shots on a pixel
 
-    std::cout << "P3\n"
-              << n_cols << " " << n_rows << "\n"
-              << "255\n";
+    ofstream output_file;
+    output_file.open(header.name);
 
-    //=== Defining our 'camera'
+    output_file << "P3" << endl;
+    output_file << header.width << " " << header.height << endl;
+    output_file << "255" << endl;
+
+
     point3 lower_left_corner(-2, -1, -1); // lower left corner of the view plane.
     vec3 horizontal(4, 0, 0); // Horizontal dimension of the view plane.
     vec3 vertical(0, 2, 0); // Vertical dimension of the view plane.
@@ -160,35 +165,46 @@ int makeImage(){
     Camera camera(lower_left_corner, vertical, horizontal, origin);
 
     // Y
-    for (int row = n_rows-1; row >= 0; --row){
+    for (int row = header.height-1; row >= 0; --row){
 
         // X
-        for(int col = 0; col < n_cols; col++){
+        for(int col = 0; col < header.width; col++){
 
-            // rgb c = colorSoftened(col, row, n_cols, n_rows, n_samples, camera);
-            rgb c = colorDefaut(col, row, n_cols, n_rows, camera);
+            rgb c = colorSoftened(col, row, header.width, header.height, n_samples, camera);
+            // rgb c = colorDefaut(col, row, header.width, header.height, camera);
 
-            int ir = int(255.99f * c.r());
-            int ig = int(255.99f * c.g());
-            int ib = int(255.99f * c.b());
-
-            std::cout << ir << " " << ig << " " << ib << std::endl;
+            int r = int(255.99f * c.r());
+            int g = int(255.99f * c.g());
+            int b = int(255.99f * c.b());
+            output_file << r << " " << g << " " << b << endl;
         }
     }
 
     return 0;
 }
 
-int main(/*int argc, char* argv[]*/){
+int main(int argc, char* argv[]){
 
-    // int x = 0;
-    // int y = 0;
-    // if(argc > 1){
-    //     x = atoi(argv[1]);
-    // }
-    // if(argc > 2){
-    //     y = atoi(argv[2]);
-    // }
+ 	if(argc > 1){
 
-    makeImage();
+        string file_name = argv[1];
+        
+        cout << "Reading Scene " << file_name << endl;
+
+        Header header = Header(file_name);
+
+        cout << "Rendering in " << header.name << endl;
+
+        chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
+
+        makeImage(header);
+
+        chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
+        chrono::duration<double> duration = t2 - t1;
+        cout << "Rendering time: " << duration.count() << " seconds." << endl;
+
+
+    }else{
+        cout << "No scene entered" << endl;
+    }
 }

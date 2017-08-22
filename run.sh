@@ -1,5 +1,5 @@
 
-make && ./render > background.ppm
+make && ./render "samples/scene1.txt" 
 make clean
 
 # mkdir -p out

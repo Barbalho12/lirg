@@ -8,11 +8,11 @@
 
 using namespace std;
 
-typedef struct RGB{
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-};
+// typedef struct RGB{
+// 	unsigned char r;
+// 	unsigned char g;
+// 	unsigned char b;
+// };
 
 class Scene{
 
