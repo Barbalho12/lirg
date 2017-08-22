@@ -1,11 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <random>
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
 #include "../utility/sphere.h"
 
 using namespace utility;
 using namespace std;
+
+random_device randomizer;
+mt19937 gen(randomizer());
 
 /*
  *  In the near future we'll want to refactor our project to become
@@ -56,7 +60,7 @@ rgb make_background_point(const Ray &r_){
 rgb color(const Ray &r_){
     rgb depth_foreground = rgb(0, 0, 0);
     rgb depth_background = rgb(1, 1, 1);
-    float max_depht = 3;
+    float max_depht = 1001;
 
 
     vector<Sphere> spheres;
@@ -85,32 +89,61 @@ rgb color(const Ray &r_){
         }
     }
 
-    if (t >= 0 && t <= max_depht) {
-        t = t/max_depht;
-        cor = ((1-t) * depth_foreground) + (t*depth_background);
-    }else{
-        cor = depth_background;
-    }
+    // if (t >= 0 && t <= max_depht) {
+    //     t = t/max_depht;
+    //     cor = ((1-t) * depth_foreground) + (t*depth_background);
+    // }else{
+    //     cor = depth_background;
+    // }
 
-    return cor;
+    // return cor;
 
     //-1 é a posição da câmera e 1000 é o limite de profundidade
-    // if( t > -1 && t <= 1000){
-    //     point3 p = r_.point_at(t);
-    //     vec3 v = unit_vector(p - center);
+    if( t > -1 && t <= 1000){
+        point3 p = r_.point_at(t);
+        vec3 v = unit_vector(p - center);
 
-    //     cor = rgb( (v.x()+1)/2.0,
-    //                (v.y()+1)/2.0,
-    //                (v.z()+1)/2.0);
-    //     return cor;
-    // }else{
-    //     return make_background_point(r_);
-    // }
+        cor = rgb( (v.x()+1)/2.0,
+                   (v.y()+1)/2.0,
+                   (v.z()+1)/2.0);
+        return cor;
+    }else{
+        return make_background_point(r_);
+    }
+}
+
+rgb colorDefaut(int col, int row, int n_cols, int n_rows, point3 lower_left_corner, vec3 horizontal, vec3 vertical, point3 origin){
+    float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
+    float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
+
+    point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+    Ray r(origin, end_point - origin);
+
+    return color(r);
+}
+
+rgb colorSoftened(int col, int row, int n_cols, int n_rows, int n_samples, point3 lower_left_corner, vec3 horizontal, vec3 vertical, point3 origin){
+    rgb c;
+    float u, v;
+
+    for (int i = 0; i < n_samples; i++){
+
+        u = float(col + generate_canonical<double, 10>(gen)) / float(n_cols);
+        v = float(row + generate_canonical<double, 10>(gen)) / float(n_rows);
+
+        point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+        Ray r(origin, end_point - origin);
+
+        c += color(r);
+    }
+
+    return c / n_samples;
 }
 
 int makeImage(){
     int n_cols = 1200;
     int n_rows = 600;
+    int n_samples = 100; // Number of ray shots on a pixel
 
     std::cout << "P3\n"
               << n_cols << " " << n_rows << "\n"
@@ -129,17 +162,35 @@ int makeImage(){
         // X
         for(int col = 0; col < n_cols; col++){
 
+            rgb c = colorSoftened(col, row, n_cols, n_rows, n_samples, lower_left_corner, horizontal, vertical, origin);
+            //rgb c = colorDefaut(col, row, n_cols, n_rows, lower_left_corner, horizontal, vertical, origin);
+
+            // for (int i = 0; i < n_samples; i++){
+            //     float u = float(col + generate_canonical<double, 10>(gen)) / float(n_cols);
+            //     float v = float(row + generate_canonical<double, 10>(gen)) / float(n_rows);
+
+            //     point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+
+            //     // The ray:
+            //     Ray r(origin, end_point - origin);
+
+            //     // Determine the color of the ray, as it travels through the virtual space.
+            //     c += color(r);
+            // }
+
+            // c /= n_samples;
+
             // Determine how much we have 'walked' on the image: in [0,1]
-            float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
-            float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
+            // float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
+            // float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
 
-            point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+            // point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
             
-            // The ray:
-            Ray r(origin, end_point - origin);
+            // // The ray:
+            // Ray r(origin, end_point - origin);
 
-            // Determine the color of the ray, as it travels through the virtual space.
-            rgb c = color(r);
+            // // Determine the color of the ray, as it travels through the virtual space.
+            // rgb c = color(r);
 
             int ir = int(255.99f * c.r());
             int ig = int(255.99f * c.g());
