@@ -6,14 +6,14 @@
 class Camera{
 	public:
 		point3 lower_left_corner;
-		vec3 vertical_axis;
-		vec3 horizontal_axis;
+		vec3 v_axis;
+		vec3 h_axis;
 		point3 origin;
 
-		Camera(const point3 &llc, const vec3 &va, const vec3 &ha, const point3 &o){
+		Camera(point3 &llc, vec3 &va, vec3 &ha, point3 &o){
 			lower_left_corner = llc;
-			vertical_axis - va;
-			horizontal_axis = ha;
+			v_axis = va;
+			h_axis = ha;
 			origin = o;
 		}
 };
