@@ -17,7 +17,7 @@ class Sphere {
         typedef float real_type;
 
         //=== Special members
-        Sphere(point3 c = point3(), float r = 0.4){
+        Sphere(point3 c = point3(0,0,0), float r = 0.0){
             center = c;
             radius = r;
         }

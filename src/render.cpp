@@ -17,6 +17,8 @@ using namespace std;
 random_device randomizer;
 mt19937 gen(randomizer());
 
+Header header;
+
 /*
  *  In the near future we'll want to refactor our project to become
  *  something like the code below.
@@ -47,11 +49,11 @@ float hit_sphere(Sphere s, Ray r){
 }
 
 rgb make_background_point(const Ray &r_){
-    rgb top_left (0.5,0.7,1);
-    rgb bottom_left(1,1,1);
-    rgb top_right (0.5,0.7,1);
-    rgb bottom_right (1,1,1);
-    
+    rgb top_left = header.upper_left/255.99f;
+    rgb bottom_left = header.lower_left/255.99f;
+    rgb top_right = header.upper_right/255.99f;
+    rgb bottom_right = header.lower_right/255.99f;
+
     float t = 0.5 * r_.get_direction().y() + 0.5;
     float u = 0.25 * r_.get_direction().x() + 0.5;
 
@@ -63,76 +65,94 @@ rgb make_background_point(const Ray &r_){
     return result;
 }
 
-rgb color(const Ray &r_){
-    // rgb depth_foreground = rgb(0, 0, 0);
-    // rgb depth_background = rgb(1, 1, 1);
-    float max_depht = 1001;
-
-
-    vector<Sphere> spheres;
-
-    // point3 sphere_center = point3(0, 0, -1);
-    Sphere s1 = Sphere( point3(0,-100.5,-3), 99.f);
-    Sphere s2 = Sphere( point3( 0.3 , 0 , -1 ),0.4);
-    Sphere s3 = Sphere( point3( 0 , 1 , -2 ),0.6);
-    Sphere s4 = Sphere( point3(-0.4 , 0 , -3 ),0.7);
-
-    spheres.push_back(s1);
-    spheres.push_back(s2);
-    spheres.push_back(s3);
-    spheres.push_back(s4);
-
-    rgb cor;
-
-    point3 center;
-
-    float t = max_depht; 
-    for(unsigned int i = 0; i < spheres.size(); i++){
-        float t_aux = hit_sphere(spheres[i], r_);
-        if(t > t_aux && t_aux > -1){
-            t = t_aux;
-            center = spheres[i].get_center();
-        }
-    }
-
-    // if (t >= 0 && t <= max_depht) {
-    //     t = t/max_depht;
-    //     cor = ((1-t) * depth_foreground) + (t*depth_background);
-    // }else{
-    //     cor = depth_background;
-    // }
-
-    // return cor;
-
-    //-1 é a posição da câmera e 1000 é o limite de profundidade
-    if( t > -1 && t <= 1000){
+rgb make_background_default(const Ray &r_, float t, point3 center, float min_depht, float max_depht){
+    if( t >= min_depht && t < max_depht){
         point3 p = r_.point_at(t);
         vec3 v = unit_vector(p - center);
 
-        cor = rgb( (v.x()+1)/2.0,
+        return rgb( (v.x()+1)/2.0,
                    (v.y()+1)/2.0,
                    (v.z()+1)/2.0);
-        return cor;
     }else{
         return make_background_point(r_);
     }
 }
 
-rgb colorDefaut(int col, int row, int n_cols, int n_rows, Camera &camera){
-    float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
-    float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
 
-    point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
-    Ray r(camera.origin, end_point - camera.origin);
+rgb make_foreground_to_background_depth(float t, float min_depht, float max_depht){
+    rgb depth_foreground = rgb(0, 0, 0);
+    rgb depth_background = rgb(1, 1, 1);
 
-    return color(r);
+    rgb cor;
+
+    if (t >= min_depht && t <= max_depht) {
+        t = t/max_depht;
+        cor = ((1-t) * depth_foreground) + (t*depth_background);
+    }else{
+        cor = depth_background;
+    }
+    return cor;
 }
 
-rgb colorSoftened(int col, int row, int n_cols, int n_rows, int n_samples, Camera &camera){
+Sphere hitSpheres(float min_depht, float max_depht, const Ray &r_, vector<Sphere> spheres, float &t){
+    t = max_depht; 
+    Sphere s; 
+    for(unsigned int i = 0; i < spheres.size(); i++){
+        float t_aux = hit_sphere(spheres[i], r_);
+        if(t > t_aux && t_aux > min_depht){
+            t = t_aux;
+            s = spheres[i];
+        }
+    }
+    return s;
+ }
+
+
+rgb color(const Ray &r_){
+
+    // float min_depht = 0;
+    // float max_depht = 3;
+    float min_depht = header.min_depht;
+    float max_depht = header.max_depht;
+    // cout << min_depht << "," << max_depht << endl;
+
+    vector<Sphere> spheres;
+
+    spheres.push_back(Sphere( point3(0,-100.5,-3), 99.f));
+    spheres.push_back(Sphere( point3( 0.3 , 0 , -1 ),0.4));
+    spheres.push_back(Sphere( point3( 0 , 1 , -2 ),0.6));
+    spheres.push_back(Sphere( point3(-0.4 , 0 , -3 ),0.7));
+
+    float t; 
+
+    Sphere s = hitSpheres(min_depht, max_depht, r_, spheres, t);
+
+    if(header.depth_mode){
+        return make_foreground_to_background_depth(t, min_depht, max_depht);
+    }else{
+        return make_background_default(r_, t, s.get_center(), min_depht, max_depht);
+    }
+    // return make_foreground_to_background_depth(t, min_depht, max_depht);
+
+    
+
+}
+
+// rgb colorDefaut(int col, int row, int n_cols, int n_rows, Camera &camera){
+//     float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
+//     float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
+
+//     point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
+//     Ray r(camera.origin, end_point - camera.origin);
+
+//     return color(r);
+// }
+
+rgb colorSoftened(int col, int row, int n_cols, int n_rows, Camera &camera){
     rgb c;
     float u, v;
 
-    for (int i = 0; i < n_samples; i++){
+    for (int i = 0; i < header.ray_shots; i++){
 
         u = float(col + generate_canonical<double, 10>(gen)) / float(n_cols);
         v = float(row + generate_canonical<double, 10>(gen)) / float(n_rows);
@@ -143,11 +163,11 @@ rgb colorSoftened(int col, int row, int n_cols, int n_rows, int n_samples, Camer
         c += color(r);
     }
 
-    return c / n_samples;
+    return c / header.ray_shots;
 }
 
-int makeImage(Header header){
-    int n_samples = 100; // Number of ray shots on a pixel
+int makeImage(){
+    // int n_samples = 100; // Number of ray shots on a pixel
 
     ofstream output_file;
     output_file.open(header.name);
@@ -170,7 +190,7 @@ int makeImage(Header header){
         // X
         for(int col = 0; col < header.width; col++){
 
-            rgb c = colorSoftened(col, row, header.width, header.height, n_samples, camera);
+            rgb c = colorSoftened(col, row, header.width, header.height, camera);
             // rgb c = colorDefaut(col, row, header.width, header.height, camera);
 
             int r = int(255.99f * c.r());
@@ -191,13 +211,13 @@ int main(int argc, char* argv[]){
         
         cout << "Reading Scene " << file_name << endl;
 
-        Header header = Header(file_name);
+        header = Header(file_name);
 
         cout << "Rendering in " << header.name << endl;
 
         chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
 
-        makeImage(header);
+        makeImage();
 
         chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration = t2 - t1;

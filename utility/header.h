@@ -18,6 +18,13 @@ using namespace std;
 #define UPRI_PARAM "UPPER_RIGHT"
 #define LWRI_PARAM "LOWER_RIGHT"
 
+#define MIN_DEPHT "MIN_DEPHT"
+#define MAX_DEPHT "MAX_DEPHT"
+
+#define RAY_SHOTS "RAY_SHOTS"
+
+#define DEPTH_MODE "DEPTH_MODE"
+
 class Header{
 
     public:
@@ -31,6 +38,13 @@ class Header{
         rgb upper_right; //UPPER_RIGHT
         rgb lower_right; //LOWER_RIGHT
 
+        float min_depht;
+        float max_depht;
+
+        int ray_shots;
+
+        bool depth_mode = false;
+
         void print(){
             cout << name << endl;
             cout << type << endl;
@@ -41,6 +55,14 @@ class Header{
             cout << "(" << lower_left.r() << ", " << lower_left.g() << ", " << lower_left.b() << ")" << endl;
             cout << "(" << upper_right.r() << ", " << upper_right.g() << ", " << upper_right.b() << ")" << endl;
             cout << "(" << lower_right.r() << ", " << lower_right.g() << ", " << lower_right.b() << ")" << endl;
+            cout << min_depht << endl;
+            cout << max_depht << endl;
+            cout << ray_shots << endl;
+            cout << depth_mode << endl;
+        }
+
+        Header(){
+           
         }
 
         Header(string file_name){
@@ -99,6 +121,30 @@ class Header{
                     if(text == LWRI_PARAM){
                         header_file >> text;
                         lower_right = read_rgb(header_file);
+                    }
+
+                    if(text == MIN_DEPHT){
+                        header_file >> text;
+                        header_file >> min_depht;
+                    }
+
+                    if(text == MAX_DEPHT){
+                        header_file >> text;
+                        header_file >> max_depht;
+                    }
+
+                    if(text == RAY_SHOTS){
+                        header_file >> text;
+                        header_file >> ray_shots;
+                    }
+
+                    if(text == DEPTH_MODE){
+                        header_file >> text;
+                        string mode;
+                        header_file >> mode;
+                        if(mode == "true"){
+                            depth_mode = true;
+                        }
                     }
                 }
             }else{

@@ -1,5 +1,5 @@
 
-make && ./render "samples/scene1.txt" 
+make && ./render "samples/scene$1.txt" 
 make clean
 
 # mkdir -p out
