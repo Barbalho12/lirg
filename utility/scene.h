@@ -17,7 +17,7 @@ using namespace std;
 class Scene{
 
 	vector<Object> objects;
-	Image background;
+	Image background; // Object
 
 	Scene(Image b){
 		background = b;

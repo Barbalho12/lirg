@@ -9,6 +9,7 @@
 #include "../utility/sphere.h"
 #include "../utility/camera.h"
 #include "../utility/header.h"
+#include "../utility/image.h"
 
 // using namespace std::chrono;
 using namespace utility;
@@ -169,12 +170,14 @@ rgb colorSoftened(int col, int row, int n_cols, int n_rows, Camera &camera){
 int makeImage(){
     // int n_samples = 100; // Number of ray shots on a pixel
 
-    ofstream output_file;
-    output_file.open(header.name);
+    // ofstream output_file;
+    // output_file.open(header.name);
 
-    output_file << "P3" << endl;
-    output_file << header.width << " " << header.height << endl;
-    output_file << "255" << endl;
+    // output_file << "P3" << endl;
+    // output_file << header.width << " " << header.height << endl;
+    // output_file << "255" << endl;
+
+    Image frame(header.width, header.height);
 
 
     point3 lower_left_corner(-2, -1, -1); // lower left corner of the view plane.
@@ -190,16 +193,19 @@ int makeImage(){
         // X
         for(int col = 0; col < header.width; col++){
 
-            rgb c = colorSoftened(col, row, header.width, header.height, camera);
+            rgb colors = colorSoftened(col, row, header.width, header.height, camera);
             // rgb c = colorDefaut(col, row, header.width, header.height, camera);
 
-            int r = int(255.99f * c.r());
-            int g = int(255.99f * c.g());
-            int b = int(255.99f * c.b());
-            output_file << r << " " << g << " " << b << endl;
+            frame.setPixel(row, col, colors);
+            // int r = int(255.99f * c.r());
+            // int g = int(255.99f * c.g());
+            // int b = int(255.99f * c.b());
+
+            // output_file << r << " " << g << " " << b << endl;
         }
     }
 
+    frame.printPPM(header);
     return 0;
 }
 
