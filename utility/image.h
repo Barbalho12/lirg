@@ -28,7 +28,7 @@ class Image{
 			width = w;
 			height = h;
 
-			screen = Matrix(w, Vetor(h, Pixel(0,0,0)));
+			screen = Matrix(h, Vetor(w, Pixel(0,0,0)));
 		}
 
 		~Image(){}
