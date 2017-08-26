@@ -11,6 +11,7 @@
 #include "../utility/camera.h"
 #include "../utility/header.h"
 #include "../utility/image.h"
+#include "../utility/progress_bar.h"
 
 // using namespace std::chrono;
 using namespace utility;
@@ -20,6 +21,7 @@ random_device randomizer;
 mt19937 gen(randomizer());
 
 Header header;
+// ProgressBar progress_bar(40);
 
 /*
  *  In the near future we'll want to refactor our project to become
@@ -165,6 +167,8 @@ int makeImage(){
         for(int col = 0; col < header.width; col++){
             rgb colors = colorSoftened(col, row, header.width, header.height, camera);
             frame.setPixel(row, col, colors);
+
+            progressbar.increase();
         }
     }
 
@@ -174,6 +178,8 @@ int makeImage(){
 
 int main(int argc, char* argv[]){
 
+    cout << "¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨LIRG¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨" << endl;
+
  	if(argc > 1){
 
         string file_name = argv[1];
@@ -181,6 +187,8 @@ int main(int argc, char* argv[]){
         cout << "Reading Scene " << file_name << endl;
 
         header = Header(file_name);
+
+        progressbar.setDimension(header.width*header.height*2);
 
         cout << "Rendering in " << header.name << endl;
 
@@ -190,9 +198,11 @@ int main(int argc, char* argv[]){
 
         chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration = t2 - t1;
-        cout << "Rendering time: " << duration.count() << " seconds." << endl;
+        cout << "\nRendering time: " << duration.count() << " seconds." << endl;
 
     }else{
         cout << "No scene entered" << endl;
     }
+
+    cout << "¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨"  << endl;
 }

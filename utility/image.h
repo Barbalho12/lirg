@@ -5,6 +5,7 @@
 #include <iostream>
 #include "header.h"
 #include "vec3.h"
+#include "progress_bar.h"
 
 using namespace std;
 
@@ -56,6 +57,7 @@ class Image{
 
     		for(int i = height-1; i >= 0; i--){
     			for(unsigned int j = 0; j < width; j++){
+    				progressbar.increase();
     				output_file << screen[i][j].r << " " << screen[i][j].g << " " << screen[i][j].b << endl;
     			}
     		}
