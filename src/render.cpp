@@ -6,6 +6,7 @@
 #include <chrono>
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
+#include "../utility/object.h"
 #include "../utility/sphere.h"
 #include "../utility/camera.h"
 #include "../utility/header.h"
@@ -38,16 +39,16 @@ Header header;
 // }
 // #endif
 
-float hit_sphere(Sphere s, Ray r){
-    float a = dot(r.get_direction(), r.get_direction());
-    float b = dot(((r.get_origin() - s.get_center())), r.get_direction());
-    float c = dot(((r.get_origin() - s.get_center())), ((r.get_origin() - s.get_center()))) - (s.get_radius() * s.get_radius());
+// float hit_sphere(Sphere s, Ray r){
+//     float a = dot(r.get_direction(), r.get_direction());
+//     float b = dot(((r.get_origin() - s.get_center())), r.get_direction());
+//     float c = dot(((r.get_origin() - s.get_center())), ((r.get_origin() - s.get_center()))) - (s.get_radius() * s.get_radius());
 
-    // float t1 = (-b + sqrt(dot(b, b) - (dot(a,c))))/a;
-    float t2 = (-b - sqrt(dot(b, b) - (dot(a,c))))/a;
+//     // float t1 = (-b + sqrt(dot(b, b) - (dot(a,c))))/a;
+//     float t2 = (-b - sqrt(dot(b, b) - (dot(a,c))))/a;
 
-    return t2;
-}
+//     return t2;
+// }
 
 rgb make_background_point(const Ray &r_){
     rgb top_left = header.upper_left/255.99f;
@@ -66,12 +67,12 @@ rgb make_background_point(const Ray &r_){
     return result;
 }
 
-rgb make_background_default(const Ray &r_, float t, point3 center, float min_depht, float max_depht){
-    if( t >= min_depht && t < max_depht){
-        point3 p = r_.point_at(t);
-        vec3 v = unit_vector(p - center);
+rgb make_background_default(const Ray &r_, HitRecord ht, float min_depht, float max_depht){
+    if( ht.t >= min_depht && ht.t < max_depht){
+        point3 p = r_.point_at(ht.t);
+        vec3 v = unit_vector(p - ht.origin);
 
-        return rgb( (v.x()+1)/2.0,
+        return rgb((v.x()+1)/2.0,
                    (v.y()+1)/2.0,
                    (v.z()+1)/2.0);
     }else{
@@ -79,75 +80,53 @@ rgb make_background_default(const Ray &r_, float t, point3 center, float min_dep
     }
 }
 
-
-rgb make_foreground_to_background_depth(float t, float min_depht, float max_depht){
+rgb make_foreground_to_background_depth(HitRecord ht, float min_depht, float max_depht){
     rgb depth_foreground = rgb(0, 0, 0);
     rgb depth_background = rgb(1, 1, 1);
 
     rgb cor;
 
-    if (t >= min_depht && t <= max_depht) {
-        t = t/max_depht;
-        cor = ((1-t) * depth_foreground) + (t*depth_background);
+    if (ht.t >= min_depht && ht.t <= max_depht) {
+        ht.t = ht.t/max_depht;
+        cor = ((1-ht.t) * depth_foreground) + (ht.t*depth_background);
     }else{
         cor = depth_background;
     }
     return cor;
 }
 
-Sphere hitSpheres(float min_depht, float max_depht, const Ray &r_, vector<Sphere> spheres, float &t){
-    t = max_depht; 
-    Sphere s; 
-    for(unsigned int i = 0; i < spheres.size(); i++){
-        float t_aux = hit_sphere(spheres[i], r_);
-        if(t > t_aux && t_aux > min_depht){
-            t = t_aux;
-            s = spheres[i];
+void hitObjects(vector<Sphere> objects, HitRecord &ht, Ray r){
+    HitRecord ht_aux;
+    for(int i = 0; i < objects.size(); i++){
+        objects[i].hit(r, header.min_depht, header.max_depht, ht_aux);
+        
+        if(ht_aux.t < ht.t){
+            ht = ht_aux;
         }
     }
-    return s;
  }
 
-
-rgb color(const Ray &r_){
-
-    // float min_depht = 0;
-    // float max_depht = 3;
-    float min_depht = header.min_depht;
-    float max_depht = header.max_depht;
-    // cout << min_depht << "," << max_depht << endl;
+rgb color(const Ray &r){
 
     vector<Sphere> spheres;
 
-    spheres.push_back(Sphere( point3(0,-100.5,-3), 99.f));
-    spheres.push_back(Sphere( point3( 0.3 , 0 , -1 ),0.4));
-    spheres.push_back(Sphere( point3( 0 , 1 , -2 ),0.6));
-    spheres.push_back(Sphere( point3(-0.4 , 0 , -3 ),0.7));
+    spheres.push_back( Sphere(point3(0, -100.5, -3), 99.f) );
+    spheres.push_back( Sphere(point3(0.3, 0, -1), 0.4) );
+    spheres.push_back( Sphere(point3(0, 1, -2), 0.6) );
+    spheres.push_back( Sphere(point3(-0.4, 0, -3), 0.7) );
 
-    float t; 
+    HitRecord ht;
+    ht.t = header.max_depht;
 
-    Sphere s = hitSpheres(min_depht, max_depht, r_, spheres, t);
+    hitObjects(spheres, ht, r);
 
     if(header.depth_mode){
-        return make_foreground_to_background_depth(t, min_depht, max_depht);
+        return make_foreground_to_background_depth(ht, header.min_depht, header.max_depht);
     }else{
-        return make_background_default(r_, t, s.get_center(), min_depht, max_depht);
+        return make_background_default(r, ht, header.min_depht, header.max_depht);
     }
     // return make_foreground_to_background_depth(t, min_depht, max_depht);
-
-    
-
 }
-
-// rgb colorDefaut(int col, int row, int n_cols, int n_rows, Camera &camera){
-//     float u = float(col) / float(n_cols); // walked u% of the horizontal dimension of the view plane.
-//     float v = float(row) / float(n_rows); // walked v% of the vertical dimension of the view plane.
-
-//     point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
-//     Ray r(camera.origin, end_point - camera.origin);
-
-//     return color(r);
-// }
 
 rgb colorSoftened(int col, int row, int n_cols, int n_rows, Camera &camera){
     rgb c;
@@ -168,14 +147,6 @@ rgb colorSoftened(int col, int row, int n_cols, int n_rows, Camera &camera){
 }
 
 int makeImage(){
-    // int n_samples = 100; // Number of ray shots on a pixel
-
-    // ofstream output_file;
-    // output_file.open(header.name);
-
-    // output_file << "P3" << endl;
-    // output_file << header.width << " " << header.height << endl;
-    // output_file << "255" << endl;
 
     Image frame(header.width, header.height);
 
@@ -192,16 +163,8 @@ int makeImage(){
 
         // X
         for(int col = 0; col < header.width; col++){
-
             rgb colors = colorSoftened(col, row, header.width, header.height, camera);
-            // rgb c = colorDefaut(col, row, header.width, header.height, camera);
-
             frame.setPixel(row, col, colors);
-            // int r = int(255.99f * c.r());
-            // int g = int(255.99f * c.g());
-            // int b = int(255.99f * c.b());
-
-            // output_file << r << " " << g << " " << b << endl;
         }
     }
 
@@ -228,7 +191,6 @@ int main(int argc, char* argv[]){
         chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration = t2 - t1;
         cout << "Rendering time: " << duration.count() << " seconds." << endl;
-
 
     }else{
         cout << "No scene entered" << endl;

@@ -8,19 +8,13 @@
 
 using namespace std;
 
-// typedef struct RGB{
-// 	unsigned char r;
-// 	unsigned char g;
-// 	unsigned char b;
-// };
-
 class Scene{
 
 	vector<Object> objects;
-	Image background; // Object
+	Object background;
 
-	Scene(Image b){
-		background = b;
+	Scene(Object o){
+		background = o;
 	}
 
 	void addObject(Object o){

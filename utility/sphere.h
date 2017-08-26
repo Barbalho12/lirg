@@ -1,31 +1,46 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
-#include "vec3.h" // necessário para acessar vec3
+#include "object.h"
+#include "vec3.h"
 
 using namespace utility; 
 
-class Sphere {
+class Sphere : public Object {
 
     private:
-        point3 center; // the origin of the ray.
-        float radius; // The ray's direction.
+        float radius;
+
+        float hit_sphere(Ray r){
+            float a = dot(r.get_direction(), r.get_direction());
+            float b = dot(((r.get_origin() - center)), r.get_direction());
+            float c = dot(((r.get_origin() - center)), ((r.get_origin() - center))) - (radius * radius);
+            
+            float t = (-b - sqrt(dot(b, b) - (dot(a,c))))/a;
+
+            return t;
+        }
 
     public:
-        
-        //=== Alias
-        typedef float real_type;
-
-        //=== Special members
         Sphere(point3 c = point3(0,0,0), float r = 0.0){
             center = c;
             radius = r;
         }
 
-        //=== Access methods
         point3 get_center() const { return center; }
-
         float get_radius() const { return radius; }
+        bool hit(Ray r, float t_min, float t_max, HitRecord &ht){
+            ht.t = t_max; 
+            ht.origin = center;
+            
+            float t_aux = hit_sphere(r);
+
+            if(ht.t > t_aux && t_aux > t_min){
+                ht.t = t_aux;
+                return true;
+            }
+            return false;
+        }
 };
 
 #endif
