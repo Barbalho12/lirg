@@ -28,7 +28,14 @@ class Image{
 			width = w;
 			height = h;
 
-			screen = Matrix(h, Vetor(w, Pixel(0,0,0)));
+			// screen = Matrix(h, Vetor(w, Pixel(0,0,0)));
+			for(int i = 0; i < h; i++){
+				Vetor v;
+				for(int j = 0; j < w; j++){
+					v.push_back(Pixel(0,0,0));
+				}
+				screen.push_back(v);
+			}
 		}
 
 		~Image(){}
@@ -48,7 +55,7 @@ class Image{
     		output_file << "255" << endl;
 
     		for(int i = height-1; i >= 0; i--){
-    			for(int j = 0; j < width; j++){
+    			for(unsigned int j = 0; j < width; j++){
     				output_file << screen[i][j].r << " " << screen[i][j].g << " " << screen[i][j].b << endl;
     			}
     		}

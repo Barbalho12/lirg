@@ -97,7 +97,7 @@ rgb make_foreground_to_background_depth(HitRecord ht, float min_depht, float max
 
 void hitObjects(vector<Sphere> objects, HitRecord &ht, Ray r){
     HitRecord ht_aux;
-    for(int i = 0; i < objects.size(); i++){
+    for(unsigned int i = 0; i < objects.size(); i++){
         objects[i].hit(r, header.min_depht, header.max_depht, ht_aux);
         
         if(ht_aux.t < ht.t){
