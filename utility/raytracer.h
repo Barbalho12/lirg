@@ -13,6 +13,7 @@
 #include "../utility/header.h"
 #include "../utility/image.h"
 #include "../utility/progress_bar.h"
+#include "../utility/scene.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -26,7 +27,7 @@ class RayTracer{
 	private: 
 
 		Camera camera;
-		// Scene scene;
+		Scene scene;
 		// ResourceManager materials;
 		int width;
 		int height;
@@ -35,7 +36,6 @@ class RayTracer{
 
 	public:
 		RayTracer(){
-
 		}
 
 		//Dá entrada dos dados
@@ -54,6 +54,12 @@ class RayTracer{
 		    point3 origin(0, 0, 0); // the camera's origin.
 
 			camera = Camera(lower_left_corner, vertical, horizontal, origin);
+			scene = Scene();
+
+			scene.addObject(Sphere(point3(0, -100.5, -3), 99.f));
+			scene.addObject(Sphere(point3(0.3, 0, -1), 0.4));
+			scene.addObject(Sphere(point3(0, 1, -2), 0.6));
+			scene.addObject(Sphere(point3(-0.4, 0, -3), 0.7));
 
 		}
 		
@@ -91,17 +97,17 @@ class RayTracer{
 
 		rgb color(const Ray &r){
 
-		    vector<Sphere> spheres;
+		    // vector<Sphere> spheres;
 
-		    spheres.push_back( Sphere(point3(0, -100.5, -3), 99.f) );
-		    spheres.push_back( Sphere(point3(0.3, 0, -1), 0.4) );
-		    spheres.push_back( Sphere(point3(0, 1, -2), 0.6) );
-		    spheres.push_back( Sphere(point3(-0.4, 0, -3), 0.7) );
+		    // spheres.push_back( Sphere(point3(0, -100.5, -3), 99.f) );
+		    // spheres.push_back( Sphere(point3(0.3, 0, -1), 0.4) );
+		    // spheres.push_back( Sphere(point3(0, 1, -2), 0.6) );
+		    // spheres.push_back( Sphere(point3(-0.4, 0, -3), 0.7) );
 
 		    HitRecord ht;
 		    ht.t = header.max_depht;
 
-		    hit_anything(spheres, ht, r);
+		    hit_anything(scene.getObjects(), ht, r);
 
 		    if(header.depth_mode){
 		        return make_foreground_to_background_depth(ht, header.min_depht, header.max_depht);

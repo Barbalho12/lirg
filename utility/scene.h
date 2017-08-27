@@ -3,23 +3,31 @@
 
 #include "../utility/vec3.h"
 #include "object.h"
+#include "sphere.h"
 #include "image.h"
 #include <vector>
 
 using namespace std;
 
 class Scene{
+	private:
+		vector<Sphere> objects;
+		//Object background;
 
-	vector<Object> objects;
-	Object background;
+	public:
+		Scene(){}
 
-	Scene(Object o){
-		background = o;
-	}
+		// Scene(Object o){
+		// 	background = o;
+		// }
 
-	void addObject(Object o){
-		objects.push_back(o);
-	}
+		void addObject(Sphere o){
+			objects.push_back(o);
+		}
+
+		vector<Sphere> getObjects(){
+			return objects;
+		}
 	
 };
 
