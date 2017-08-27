@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include "vec3.h"
+#include "ray.h"
 
 using namespace std;
 

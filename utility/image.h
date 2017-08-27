@@ -37,6 +37,8 @@ class Image{
 				}
 				screen.push_back(v);
 			}
+
+
 		}
 
 		~Image(){}
@@ -54,6 +56,9 @@ class Image{
 		    output_file << "P3" << endl;
 		    output_file << width << " " << height << endl;
     		output_file << "255" << endl;
+
+    		progressbar.reset();
+			// progressbar.setDimension(width*height);
 
     		for(int i = height-1; i >= 0; i--){
     			for(unsigned int j = 0; j < width; j++){

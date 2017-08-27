@@ -4,8 +4,6 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
-#include <thread>
 
 using namespace std;
 
@@ -24,6 +22,11 @@ class ProgressBar{
     public:
         ProgressBar(int size_){
             size = size_;
+        }
+
+        void reset(){
+            percent = 0;
+            size = 0;
         }
 
         void setDimension(int dimension_){
