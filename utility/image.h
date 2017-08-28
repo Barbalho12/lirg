@@ -49,6 +49,43 @@ class Image{
             screen[row][col].b = int(255.99f * colors.b());
 		}
 
+		void print(Header header){
+
+			if(header.type == "PPM"){
+				if(header.codi == "ascii"){
+					printPPM(header);
+				}else if (header.codi == "binary"){
+					printPPMBinary(header);
+				}
+			}
+		}
+
+		void printPPMBinary(Header header){
+
+			ofstream output_file(header.name, ofstream::binary);
+			char* image_buffer = new char[width*height*3];
+
+		    output_file << "P6" << endl;
+		    output_file << width << " " << height << endl;
+    		output_file << "255" << endl;
+
+    		progressbar.reset();
+
+    		for(unsigned int i = 0; i < height; i++){
+    			for(unsigned int j = 0; j < width; j++){
+    				progressbar.increase();
+
+    				image_buffer[((height-i-1)*width*3 + j*3)] 	= screen[i][j].r;
+					image_buffer[((height-i-1)*width*3 + j*3 + 1)] = screen[i][j].g;
+					image_buffer[((height-i-1)*width*3 + j*3 + 2)] = screen[i][j].b;
+    			}
+    		}
+
+    		output_file.write(image_buffer, width*height*3);	
+  			output_file.close();
+			delete [] image_buffer;
+		}
+
 		void printPPM(Header header){
 			ofstream output_file;
 		    output_file.open(header.name);
@@ -58,7 +95,6 @@ class Image{
     		output_file << "255" << endl;
 
     		progressbar.reset();
-			// progressbar.setDimension(width*height);
 
     		for(int i = height-1; i >= 0; i--){
     			for(unsigned int j = 0; j < width; j++){

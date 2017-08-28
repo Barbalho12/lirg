@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
         Image image = raytracer.ray_trace();
 
         cout << "\nSaving in file: " << header.name << endl;
-        image.printPPM(header);
+        image.print(header);
 
         chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration = t2 - t1;
