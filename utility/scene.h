@@ -11,7 +11,7 @@ using namespace std;
 
 class Scene{
 	private:
-		vector<Sphere> objects;
+		vector<Object*> objects;
 		//Object background;
 
 	public:
@@ -21,11 +21,15 @@ class Scene{
 		// 	background = o;
 		// }
 
-		void addObject(Sphere o){
+		void addObject(Object * o){
 			objects.push_back(o);
 		}
 
-		vector<Sphere> getObjects(){
+		void setObjects(vector<Object*> objects_){
+			objects = objects_;
+		}
+
+		vector<Object*> getObjects(){
 			return objects;
 		}
 	

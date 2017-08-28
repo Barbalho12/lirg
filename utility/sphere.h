@@ -22,6 +22,7 @@ class Sphere : public Object {
         }
 
     public:
+
         Sphere(point3 c = point3(0,0,0), float r = 0.0){
             center = c;
             radius = r;

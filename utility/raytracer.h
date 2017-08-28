@@ -56,18 +56,19 @@ class RayTracer{
 			camera = Camera(lower_left_corner, vertical, horizontal, origin);
 			scene = Scene();
 
-			scene.addObject(Sphere(point3(0, -100.5, -3), 99.f));
-			scene.addObject(Sphere(point3(0.3, 0, -1), 0.4));
-			scene.addObject(Sphere(point3(0, 1, -2), 0.6));
-			scene.addObject(Sphere(point3(-0.4, 0, -3), 0.7));
+			// scene.addObject(new Sphere(point3(0, -100.5, -3), 99.f));
+			// scene.addObject(new Sphere(point3(0.3, 0, -1), 0.4));
+			// scene.addObject(new Sphere(point3(0, 1, -2), 0.6));
+			// scene.addObject(new Sphere(point3(-0.4, 0, -3), 0.7));
+			scene.setObjects(header.objects);
 
 		}
 		
 		//Verifica hit de todos objetos;
-		void hit_anything(vector<Sphere> objects, HitRecord &ht, Ray r){
+		void hit_anything(vector<Object*> objects, HitRecord &ht, Ray r){
 		    HitRecord ht_aux;
 		    for(unsigned int i = 0; i < objects.size(); i++){
-		        objects[i].hit(r, header.min_depht, header.max_depht, ht_aux);
+		        objects[i]->hit(r, header.min_depht, header.max_depht, ht_aux);
 		        
 		        if(ht_aux.t < ht.t){
 		            ht = ht_aux;
@@ -96,13 +97,6 @@ class RayTracer{
 
 
 		rgb color(const Ray &r){
-
-		    // vector<Sphere> spheres;
-
-		    // spheres.push_back( Sphere(point3(0, -100.5, -3), 99.f) );
-		    // spheres.push_back( Sphere(point3(0.3, 0, -1), 0.4) );
-		    // spheres.push_back( Sphere(point3(0, 1, -2), 0.6) );
-		    // spheres.push_back( Sphere(point3(-0.4, 0, -3), 0.7) );
 
 		    HitRecord ht;
 		    ht.t = header.max_depht;

@@ -6,6 +6,8 @@
 #include <string>
 #include "vec3.h"
 #include "ray.h"
+#include "sphere.h"
+#include "object.h"
 
 using namespace std;
 
@@ -26,6 +28,8 @@ using namespace std;
 
 #define DEPTH_MODE "DEPTH_MODE"
 
+#define SPHERE "SPHERE"
+
 class Header{
 
     public:
@@ -45,6 +49,8 @@ class Header{
         int ray_shots;
 
         bool depth_mode = false;
+
+        vector<Object*> objects;
 
         void print(){
             cout << name << endl;
@@ -146,6 +152,16 @@ class Header{
                         if(mode == "true"){
                             depth_mode = true;
                         }
+                    }
+
+                    if(text == SPHERE){
+                        // header_file >> text;
+                        float x,y,z,r;
+                        header_file >> x;
+                        header_file >> y;
+                        header_file >> z;
+                        header_file >> r;
+                        objects.push_back(new Sphere(point3(x, y, z), r));
                     }
                 }
             }else{
