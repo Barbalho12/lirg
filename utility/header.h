@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "vec3.h"
 #include "ray.h"
 #include "sphere.h"
@@ -30,6 +31,11 @@ using namespace std;
 
 #define SPHERE "SPHERE"
 
+#define LOWER_LEFT_CORNER "LOWER_LEFT_CORNER" // lower left corner of the view plane.
+#define H_D_VIEW_PLANE "H_D_VIEW_PLANE"       // Horizontal dimension of the view plane.
+#define V_D_VIEW_PLANE "V_D_VIEW_PLANE"       // Vertical dimension of the view plane.
+#define CAMERA_ORIGIN "CAMERA_ORIGIN"         // the camera's origin.
+
 class Header{
 
     public:
@@ -51,6 +57,11 @@ class Header{
         bool depth_mode = false;
 
         vector<Object*> objects;
+
+        point3 lower_left_corner;
+        vec3 h_d_view_plane;
+        vec3 v_d_view_plane;
+        point3 camera_origin;
 
         void print(){
             cout << name << endl;
@@ -112,22 +123,22 @@ class Header{
 
                     if(text == UPLF_PARAM){
                         header_file >> text;
-                        upper_left = read_rgb(header_file);
+                        upper_left = read_vec3(header_file);
                     }
 
                     if(text == LWLF_PARAM){
                         header_file >> text;
-                        lower_left = read_rgb(header_file);
+                        lower_left = read_vec3(header_file);
                     }
 
                     if(text == UPRI_PARAM){
                         header_file >> text;
-                        upper_right = read_rgb(header_file);
+                        upper_right = read_vec3(header_file);
                     }
 
                     if(text == LWRI_PARAM){
                         header_file >> text;
-                        lower_right = read_rgb(header_file);
+                        lower_right = read_vec3(header_file);
                     }
 
                     if(text == MIN_DEPHT){
@@ -155,14 +166,33 @@ class Header{
                     }
 
                     if(text == SPHERE){
-                        // header_file >> text;
-                        float x,y,z,r;
-                        header_file >> x;
-                        header_file >> y;
-                        header_file >> z;
+                        header_file >> text;
+                        point3 c = read_vec3(header_file);
+                        float r;
                         header_file >> r;
-                        objects.push_back(new Sphere(point3(x, y, z), r));
+                        objects.push_back(new Sphere(c, r));
                     }
+
+                    if(text == LOWER_LEFT_CORNER){
+                        header_file >> text;
+                        lower_left_corner = read_vec3(header_file);
+                    }
+
+                    if(text == H_D_VIEW_PLANE){
+                        header_file >> text;
+                        h_d_view_plane = read_vec3(header_file);
+                    }
+
+                    if(text == V_D_VIEW_PLANE){
+                        header_file >> text;
+                        v_d_view_plane = read_vec3(header_file);
+                    }
+
+                    if(text == CAMERA_ORIGIN){
+                        header_file >> text;
+                        camera_origin = read_vec3(header_file);
+                    }
+
                 }
             }else{
                 cout << "file is not open" << endl;
@@ -171,12 +201,12 @@ class Header{
             header_file.close();
         }
 
-        rgb read_rgb(ifstream &header_file){
-            int r,g,b;
-            header_file >> r;
-            header_file >> g;
+        vec3 read_vec3(ifstream &header_file){
+            float a,b,c;
+            header_file >> a;
             header_file >> b;
-            return rgb(r,g,b);
+            header_file >> c;
+            return vec3(a,b,c);
         }
 
 };

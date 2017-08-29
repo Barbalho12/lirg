@@ -10,9 +10,12 @@ LOWER_RIGHT = 255 255 255
 MIN_DEPHT = -1
 MAX_DEPHT = 1001
 RAY_SHOTS = 10
-SPHERE 0.3 0 -1 0.4
-SPHERE 0 -100.5 -3 99
-SPHERE 0 1 -2 0.6
-SPHERE -0.4 0 -3 0.7
-
+SPHERE = 0.3 0 -1 0.4
+SPHERE = 0 -100.5 -3 99
+SPHERE = 0 1 -2 0.6
+SPHERE = -0.4 0 -3 0.7
+LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
+H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.
+V_D_VIEW_PLANE = 0 2 0 # Vertical dimension of the view plane.
+CAMERA_ORIGIN = 0 0 0 # the camera's origin.
 

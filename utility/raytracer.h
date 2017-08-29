@@ -48,18 +48,13 @@ class RayTracer{
 
 			progressbar.setDimension(width*height);
 
-		    point3 lower_left_corner(-2, -1, -1); // lower left corner of the view plane.
-		    vec3 horizontal(4, 0, 0); // Horizontal dimension of the view plane.
-		    vec3 vertical(0, 2, 0); // Vertical dimension of the view plane.
-		    point3 origin(0, 0, 0); // the camera's origin.
+			camera = Camera(header.lower_left_corner, // lower left corner of the view plane.
+				header.v_d_view_plane,  // Vertical dimension of the view plane.
+				header.h_d_view_plane,  // Horizontal dimension of the view plane.
+				header.camera_origin);	// the camera's origin.
 
-			camera = Camera(lower_left_corner, vertical, horizontal, origin);
 			scene = Scene();
 
-			// scene.addObject(new Sphere(point3(0, -100.5, -3), 99.f));
-			// scene.addObject(new Sphere(point3(0.3, 0, -1), 0.4));
-			// scene.addObject(new Sphere(point3(0, 1, -2), 0.6));
-			// scene.addObject(new Sphere(point3(-0.4, 0, -3), 0.7));
 			scene.setObjects(header.objects);
 
 		}
