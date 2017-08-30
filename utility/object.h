@@ -8,13 +8,15 @@
 struct HitRecord{
 	float t;
 	vec3 origin;
+	vec3 normal;
+	Material *material;
 };
 
 class Object {
 
 	protected:
 		point3 center;
-		Material material;
+		Material *material;
 
 	public:
 		virtual bool hit(Ray r, float t_min, float t_max, HitRecord &ht) = 0;

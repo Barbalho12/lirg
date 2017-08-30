@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <math.h>
 #include "header.h"
 #include "vec3.h"
 #include "progress_bar.h"
@@ -38,7 +39,6 @@ class Image{
 				screen.push_back(v);
 			}
 
-
 		}
 
 		~Image(){}
@@ -47,6 +47,12 @@ class Image{
 			screen[row][col].r = int(255.99f * colors.r());
             screen[row][col].g = int(255.99f * colors.g());
             screen[row][col].b = int(255.99f * colors.b());
+		}
+
+		void setGammaPixel(int row, int col, rgb colors){
+			screen[row][col].r = int(255.99f * sqrt(colors.r()));
+            screen[row][col].g = int(255.99f * sqrt(colors.g()));
+            screen[row][col].b = int(255.99f * sqrt(colors.b()));
 		}
 
 		void print(Header header){

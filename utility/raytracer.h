@@ -60,15 +60,18 @@ class RayTracer{
 		}
 		
 		//Verifica hit de todos objetos;
-		void hit_anything(vector<Object*> objects, HitRecord &ht, Ray r){
+		bool hit_anything(vector<Object*> objects, HitRecord &ht, Ray r){
 		    HitRecord ht_aux;
+		    bool flag = false;
 		    for(unsigned int i = 0; i < objects.size(); i++){
 		        objects[i]->hit(r, header.min_depht, header.max_depht, ht_aux);
 		        
 		        if(ht_aux.t < ht.t){
 		            ht = ht_aux;
+		            flag = true;
 		        }
 		    }
+		    return flag;
 		 }
 
 		
@@ -82,7 +85,7 @@ class RayTracer{
 		        // X
 		        for(int col = 0; col < width; col++){
 		            rgb colors = colorSoftened(col, row);
-		            frame.setPixel(row, col, colors);
+		            frame.setGammaPixel(row, col, colors);
 
 		            progressbar.increase();
 		        }
@@ -91,17 +94,31 @@ class RayTracer{
 		}
 
 
+		vec3 random_in_unit_sphere(){
+			vec3 p;
+			do{
+				p = 2.0*vec3(drand48(),drand48(),drand48()) - vec3(1,1,1);
+			}while(dot(p,p) >= 1.0);
+			return p;
+		}
+
 		rgb color(const Ray &r){
 
 		    HitRecord ht;
 		    ht.t = header.max_depht;
 
-		    hit_anything(scene.getObjects(), ht, r);
 
-		    if(header.depth_mode){
-		        return make_foreground_to_background_depth(ht, header.min_depht, header.max_depht);
+		    // hit_anything(scene.getObjects(), ht, r);
+
+		    if(hit_anything(scene.getObjects(), ht, r)){
+		    	vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
+		    	return 0.5*color( Ray(ht.origin, target-ht.origin));
 		    }else{
-		        return make_background_default(r, ht, header.min_depht, header.max_depht);
+		    	if(header.depth_mode){
+		        	return make_foreground_to_background_depth(ht, header.min_depht, header.max_depht);
+		    	}else{
+		        	return make_background_default(r, ht, header.min_depht, header.max_depht);
+		    	}
 		    }
 		}
 
