@@ -102,7 +102,7 @@ class RayTracer{
 			return p;
 		}
 
-		rgb color(const Ray &r){
+		rgb color(const Ray &r, int depth){
 
 		    HitRecord ht;
 		    ht.t = header.max_depht;
@@ -111,9 +111,21 @@ class RayTracer{
 		    // hit_anything(scene.getObjects(), ht, r);
 
 		    if(hit_anything(scene.getObjects(), ht, r)){
-		    	vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
-		    	return 0.5*color( Ray(ht.origin, target-ht.origin));
+
+		    	Ray scattered;
+		    	vec3 attenuation;
+		    	if(depth < header.max_depht && ht.material->scatter(r, ht, attenuation, scattered)){
+		    		return attenuation*color(scattered, depth+1);
+		    		// return vec3(0,1,0);
+		    	}else{
+		    		return vec3(0,0,0);
+		    	}
+		    	// vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
+		    	// return 0.5*color( Ray(ht.origin, target-ht.origin),0);
 		    }else{
+		    	// vec3 unit_direction = unit_vector(r.get_direction());
+		    	// float t = 0.5*(unit_direction.y()*1.0);
+		    	// return (1.0-t)*vec3(1.0,1.0,1.0) + t*vec3(0.5,0.7,1.0);
 		    	if(header.depth_mode){
 		        	return make_foreground_to_background_depth(ht, header.min_depht, header.max_depht);
 		    	}else{
@@ -134,7 +146,7 @@ class RayTracer{
 		        point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
 		        Ray r(camera.origin, end_point - camera.origin);
 
-		        c += color(r);
+		        c += color(r,0);
 		    }
 
 		    return c / header.ray_shots;

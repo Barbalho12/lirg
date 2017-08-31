@@ -39,6 +39,7 @@ class Sphere : public Object {
                 ht.t = t_aux;
                 ht.origin = r.point_at(t_aux);
                 ht.normal = (ht.origin - center) / radius;
+                ht.material = material;
                 return true;
             }
             return false;

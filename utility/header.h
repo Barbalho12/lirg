@@ -10,6 +10,7 @@
 #include "sphere.h"
 #include "object.h"
 #include "lambertian.h"
+#include "metal.h"
 
 using namespace std;
 
@@ -171,7 +172,14 @@ class Header{
                         point3 c = read_vec3(header_file);
                         float r;
                         header_file >> r;
-                        objects.push_back(new Sphere(c, r, new Lambertian(vec3(0.8,0.3,0.3))));
+                        string material;
+                        header_file >> material;
+                        if(material == "LAMBERTIAN"){
+                            objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
+                        }else if(material == "METAL"){
+                            objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+                        }
+                        // objects.push_back(new Sphere(c, r, new Lambertian(vec3(0.8,0.3,0.3))));
                     }
 
                     if(text == LOWER_LEFT_CORNER){
