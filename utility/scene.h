@@ -13,8 +13,11 @@ class Scene{
 	private:
 		vector<Object*> objects;
 		//Object background;
-
+		
 	public:
+		float min_depht;
+		float max_depht;
+
 		Scene(){}
 
 		// Scene(Object o){
@@ -31,6 +34,26 @@ class Scene{
 
 		vector<Object*> getObjects(){
 			return objects;
+		}
+
+		Object* getObject(int i){
+			return objects[i];
+		}
+
+		void setMaxDepht(int max_depht_){
+			max_depht = max_depht_;
+		}
+
+		void setMinDepht(int min_depht_){
+			min_depht = min_depht_;
+		}
+
+		float getMaxDepht(){
+			return max_depht;
+		}
+
+		float getMinDepht(){
+			return min_depht;
 		}
 	
 };

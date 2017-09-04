@@ -1,11 +1,13 @@
-make &&
-./render samples/scene0.txt &&
-./render samples/scene1.txt && 
-./render samples/scene2.txt &&
-./render samples/scene3.txt &&
-./render samples/scene4.txt &&
-./render samples/scene5.txt &&
-make clean
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene6.txt
+
+# make &&
+# ./render samples/scene0.txt &&
+# ./render samples/scene1.txt && 
+# ./render samples/scene2.txt &&
+# ./render samples/scene3.txt &&
+# ./render samples/scene4.txt &&
+# ./render samples/scene5.txt &&
+# make clean
 
 # mkdir -p out
 # mkdir -p out_convrt
