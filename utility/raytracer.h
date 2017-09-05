@@ -65,9 +65,9 @@ class RayTracer{
 			scene.setMaxDepht(header.max_depht);
 			scene.setMinDepht(header.min_depht);
 
-			// shader = new LambertianShader(scene);
-			// shader = new DepthColorShader(scene);
-			shader = new Normals2RGBShader(scene, header);
+			 shader = new LambertianShader(scene);
+			 //shader = new DepthColorShader(scene);
+			//shader = new Normals2RGBShader(scene, header);
 
 		}
 		
@@ -87,11 +87,14 @@ class RayTracer{
 			Image frame(width, height);
 
 			//Define numero de threads
-			int n_threads = 4;
-			// int n_threads = std::thread::hardware_concurrency();
+			//int n_threads = 4;
+			int n_threads = std::thread::hardware_concurrency();
 
 			cout << "Threads Number: " << n_threads << endl;
-			thread block_executions[n_threads];
+
+			vector<thread> block_executions(n_threads);
+
+			//thread block_executions[8];
 			int n = 1;
 			while ( n <= n_threads){
 				int height_top =  (height*(n*1.0/n_threads))-1;
