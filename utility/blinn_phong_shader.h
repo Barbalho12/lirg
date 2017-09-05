@@ -27,15 +27,18 @@ class BlinnPhongShader : public Shader{
 		}
 
 		rgb color(const Ray &r){
-			rgb intensity = rgb(1,1,1);
-			vec3 direction = vec3(20,10,5);
+			rgb intensity = rgb(1,1,1); // Ler de arquivo e armazenar em Light
+			vec3 direction = vec3(20,10,5); // Ler de arquivo e armazenar em Light
 
 			HitRecord ht;
 		    ht.t = scene.getMaxDepht();
 
 		    if(hit_anything(ht, r)){
 				Lambertian *kd = dynamic_cast<Lambertian*>(ht.material);
-				return rgb(0,0,0);	
+				vec3 lightDir = unit_vector(direction - ht.normal);
+				rgb c = kd->albedo * dot(lightDir, ht.normal);
+				rgb posLightIntensity = c * intensity;
+				return posLightIntensity;
 		    }
 
 			//https://en.wikipedia.org/wiki/Blinn%96Phong_shading_model#Fragment_shader
