@@ -12,7 +12,7 @@ class DirectionLight{
 
      DirectionLight( rgb i = vec3(0,0,0), vec3 d = vec3(0,0,0) ){
      	m_intensity = i;
-     	m_direction = unit_vector(d);
+     	m_direction = d;
      }
 
 

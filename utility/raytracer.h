@@ -69,10 +69,10 @@ class RayTracer{
 
 			switch(header.shader){
 				case LAMBERTIAN:
-					shader = new LambertianShader(scene);
+					shader = new LambertianShader(scene, header);
 					break;
 				case BLINNPHONG:
-					shader = new BlinnPhongShader(scene);
+					shader = new BlinnPhongShader(scene, header);
 					break;
 				case DEPTHCOLOR:
 					shader = new DepthColorShader(scene);
