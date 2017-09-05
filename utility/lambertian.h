@@ -6,7 +6,7 @@
 class Lambertian : public Material{
 	public:
 		vec3 albedo;
-
+		
 		Lambertian(const vec3 &attenuation){
 			albedo = attenuation;
 		}
