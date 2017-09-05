@@ -1,5 +1,5 @@
-#ifndef _NORMALS2RGBSHADER_H_
-#define _NORMALS2RGBSHADER_H_
+#ifndef _NORMALS2RGB_SHADER_H_
+#define _NORMALS2RGB_SHADER_H_
 
 #include <iostream>
 #include "shader.h"
@@ -24,7 +24,7 @@ class Normals2RGBShader	 : public Shader{
 
 		    hit_anything(ht, r);
 	
-		    return make_background_default(r, ht, scene.getMinDepht(), scene.getMaxDepht());
+		    return make_background_default(r, ht);
 		    
 		}
 
@@ -46,19 +46,17 @@ class Normals2RGBShader	 : public Shader{
 		    return result;
 		}
 
-		rgb make_background_default(const Ray &r_, HitRecord ht, float min_depht, float max_depht){
-		    if( ht.t >= min_depht && ht.t < max_depht){
-		        point3 p = r_.point_at(ht.t);
-		        vec3 v = unit_vector(p - ht.origin);
-
-		        return rgb((v.x()+1)/2.0,
-		                   (v.y()+1)/2.0,
-		                   (v.z()+1)/2.0);
+		rgb make_background_default(const Ray &r_, HitRecord &ht){
+		    if( ht.t >= scene.getMinDepht() && ht.t < scene.getMaxDepht()){
+		        return rgb((ht.normal.x()+1.0)/2.0,
+		                   (ht.normal.y()+1.0)/2.0,
+		                   (ht.normal.z()+1.0)/2.0);
 		    }else{
-		    	// return rgb(0.5,0.5,0.5);
 		        return make_background_point(r_);
 		    }
 		}
+
+
 
 };
 

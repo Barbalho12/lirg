@@ -23,9 +23,7 @@ class Lambertian : public Material{
 			vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
 			scattered = Ray(ht.origin, target-ht.origin);
 			attenuation = albedo;
-			// std::cout <<"Aqii"<< std::endl;
 			return true;
-
 		}
 };
 

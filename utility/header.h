@@ -33,10 +33,21 @@ using namespace std;
 
 #define SPHERE "SPHERE"
 
+#define SHADER_ "SHADER"
+
 #define LOWER_LEFT_CORNER "LOWER_LEFT_CORNER" // lower left corner of the view plane.
 #define H_D_VIEW_PLANE "H_D_VIEW_PLANE"       // Horizontal dimension of the view plane.
 #define V_D_VIEW_PLANE "V_D_VIEW_PLANE"       // Vertical dimension of the view plane.
 #define CAMERA_ORIGIN "CAMERA_ORIGIN"         // the camera's origin.
+
+#define THREADS "THREADS"
+
+typedef enum{
+    NORMALS2RGB,
+    BLINNPHONG,
+    DEPTHCOLOR,
+    LAMBERTIAN
+}SHADER;
 
 class Header{
 
@@ -56,7 +67,7 @@ class Header{
 
         int ray_shots;
 
-        bool depth_mode = false;
+        SHADER shader;
 
         vector<Object*> objects;
 
@@ -65,21 +76,7 @@ class Header{
         vec3 v_d_view_plane;
         point3 camera_origin;
 
-        void print(){
-            cout << name << endl;
-            cout << type << endl;
-            cout << codi << endl;
-            cout << width << endl;
-            cout << height << endl;
-            cout << "(" << upper_left.r() << ", " << upper_left.g() << ", " << upper_left.b() << ")" << endl;
-            cout << "(" << lower_left.r() << ", " << lower_left.g() << ", " << lower_left.b() << ")" << endl;
-            cout << "(" << upper_right.r() << ", " << upper_right.g() << ", " << upper_right.b() << ")" << endl;
-            cout << "(" << lower_right.r() << ", " << lower_right.g() << ", " << lower_right.b() << ")" << endl;
-            cout << min_depht << endl;
-            cout << max_depht << endl;
-            cout << ray_shots << endl;
-            cout << depth_mode << endl;
-        }
+        int nthreads = 1;
 
         Header(){
            
@@ -158,12 +155,19 @@ class Header{
                         header_file >> ray_shots;
                     }
 
-                    if(text == DEPTH_MODE){
+                    if(text == SHADER_){
                         header_file >> text;
-                        string mode;
-                        header_file >> mode;
-                        if(mode == "true"){
-                            depth_mode = true;
+                        string shader_option;
+                        header_file >> shader_option;
+
+                        if(shader_option == "NORMALS2RGB"){
+                            shader = NORMALS2RGB;
+                        }else if(shader_option == "BLINNPHONG"){
+                            shader = BLINNPHONG;
+                        }else if(shader_option == "DEPTHCOLOR"){
+                            shader = DEPTHCOLOR;
+                        }else if(shader_option == "LAMBERTIAN"){
+                            shader = LAMBERTIAN;
                         }
                     }
 
@@ -174,12 +178,13 @@ class Header{
                         header_file >> r;
                         string material;
                         header_file >> material;
-                        if(material == "LAMBERTIAN"){
+                        if(material == "NONE"){
+                            objects.push_back(new Sphere(c, r, new Lambertian(vec3(0,0,0))));         
+                        }else if(material == "LAMBERTIAN"){
                             objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
                         }else if(material == "METAL"){
                             objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
                         }
-                        // objects.push_back(new Sphere(c, r, new Lambertian(vec3(0.8,0.3,0.3))));
                     }
 
                     if(text == LOWER_LEFT_CORNER){
@@ -201,7 +206,11 @@ class Header{
                         header_file >> text;
                         camera_origin = read_vec3(header_file);
                     }
-
+                    if(text == THREADS){
+                        header_file >> text;
+                        header_file >> nthreads;
+                    }
+                    
                 }
             }else{
                 cout << "file is not open" << endl;
@@ -217,7 +226,6 @@ class Header{
             header_file >> c;
             return vec3(a,b,c);
         }
-
 };
 
 #endif

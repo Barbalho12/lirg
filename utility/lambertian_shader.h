@@ -1,5 +1,5 @@
-#ifndef _RAY_LAMBERTIANSHADER_H_
-#define _RAY_LAMBERTIANSHADER_H_
+#ifndef _LAMBERTIAN_SHADER_H_
+#define _LAMBERTIAN_SHADER_H_
 
 #include <iostream>
 #include "shader.h"

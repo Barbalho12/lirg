@@ -1,5 +1,5 @@
-#ifndef _RAY_DEPTHCOLORSHADER_H_
-#define _RAY_DEPTHCOLORSHADER_H_
+#ifndef _DEPTHCOLOR_SHADER_H_
+#define _DEPTHCOLOR_SHADER_H_
 
 #include <iostream>
 #include "shader.h"
