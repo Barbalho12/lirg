@@ -4,8 +4,11 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <mutex>
 
 using namespace std;
+
+std::mutex mtx;
 
 /*
 Reference: https://github.com/htailor/cpp_progress_bar
@@ -34,12 +37,14 @@ class ProgressBar{
         }
 
         void increase(){
+        	mtx.lock();
             size++;
             int _percent = (size*1.0/dimension*1.0)*100;
             if(_percent > percent){
                 percent = _percent;
                 print();
             }
+            mtx.unlock();
         }
 
         void print() {
