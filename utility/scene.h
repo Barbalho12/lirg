@@ -5,6 +5,7 @@
 #include "object.h"
 #include "sphere.h"
 #include "image.h"
+#include "light.h"
 #include <vector>
 
 using namespace std;
@@ -12,6 +13,8 @@ using namespace std;
 class Scene{
 	private:
 		vector<Object*> objects;
+		vector<DirectionLight*> lights;
+		rgb natural_light;
 		//Object background;
 		
 	public:
@@ -32,6 +35,18 @@ class Scene{
 			objects = objects_;
 		}
 
+		void setLights(vector<DirectionLight*> lights_){
+			lights = lights_;
+		}
+
+		vector<DirectionLight*> getLights(){
+			return lights;
+		}
+
+		DirectionLight* getLight(int i){
+			return lights[i];
+		}
+
 		vector<Object*> getObjects(){
 			return objects;
 		}
@@ -42,6 +57,14 @@ class Scene{
 
 		void setMaxDepht(int max_depht_){
 			max_depht = max_depht_;
+		}
+
+		void setNaturalLight(rgb natural_light_){
+			natural_light = natural_light_;
+		}
+
+		rgb getNaturalLight(){
+			return natural_light;
 		}
 
 		void setMinDepht(int min_depht_){

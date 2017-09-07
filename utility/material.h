@@ -6,6 +6,7 @@
 #include "vec3.h"
 
 class Material{
+
 	public:
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
 };

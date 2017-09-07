@@ -11,6 +11,7 @@
 #include "object.h"
 #include "lambertian.h"
 #include "metal.h"
+#include "light.h"
 
 using namespace std;
 
@@ -42,6 +43,15 @@ using namespace std;
 
 #define THREADS "THREADS"
 
+#define BP_AMBIENT "AMBIENT"
+#define BP_SPECULAR "SPECULAR"
+#define BP_SHININESS "SHININESS"
+
+#define LIGHT "LIGHT"
+
+#define NATURAL_LIGHT "NATURAL_LIGHT"
+
+
 typedef enum{
     NORMALS2RGB,
     BLINNPHONG,
@@ -70,6 +80,9 @@ class Header{
         SHADER shader;
 
         vector<Object*> objects;
+        vector<DirectionLight*> lights;
+
+        rgb natural_light;
 
         point3 lower_left_corner;
         vec3 h_d_view_plane;
@@ -181,7 +194,20 @@ class Header{
                         if(material == "NONE"){
                             objects.push_back(new Sphere(c, r, new Lambertian(vec3(0,0,0))));         
                         }else if(material == "LAMBERTIAN"){
-                            objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
+                        	if( shader == BLINNPHONG){
+                        		vec3 albedo = read_vec3(header_file);
+                        		header_file >> text;
+                        		vec3 ambient = read_vec3(header_file);
+                        		header_file >> text;
+								vec3 specular = read_vec3(header_file);
+								header_file >> text;
+								float shininess;
+								header_file >> shininess;
+								objects.push_back(new Sphere(c, r, new Lambertian(albedo,ambient,specular,shininess)));
+                        	}else{
+                        		objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
+                        	}
+                            
                         }else if(material == "METAL"){
                             objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
                         }
@@ -210,6 +236,20 @@ class Header{
                         header_file >> text;
                         header_file >> nthreads;
                     }
+                    if(text == LIGHT){
+                        // header_file >> text;
+                        rgb intensity; 
+						vec3 direction; 
+                        intensity = read_vec3(header_file);
+                        header_file >> text;
+                        direction = read_vec3(header_file);
+                        lights.push_back(new DirectionLight(intensity, direction));
+                    }
+                    if(text == NATURAL_LIGHT){
+                        // header_file >> text;
+                        natural_light = read_vec3(header_file);
+                    }
+
                     
                 }
             }else{
@@ -218,6 +258,12 @@ class Header{
 
             header_file.close();
         }
+
+        // string read_string(ifstream &header_file){
+        //     string s;
+        //     header_file >> c;
+        //     return c;
+        // }
 
         vec3 read_vec3(ifstream &header_file){
             float a,b,c;

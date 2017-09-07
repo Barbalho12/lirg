@@ -6,7 +6,17 @@
 class Lambertian : public Material{
 	public:
 		vec3 albedo;
+		vec3 ambient;
+		vec3 specular;
+		float shininess;
 		
+		Lambertian(const vec3 &attenuation, vec3 & ambient_, vec3 & specular_, float shininess_){
+			albedo = attenuation;
+			ambient = ambient_;
+			specular = specular_;
+			shininess = shininess_;
+		}
+
 		Lambertian(const vec3 &attenuation){
 			albedo = attenuation;
 		}

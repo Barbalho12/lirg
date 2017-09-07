@@ -19,6 +19,7 @@
 #include "depth_color_shader.h"
 #include "normals2rgb_shader.h"
 #include "blinn_phong_shader.h"
+#include "light.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -64,6 +65,8 @@ class RayTracer{
 			scene = Scene();
 
 			scene.setObjects(header.objects);
+			scene.setLights(header.lights);
+			scene.setNaturalLight(header.natural_light);
 			scene.setMaxDepht(header.max_depht);
 			scene.setMinDepht(header.min_depht);
 
