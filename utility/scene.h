@@ -6,6 +6,7 @@
 #include "sphere.h"
 #include "image.h"
 #include "light.h"
+#include "background.h"
 #include <vector>
 
 using namespace std;
@@ -15,17 +16,15 @@ class Scene{
 		vector<Object*> objects;
 		vector<DirectionLight*> lights;
 		rgb natural_light;
-		//Object background;
 		
 	public:
+		Background background;
+
 		float min_depht;
 		float max_depht;
 
 		Scene(){}
 
-		// Scene(Object o){
-		// 	background = o;
-		// }
 
 		void addObject(Object * o){
 			objects.push_back(o);

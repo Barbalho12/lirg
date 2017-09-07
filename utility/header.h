@@ -47,6 +47,9 @@ using namespace std;
 #define BP_SPECULAR "SPECULAR"
 #define BP_SHININESS "SHININESS"
 
+#define D_FOREGROUND_COLOR "D_FOREGROUND_COLOR" 
+#define D_BACKGROUND_COLOR "D_BACKGROUND_COLOR" 
+
 #define LIGHT "LIGHT"
 
 #define NATURAL_LIGHT "NATURAL_LIGHT"
@@ -67,10 +70,13 @@ class Header{
         string codi; //CODIFICATION
         int width;
         int height;
-        rgb upper_left; //UPPER_LEFT
-        rgb lower_left; //LOWER_LEFT
-        rgb upper_right; //UPPER_RIGHT
-        rgb lower_right; //LOWER_RIGHT
+        rgb upper_left = rgb(0,0,0); //UPPER_LEFT
+        rgb lower_left = rgb(0,0,0); //LOWER_LEFT
+        rgb upper_right = rgb(0,0,0); //UPPER_RIGHT
+        rgb lower_right = rgb(0,0,0); //LOWER_RIGHT
+
+        rgb d_foreground_color = rgb(0,0,0);
+        rgb d_background_color = rgb(0,0,0);
 
         float min_depht;
         float max_depht;
@@ -151,6 +157,16 @@ class Header{
                     if(text == LWRI_PARAM){
                         header_file >> text;
                         lower_right = read_vec3(header_file);
+                    }
+
+                    if(text == D_FOREGROUND_COLOR){
+                        header_file >> text;
+                        d_foreground_color = read_vec3(header_file);
+                    }
+
+                    if(text == D_BACKGROUND_COLOR){
+                        header_file >> text;
+                        d_background_color = read_vec3(header_file);
                     }
 
                     if(text == MIN_DEPHT){
@@ -237,7 +253,7 @@ class Header{
                         header_file >> nthreads;
                     }
                     if(text == LIGHT){
-                        // header_file >> text;
+                        header_file >> text;
                         rgb intensity; 
 						vec3 direction; 
                         intensity = read_vec3(header_file);
@@ -246,7 +262,7 @@ class Header{
                         lights.push_back(new DirectionLight(intensity, direction));
                     }
                     if(text == NATURAL_LIGHT){
-                        // header_file >> text;
+                        header_file >> text;
                         natural_light = read_vec3(header_file);
                     }
 
@@ -258,12 +274,6 @@ class Header{
 
             header_file.close();
         }
-
-        // string read_string(ifstream &header_file){
-        //     string s;
-        //     header_file >> c;
-        //     return c;
-        // }
 
         vec3 read_vec3(ifstream &header_file){
             float a,b,c;

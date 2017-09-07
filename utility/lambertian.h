@@ -30,6 +30,7 @@ class Lambertian : public Material{
 		}
 			
 		bool scatter(const Ray &r, const HitRecord &ht, vec3 & attenuation, Ray &scattered) const {
+			(void) (r);
 			vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
 			scattered = Ray(ht.origin, target-ht.origin);
 			attenuation = albedo;

@@ -20,6 +20,7 @@
 #include "normals2rgb_shader.h"
 #include "blinn_phong_shader.h"
 #include "light.h"
+#include "background.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -35,7 +36,6 @@ class RayTracer{
 
 		Camera camera;
 		Scene scene;
-		// ResourceManager materials;
 		int width;
 		int height;
 
@@ -69,6 +69,7 @@ class RayTracer{
 			scene.setNaturalLight(header.natural_light);
 			scene.setMaxDepht(header.max_depht);
 			scene.setMinDepht(header.min_depht);
+			scene.background = Background(header.upper_left, header.lower_left, header.upper_right, header.lower_right);
 
 			switch(header.shader){
 				case LAMBERTIAN:
@@ -78,7 +79,7 @@ class RayTracer{
 					shader = new BlinnPhongShader(scene, header);
 					break;
 				case DEPTHCOLOR:
-					shader = new DepthColorShader(scene);
+					shader = new DepthColorShader(scene, header.d_foreground_color, header.d_background_color);
 					break;
 				default:
 					shader = new Normals2RGBShader(scene, header);
