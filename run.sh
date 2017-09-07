@@ -6,6 +6,9 @@ g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene
 g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene5.txt
 g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene6.txt
 g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene7.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene8.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene10.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene11.txt
 
 # make &&
 # ./render samples/scene0.txt &&

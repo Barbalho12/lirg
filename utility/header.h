@@ -59,7 +59,8 @@ typedef enum{
     NORMALS2RGB,
     BLINNPHONG,
     DEPTHCOLOR,
-    LAMBERTIAN
+    LAMBERTIAN,
+    BP_LAMBERTIAN
 }SHADER;
 
 class Header{
@@ -197,6 +198,8 @@ class Header{
                             shader = DEPTHCOLOR;
                         }else if(shader_option == "LAMBERTIAN"){
                             shader = LAMBERTIAN;
+                        }else if(shader_option == "BP_LAMBERTIAN"){
+                            shader = BP_LAMBERTIAN;
                         }
                     }
 
@@ -210,7 +213,8 @@ class Header{
                         if(material == "NONE"){
                             objects.push_back(new Sphere(c, r, new Lambertian(vec3(0,0,0))));         
                         }else if(material == "LAMBERTIAN"){
-                        	if( shader == BLINNPHONG){
+                        	if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
+                                // cout << 1 << endl;
                         		vec3 albedo = read_vec3(header_file);
                         		header_file >> text;
                         		vec3 ambient = read_vec3(header_file);
@@ -225,7 +229,21 @@ class Header{
                         	}
                             
                         }else if(material == "METAL"){
-                            objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+                            if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
+                                // cout << 2 << endl;
+                                vec3 albedo = read_vec3(header_file);
+                                header_file >> text;
+                                vec3 ambient = read_vec3(header_file);
+                                header_file >> text;
+                                vec3 specular = read_vec3(header_file);
+                                header_file >> text;
+                                float shininess;
+                                header_file >> shininess;
+                                objects.push_back(new Sphere(c, r, new Metal(albedo,ambient,specular,shininess)));
+                            }else{
+                                objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+                            }
+                            // objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
                         }
                     }
 

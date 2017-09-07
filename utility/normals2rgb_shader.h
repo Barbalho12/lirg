@@ -9,13 +9,9 @@ using namespace std;
 
 class Normals2RGBShader	 : public Shader{
 
-	private:
-		Header header;
-
 	public:
 
-		Normals2RGBShader( Scene &scene_,Header header_ ) : Shader(scene_){
-			header = header_;
+		Normals2RGBShader( Scene &scene_) : Shader(scene_){
 		}
 
 		rgb color(const Ray &r){

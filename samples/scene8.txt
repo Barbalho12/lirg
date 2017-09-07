@@ -1,6 +1,6 @@
 NAME = background7.ppm
 TYPE = PPM
-CODIFICATION = ascii 
+CODIFICATION = binary 
 
 WIDTH = 1200
 HEIGHT = 600
@@ -21,7 +21,8 @@ SPHERE = 0 0 -1 0.4 LAMBERTIAN 0.0 0.3 0.8 ; 0.1 0.1 0.1 ; 0.9 0.9 0.9 ; 64
 SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.4 0.4 0.4 ; 0.1 0.1 0.1 ; 1.0 1.0 1.0 ; 5
 
 LIGHT = 1.0 1.0 1.0 ; 20 10 5
-NATURAL_LIGHT = 0.4 0.4 0.4
+LIGHT = 1.0 1.0 1.0 ; -8 2 5
+NATURAL_LIGHT = 0.1 0.4 0.3
 
 LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
 H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.

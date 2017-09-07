@@ -8,14 +8,11 @@ using namespace utility;
 using namespace std;
 
 class LambertianShader : public Shader{
-	
-	private:
-		Header header;
+
 
 	public:
 
-		LambertianShader( Scene &scene_, Header header_) : Shader(scene_){
-			header = header_;
+		LambertianShader( Scene &scene_) : Shader(scene_){
 		}
 
 

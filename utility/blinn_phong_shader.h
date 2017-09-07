@@ -13,13 +13,9 @@ using namespace std;
 
 class BlinnPhongShader : public Shader{
 
-	private:
-		Header header;
-
 	public:
 
-		BlinnPhongShader( Scene &scene_, Header header_) : Shader(scene_){
-			header = header_;
+		BlinnPhongShader( Scene &scene_) : Shader(scene_){
 		}
 
 		float max(float a, float b){
@@ -88,7 +84,7 @@ class BlinnPhongShader : public Shader{
 
 		    	rgb c0 = ka*ia;
 
-				return normalize_min_max(c0+c1+c2);
+				return normalize_min_max(c1+c2)+c0;
 
 		    }else{
 				return scene.background.getColor(r);

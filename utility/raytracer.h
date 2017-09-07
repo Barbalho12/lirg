@@ -21,6 +21,7 @@
 #include "blinn_phong_shader.h"
 #include "light.h"
 #include "background.h"
+#include "bp_lambertian_shader.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -73,16 +74,19 @@ class RayTracer{
 
 			switch(header.shader){
 				case LAMBERTIAN:
-					shader = new LambertianShader(scene, header);
+					shader = new LambertianShader(scene);
 					break;
 				case BLINNPHONG:
-					shader = new BlinnPhongShader(scene, header);
+					shader = new BlinnPhongShader(scene);
 					break;
 				case DEPTHCOLOR:
 					shader = new DepthColorShader(scene, header.d_foreground_color, header.d_background_color);
 					break;
+				case BP_LAMBERTIAN:
+					shader = new BP_LambertianShader(scene);
+					break;
 				default:
-					shader = new Normals2RGBShader(scene, header);
+					shader = new Normals2RGBShader(scene);
 					break;
 			}
 
