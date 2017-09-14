@@ -77,14 +77,18 @@ class BlinnPhongShader : public Shader{
 	                float specular = max(0.0, dot(halfDir, ht.normal));
 	                specular = pow(specular, p);
 		
-					c1 += (kd * dot(unit_vector(light->direction()  - N), ht.normal)) * light->intensity();
-				    c2 += ks * specular * light->intensity(); 
-
+				    Ray shadowRay = Ray(ht.origin, light->direction());
+				    HitRecord shadowHT;
+				    shadowHT.t = scene.getMaxDepht();
+			    	if(!hit_anything(shadowHT, shadowRay)){
+			    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
+			    		c2 += ks * specular * light->intensity();
+			    	}
 		    	}
 
 		    	rgb c0 = ka*ia;
 
-				return normalize_min_max(c1+c2)+c0;
+				return normalize_min_max((c1+c2)+c0);
 
 		    }else{
 				return scene.background.getColor(r);
