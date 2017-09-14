@@ -15,26 +15,6 @@ class BP_LambertianShader : public Shader{
 		BP_LambertianShader( Scene &scene_) : Shader(scene_){
 		}
 
-
-		// rgb color_rec(const Ray &r, int depth){
-		// 	HitRecord ht;
-		//     ht.t = scene.max_depht;
-
-		//     if(hit_anything(ht, r)){
-
-		//     	Ray scattered;
-		//     	vec3 attenuation;
-		//     	if(depth < scene.max_depht && ht.material->scatter(r, ht, attenuation, scattered)){
-		//     		return attenuation*color_rec(scattered, depth+1);
-		//     	}else{
-		//     		return rgb(0,0,0);
-		//     	}
-		//     }else{
-		//     	return scene.background.getColor(r);
-		//     }
-
-		// }
-
 		float max(float a, float b){
 			if(a>b){
 				return a;
@@ -93,6 +73,14 @@ class BP_LambertianShader : public Shader{
 						kd = l->albedo;
    					}
 
+   			// 		if(((int)(100 * ht.origin.x()))%3 == 0){
+   			// 			attenuation = rgb(1,0,0);
+   			// 		}else if(((int)(100 * ht.origin.x()))%3 == 1){
+						// attenuation = rgb(0,1,0);
+   			// 		}else{
+   			// 			attenuation = rgb(0,0,1);
+   			// 		}
+
 					vec3 N = ht.normal;
 					vec3 ka = scene.getNaturalLight();
 
@@ -108,14 +96,18 @@ class BP_LambertianShader : public Shader{
 		                float specular = max(0.0, dot(halfDir, ht.normal));
 		                specular = pow(specular, p);
 			
-						c1 += attenuation*color_rec(scattered, depth+1)* (dot(unit_vector(light->direction()  - N), ht.normal)) * light->intensity();
-					    c2 += ks * specular * light->intensity(); 
-
+						Ray shadowRay = Ray(ht.origin, light->direction());
+					    HitRecord shadowHT;
+					    shadowHT.t = scene.getMaxDepht();
+				    	if(!hit_anything(shadowHT, shadowRay)){
+				    		c1 += attenuation * color_rec(scattered, depth+1) * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal)) * light->intensity();
+				    		c2 += ks * specular * light->intensity();
+				    	}
 			    	}
 
 			    	rgb c0 = ka*ia;
 
-					return normalize_min_max(c0+c1+c2);
+					return normalize_min_max((c1+c2)+c0);
 
 		    		// return attenuation*color_rec(scattered, depth+1)*;
 		    	}else{
