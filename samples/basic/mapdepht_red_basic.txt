@@ -1,5 +1,5 @@
 # Image output information
-NAME = background1.ppm
+NAME = mapdepht_red_basic.ppm
 TYPE = PPM
 CODIFICATION = ascii 
 

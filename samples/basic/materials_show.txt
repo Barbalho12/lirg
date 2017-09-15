@@ -1,23 +1,21 @@
-NAME = background11.ppm
+NAME = materials_show.ppm
 TYPE = PPM
 CODIFICATION = binary 
-WIDTH = 400
-HEIGHT = 200
-UPPER_LEFT = 255 255 200    
+WIDTH = 1200
+HEIGHT = 600
+UPPER_LEFT = 127 179 255    
 LOWER_LEFT = 255 255 255      
 UPPER_RIGHT = 127 179 255 
 LOWER_RIGHT = 255 255 255 
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
-RAY_SHOTS = 10
+RAY_SHOTS = 50
 THREADS = 10
-SHADER = BP_LAMBERTIAN
-SPHERE = 0 0 -1 0.4 METAL 1.0 1 1 ; 0.1 0.1 0.1 ; 0.9 0.9 0.9 ; 64
-SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.3 0.8 0.2 ; 0.1 0.1 0.1 ; 1.0 1.0 1.0 ; 5
-
-LIGHT = 1.0 1.0 1.0 ; -20 10 5
-NATURAL_LIGHT = 0.4 0.4 0.2
-
+SHADER = LAMBERTIAN
+SPHERE = 0 0 -1 0.5 LAMBERTIAN 0.8 0.3 0.3
+SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.8 0.8 0.0
+SPHERE = 1 0 -1 0.5 METAL 0.8 0.6 0.2
+SPHERE = -1 0 -1 0.5 METAL 0.8 0.8 0.8
 LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
 H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.
 V_D_VIEW_PLANE = 0 2 0 # Vertical dimension of the view plane.

@@ -1,21 +1,29 @@
-NAME = background.ppm
+NAME = bp_metal_shadow.ppm
 TYPE = PPM
 CODIFICATION = ascii 
-WIDTH = 1920
-HEIGHT = 960
+
+WIDTH = 1200
+HEIGHT = 600
+
 UPPER_LEFT = 127 179 255    
 LOWER_LEFT = 255 255 255      
 UPPER_RIGHT = 127 179 255 
 LOWER_RIGHT = 255 255 255 
-MIN_DEPHT = -1
-MAX_DEPHT = 1001
-RAY_SHOTS = 1 # anti-aliasing.
-SHADER = NORMALS2RGB
-THREADS = 100
-SPHERE = 0.3 0 -1 0.4 NONE
-SPHERE = 0 -100.5 -3 99 NONE
-SPHERE = 0 1 -2 0.6 NONE
-SPHERE = -0.4 0 -3 0.7 NONE
+
+MIN_DEPHT = 0.001
+MAX_DEPHT = 4
+RAY_SHOTS = 10
+
+THREADS = 10
+
+SHADER = BP_LAMBERTIAN
+SPHERE = 0 0 -2 0.5 METAL 0.0 0.3 0.8 ; 0.1 0.1 0.1 ; 0.9 0.9 0.9 ; 64
+SPHERE = 0 -100.5 -1 100 METAL 0.4 0.4 0.4 ; 0.1 0.1 0.1 ; 1.0 1.0 1.0 ; 5
+
+LIGHT = 0.8 0.8 0.8 ; -8 7 0
+LIGHT = 0.5 0.5 0.5 ; 20 10 15
+NATURAL_LIGHT = 0.4 0.4 0.4
+
 LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
 H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.
 V_D_VIEW_PLANE = 0 2 0 # Vertical dimension of the view plane.

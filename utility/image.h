@@ -44,15 +44,15 @@ class Image{
 		~Image(){}
 
 		void setPixel(int row, int col, rgb colors){
-			screen[row][col].r = int(255.99f * colors.r());
-            screen[row][col].g = int(255.99f * colors.g());
-            screen[row][col].b = int(255.99f * colors.b());
+			screen[row][col].r = int(255.f * colors.r());
+            screen[row][col].g = int(255.f * colors.g());
+            screen[row][col].b = int(255.f * colors.b());
 		}
 
 		void setGammaPixel(int row, int col, rgb colors){
-			screen[row][col].r = int(255.99f * sqrt(colors.r()));
-            screen[row][col].g = int(255.99f * sqrt(colors.g()));
-            screen[row][col].b = int(255.99f * sqrt(colors.b()));
+			screen[row][col].r = int(255.f * sqrt(colors.r()));
+            screen[row][col].g = int(255.f * sqrt(colors.g()));
+            screen[row][col].b = int(255.f * sqrt(colors.b()));
 		}
 
 		void print(Header header){

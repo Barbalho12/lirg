@@ -82,8 +82,9 @@ class BlinnPhongShader : public Shader{
 				    shadowHT.t = scene.getMaxDepht();
 			    	if(!hit_anything(shadowHT, shadowRay)){
 			    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
-			    		c2 += ks * specular * light->intensity();
+			    		
 			    	}
+			    	c2 += ks * specular * light->intensity();
 		    	}
 
 		    	rgb c0 = ka*ia;

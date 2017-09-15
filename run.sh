@@ -1,26 +1,25 @@
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_0.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_1.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_2.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_3.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_4.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_5.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_6.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_7.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples_blinn_phong/img_8.txt
+
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/bp_metal_shadow.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/mapdepht_red_basic.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/normal2rgb_basic.txt
+
+
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_0.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_1.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_2.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_3.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_4.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_5.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_6.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_7.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_8.txt
 
 
 
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene0.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene1.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene2.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene3.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene4.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene5.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene6.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene7.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene8.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene10.txt
-# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/scene11.txt
+
+
+
 
 # make &&
 # ./render samples/scene0.txt &&
