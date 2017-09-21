@@ -11,6 +11,7 @@
 #include "object.h"
 #include "lambertian.h"
 #include "metal.h"
+#include "toon.h"
 #include "light.h"
 
 using namespace std;
@@ -60,7 +61,8 @@ typedef enum{
     BLINNPHONG,
     DEPTHCOLOR,
     LAMBERTIAN,
-    BP_LAMBERTIAN
+    BP_LAMBERTIAN,
+    TOON
 }SHADER;
 
 class Header{
@@ -200,6 +202,8 @@ class Header{
                             shader = LAMBERTIAN;
                         }else if(shader_option == "BP_LAMBERTIAN"){
                             shader = BP_LAMBERTIAN;
+                        }else if(shader_option == "TOON"){
+                            shader = TOON;
                         }
                     }
 
@@ -244,6 +248,17 @@ class Header{
                                 objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
                             }
                             // objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+                        }else if(material == "TOON"){
+                            if(shader == TOON){
+                                vector<rgb> colors;
+                                rgb color = read_vec3(header_file);
+                                colors.push_back(color);
+                                header_file >> text;
+                                rgb borderColor = read_vec3(header_file);
+                                header_file >> text;
+                                rgb shadowColor = read_vec3(header_file);
+                                objects.push_back(new Sphere(c, r, new Toon(colors, borderColor, shadowColor)));
+                            }
                         }
                     }
 

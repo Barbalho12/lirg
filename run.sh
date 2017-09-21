@@ -1,8 +1,8 @@
 
 g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/bp_metal_shadow.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/mapdepht_red_basic.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/normal2rgb_basic.txt
+# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/mapdepht_red_basic.txt
+# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt
+# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/normal2rgb_basic.txt
 
 
 g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/blinn_phong_base/img_0.txt

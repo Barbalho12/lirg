@@ -25,29 +25,6 @@ class BlinnPhongShader : public Shader{
 			return b;
 		}
 
-		rgb normalize_min_max(rgb c){
-			if(c.r() > 1.f){
-				c.e[0] = 1.0;
-			}
-			if(c.g() > 1.f){
-				c.e[1] = 1.0;
-			}
-			if(c.b() > 1.f){
-				c.e[2] = 1.0;
-			}
-			if(c.r() < 0.f){
-				c.e[0] = 0.0;
-			}
-			if(c.g() < 0.f){
-				c.e[1] = 0.0;
-			}
-			if(c.b() < 0.f){
-				c.e[2] = 0.0;
-			}
-			return c;
-		}
-
-
 		//https://en.wikipedia.org/wiki/Blinn%96Phong_shading_model#Fragment_shader
 		//https://selan.bitbucket.io/srt/classrt_1_1_blinn_phong_shader.html
 		rgb color(const Ray &r){

@@ -19,6 +19,7 @@
 #include "depth_color_shader.h"
 #include "normals2rgb_shader.h"
 #include "blinn_phong_shader.h"
+#include "toon_shader.h"
 #include "light.h"
 #include "background.h"
 #include "bp_lambertian_shader.h"
@@ -84,6 +85,9 @@ class RayTracer{
 					break;
 				case BP_LAMBERTIAN:
 					shader = new BP_LambertianShader(scene);
+					break;
+				case TOON:
+					shader = new ToonShader(scene);
 					break;
 				default:
 					shader = new Normals2RGBShader(scene);
