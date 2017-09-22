@@ -45,7 +45,7 @@ class LambertianShader : public Shader{
 		    	Ray scattered;
 		    	vec3 attenuation;
 		    	if(depth < scene.max_depht && ht.material->scatter(r, ht, attenuation, scattered)){
-		    		return attenuation*color_rec(scattered, depth+1)*c1;
+		    		return normalize_min_max(attenuation*color_rec(scattered, depth+1)*c1);
 		    	}else{
 		    		return rgb(0,0,0);
 		    	}
