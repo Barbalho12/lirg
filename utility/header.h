@@ -250,13 +250,15 @@ class Header{
                             // objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
                         }else if(material == "TOON"){
                             if(shader == TOON){
-                                vector<rgb> colors;
-                                rgb color = read_vec3(header_file);
-                                colors.push_back(color);
-                                header_file >> text;
+
                                 rgb borderColor = read_vec3(header_file);
                                 header_file >> text;
+
                                 rgb shadowColor = read_vec3(header_file);
+                                header_file >> text;
+
+                                vector<rgb> colors = readListColor(header_file);
+
                                 objects.push_back(new Sphere(c, r, new Toon(colors, borderColor, shadowColor)));
                             }
                         }
@@ -306,6 +308,24 @@ class Header{
             }
 
             header_file.close();
+        }
+
+        vector<rgb> readListColor(ifstream &header_file){
+            char c;
+            vector<rgb> colors;
+            header_file.get(c);
+            while(c != '{') header_file.get(c);
+            while(true){
+                char value = header_file.peek();
+                if(!isdigit(value) && value != header_file.eof()){
+                    header_file.get(c);
+                    if(c == '}') break;
+                }else{
+                    colors.push_back(read_vec3(header_file));
+                }
+                
+            }
+            return colors;
         }
 
         vec3 read_vec3(ifstream &header_file){
