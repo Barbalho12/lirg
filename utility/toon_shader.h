@@ -16,101 +16,101 @@ class ToonShader : public Shader{
 		ToonShader( Scene &scene_) : Shader(scene_){
 		}
 
+
+		float getAngle(vec3 v1, vec3 v2){
+			//resultado da expressão [[[   cos phi = v1*v2 / |v1| * |v2|    ]]]
+		    //Retorna cos phi
+			float angle = dot(v1, v2)/(v1.length()*v2.length());
+
+			//Anglo em graus entre v1 e v2
+			float piangle = acos(angle) * 180.0 / PI;
+
+			//Gambiarra para variar entre 0° e 90° (Não acho que esteja correto, fiz pra testar)
+			piangle = ((int) piangle) % 90;
+
+			return piangle;
+		}
+
+		float max(float a, float b){
+			if(a>b){
+				return a;
+			}
+			return b;
+		}
+
 		rgb color(const Ray &r){
 			HitRecord ht;
 		    ht.t = scene.getMaxDepht();
 
 		    if(hit_anything(ht, r)){
 		    	Toon *toon = dynamic_cast<Toon*>(ht.material);
-		    	// float hitAngle = fabs(dot(ht.normal, r.get_direction()));
-		    	//printf("%lf\n", hitAngle);
 
-		    	//resultado da expressão [[[   cos phi = v1*v2 / |v1| * |v2|    ]]]
-		    	//Retorna cos phi
-		    	float angle = dot(ht.normal, r.get_direction())/(ht.normal.length()*r.get_direction().length());
 
-		    	//Anglo em graus entre v1 e v2
-			    float piangle = acos(angle) * 180.0 / PI;
+		    	//Anglo entre o raio da camera e anormal do ponto
+			    float angleHitCamera = getAngle(ht.normal, r.get_direction());
+
 			    
-			    //Gambiarra para variar entre 0° e 90° (Não acho que esteja correto, fiz pra testar)
-			    piangle = ((int) piangle) % 90;
-
-			    //Factor de variação 90 dividido pelo numero de cores (depende do valor maximo de 'piangle', que no caso da gambiarra é 90°)
-			    int factor = 90/toon->colors.size();
-
-			    //Margem da borda
-			    if(piangle < 10){
+			    //Margem da borda 
+			    if(angleHitCamera < 10){
 			    	return rgb(0, 0, 0);
-			    }
+			    }else{
 
-			    //Percorre cada cor
-			    for(unsigned int i = 0; i < toon->colors.size(); i++){
+			    	//Factor de variação 90 dividido pelo numero de cores (depende do valor maximo de 'piangle', que no caso da gambiarra é 90°)
+			    	float factor = 90.0/toon->colors.size();
+			    	
 
-			    	//Se o ango estiver na margem  [[ (i*factor)  =<   piangle   < (i*factor+factor) ]] colore
-			    	if(piangle >= i*factor && piangle < (i*factor+factor)){
-			    		return rgb(toon->colors[i]);
-			    	}
+			    	// vec3 ks = lambertian->specular;
+					// float p = lambertian->shininess;
+					vec3 ia = vec3(0.1, 0.1, 0.1);
+					rgb kd;
+					vec3 N = ht.normal;
+					vec3 ka = scene.getNaturalLight();
 
+				    	
+			    	vector<DirectionLight*> lights = scene.getLights();
 
-			    }
+					rgb c1, c2;
 
-			    //Verifica se alguem ficou de fora, pintando de branco "DEBUGANDO"
-			    return rgb(1, 1, 1);
+			    	for(unsigned int i = 0; i < lights.size(); i++){
 
-			    // piangle = ((int) piangle) % 90; 
-			    // if(piangle > 0 && piangle <= 30){
-			    // 	return rgb(0, 0, 1);
-			    // }else if(piangle > 30 && piangle <= 60){
-			    // 	return rgb(1, 0, 0);
-			    // }else if(piangle > 60 && piangle <= 90){
-			    // 	return rgb(1, 1, 1);
-			    // }else{
-			    	// return rgb(1, 1, 1);
-			    // }
-		    	
+			    		DirectionLight *light = scene.getLight(i);
 
-		    	// if(hitAngle < 0.3){
-
-		    	// 	return rgb(0, 0, 0);
-		    	// }
-		    	// 	return rgb(1, 1, 1);
+			    		//Anglo entre a luz e anormal do ponto
+			    		float angleHitLight = getAngle(light->direction(), ht.normal);
 
 
-		    	
+						//Percorre cada cor
+					    for(unsigned int color_toon = 0; color_toon < toon->colors.size(); color_toon++){
+				    		
+				    		//Se o anglo estiver na margem  [[ (i*factor)  =<   piangle   < (i*factor+factor) ]] colore
+					    	if(angleHitLight >= color_toon*factor && angleHitLight < (color_toon*factor+factor)){
+					    		kd =  toon->colors[color_toon];
+					    	}
+					    }
 
-		    	
-		  //   	vec3 ks = lambertian->specular;
-				// float p = lambertian->shininess;
-				// vec3 ia = lambertian->ambient;
-				// vec3 kd = lambertian->albedo;
-				// vec3 N = ht.normal;
-				// vec3 ka = scene.getNaturalLight();
+				    		
 
-				// vector<DirectionLight*> lights = scene.getLights();
+			    		vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
+		                // float specular = max(0.0, dot(halfDir, ht.normal));
+		                // specular = pow(specular, p);
+			
+					    Ray shadowRay = Ray(ht.origin, light->direction());
+					    HitRecord shadowHT;
+					    shadowHT.t = scene.getMaxDepht();
+				    	
+				    	if(!hit_anything(shadowHT, shadowRay)){
+				    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
+				    		
+				    	}
+					    	// c2 += ks * specular * light->intensity();
+				    	}
 
-				// rgb c1, c2;
+				    	rgb c0 = ka*ia;
 
-		  //   	for(unsigned int i = 0; i < lights.size(); i++){
+						return normalize_min_max(c1+c0);
 
-		  //   		DirectionLight *light = scene.getLight(i);
 
-		  //   		vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
-	   //              float specular = max(0.0, dot(halfDir, ht.normal));
-	   //              specular = pow(specular, p);
-		
-				//     Ray shadowRay = Ray(ht.origin, light->direction());
-				//     HitRecord shadowHT;
-				//     shadowHT.t = scene.getMaxDepht();
-			 //    	if(!hit_anything(shadowHT, shadowRay)){
-			 //    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
-			    		
-			 //    	}
-			 //    	c2 += ks * specular * light->intensity();
-		  //   	}
-
-		  //   	rgb c0 = ka*ia;
-
-				// return normalize_min_max((c1+c2)+c0);
+				    }
 
 		    }else{
 				return scene.background.getColor(r);
