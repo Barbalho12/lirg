@@ -25,17 +25,28 @@ class ToonShader : public Shader{
 		    	// float hitAngle = fabs(dot(ht.normal, r.get_direction()));
 		    	//printf("%lf\n", hitAngle);
 
+		    	//resultado da expressão [[[   cos phi = v1*v2 / |v1| * |v2|    ]]]
+		    	//Retorna cos phi
 		    	float angle = dot(ht.normal, r.get_direction())/(ht.normal.length()*r.get_direction().length());
+
+		    	//Anglo em graus entre v1 e v2
 			    float piangle = acos(angle) * 180.0 / PI;
 			    
+			    //Gambiarra para variar entre 0° e 90° (Não acho que esteja correto, fiz pra testar)
 			    piangle = ((int) piangle) % 90;
+
+			    //Factor de variação 90 dividido pelo numero de cores (depende do valor maximo de 'piangle', que no caso da gambiarra é 90°)
 			    int factor = 90/toon->colors.size();
 
+			    //Margem da borda
 			    if(piangle < 10){
 			    	return rgb(0, 0, 0);
 			    }
 
+			    //Percorre cada cor
 			    for(unsigned int i = 0; i < toon->colors.size(); i++){
+
+			    	//Se o ango estiver na margem  [[ (i*factor)  =<   piangle   < (i*factor+factor) ]] colore
 			    	if(piangle >= i*factor && piangle < (i*factor+factor)){
 			    		return rgb(toon->colors[i]);
 			    	}
@@ -43,6 +54,7 @@ class ToonShader : public Shader{
 
 			    }
 
+			    //Verifica se alguem ficou de fora, pintando de branco "DEBUGANDO"
 			    return rgb(1, 1, 1);
 
 			    // piangle = ((int) piangle) % 90; 
