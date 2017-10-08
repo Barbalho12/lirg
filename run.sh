@@ -1,4 +1,5 @@
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render snow.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/cartoons/img_0.txt
+# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render snow.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/bp_metal_shadow.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/mapdepht_red_basic.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt

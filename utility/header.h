@@ -258,6 +258,9 @@ class Header{
                                 header_file >> text;
 
                                 vector<rgb> colors = readListColor(header_file);
+                                // header_file >> text;
+
+                                // vector<float> angles = readListFloat(header_file);
 
                                 objects.push_back(new Sphere(c, r, new Toon(colors, borderColor, shadowColor)));
                             }
@@ -327,6 +330,26 @@ class Header{
             }
             return colors;
         }
+
+        // vector<float> readListFloat(ifstream &header_file){
+        //     char c;
+        //     vector<float> angles;
+        //     header_file.get(c);
+        //     while(c != '{') header_file.get(c);
+        //     while(true){
+        //         char value = header_file.peek();
+        //         if(!isdigit(value) && value != header_file.eof()){
+        //             header_file.get(c);
+        //             if(c == '}') break;
+        //         }else{
+        //             float value;
+        //             header_file >> value;
+        //             angles.push_back(value);
+        //         }
+                
+        //     }
+        //     return angles;
+        // }
 
         vec3 read_vec3(ifstream &header_file){
             float a,b,c;
