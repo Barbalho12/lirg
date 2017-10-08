@@ -1,29 +1,23 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "vec3.h"
+
 using namespace utility;
 
-
-class DirectionLight{
-
-	public:
+class Light{
+	protected:
 		rgb m_intensity; 
 		vec3 m_direction; 
 
-     DirectionLight( rgb i = vec3(0,0,0), vec3 d = vec3(0,0,0) ){
-     	m_intensity = i;
-     	m_direction = d;
-     }
-
-
-     rgb intensity() const { 
-     	return m_intensity;
-     }
-     vec3 direction() const {
-     	return m_direction; 
-     }
-
-    virtual ~DirectionLight() { };
+     public:
+          Light(rgb i, vec3 d){
+               m_intensity = i;
+               m_direction = d;
+          }
+          
+          virtual rgb intensity(point3 p) = 0;
+          virtual vec3 direction() = 0;
 };
 
-#endif /* LIGHT_H */
+#endif

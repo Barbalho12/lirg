@@ -45,19 +45,16 @@ class ToonShader : public Shader{
 		    if(hit_anything(ht, r)){
 		    	Toon *toon = dynamic_cast<Toon*>(ht.material);
 
-
 		    	//Anglo entre o raio da camera e anormal do ponto
 			    float angleHitCamera = getAngle(ht.normal, r.get_direction());
-
 			    
 			    //Margem da borda 
 			    if(angleHitCamera < 10){
-			    	return rgb(0, 0, 0);
+			    	return toon->borderColor;
 			    }else{
 
 			    	//Factor de variação 90 dividido pelo numero de cores (depende do valor maximo de 'piangle', que no caso da gambiarra é 90°)
 			    	float factor = 90.0/toon->colors.size();
-			    	
 
 			    	// vec3 ks = lambertian->specular;
 					// float p = lambertian->shininess;
@@ -67,17 +64,16 @@ class ToonShader : public Shader{
 					vec3 ka = scene.getNaturalLight();
 
 				    	
-			    	vector<DirectionLight*> lights = scene.getLights();
+			    	vector<Light*> lights = scene.getLights();
 
 					rgb c1, c2;
 
 			    	for(unsigned int i = 0; i < lights.size(); i++){
 
-			    		DirectionLight *light = scene.getLight(i);
+			    		Light *light = scene.getLight(i);
 
 			    		//Anglo entre a luz e anormal do ponto
 			    		float angleHitLight = getAngle(light->direction(), ht.normal);
-
 
 						//Percorre cada cor
 					    for(unsigned int color_toon = 0; color_toon < toon->colors.size(); color_toon++){
@@ -86,11 +82,9 @@ class ToonShader : public Shader{
 					    	if(angleHitLight >= color_toon*factor && angleHitLight < (color_toon*factor+factor)){
 					    		kd =  toon->colors[color_toon];
 					    	}
-					    }
+					    }	
 
-				    		
-
-			    		vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
+			    		//vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
 		                // float specular = max(0.0, dot(halfDir, ht.normal));
 		                // specular = pow(specular, p);
 			
@@ -99,19 +93,16 @@ class ToonShader : public Shader{
 					    shadowHT.t = scene.getMaxDepht();
 				    	
 				    	if(!hit_anything(shadowHT, shadowRay)){
-				    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
+				    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity(ht.normal);
 				    		
 				    	}
 					    	// c2 += ks * specular * light->intensity();
-				    	}
-
-				    	rgb c0 = ka*ia;
-
-						return normalize_min_max(c1+c0);
-
-
 				    }
 
+			    	rgb c0 = ka*ia;
+
+					return normalize_min_max(c1+c0);
+				}
 		    }else{
 				return scene.background.getColor(r);
 		    }

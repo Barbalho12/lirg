@@ -42,13 +42,13 @@ class BlinnPhongShader : public Shader{
 				vec3 N = ht.normal;
 				vec3 ka = scene.getNaturalLight();
 
-				vector<DirectionLight*> lights = scene.getLights();
+				vector<Light*> lights = scene.getLights();
 
 				rgb c1, c2;
 
 		    	for(unsigned int i = 0; i < lights.size(); i++){
 
-		    		DirectionLight *light = scene.getLight(i);
+		    		Light *light = scene.getLight(i);
 
 		    		vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
 	                float specular = max(0.0, dot(halfDir, ht.normal));
@@ -58,10 +58,10 @@ class BlinnPhongShader : public Shader{
 				    HitRecord shadowHT;
 				    shadowHT.t = scene.getMaxDepht();
 			    	if(!hit_anything(shadowHT, shadowRay)){
-			    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity();
+			    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity(ht.normal);
 			    		
 			    	}
-			    	c2 += ks * specular * light->intensity();
+			    	c2 += ks * specular * light->intensity(ht.normal);
 		    	}
 
 		    	rgb c0 = ka*ia;

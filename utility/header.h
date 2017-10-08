@@ -13,6 +13,8 @@
 #include "metal.h"
 #include "toon.h"
 #include "light.h"
+#include "direction_light.h"
+#include "spot_light.h"
 
 using namespace std;
 
@@ -89,7 +91,7 @@ class Header{
         SHADER shader;
 
         vector<Object*> objects;
-        vector<DirectionLight*> lights;
+        vector<Light*> lights;
 
         rgb natural_light;
 
@@ -292,12 +294,32 @@ class Header{
                     }
                     if(text == LIGHT){
                         header_file >> text;
-                        rgb intensity; 
-						vec3 direction; 
-                        intensity = read_vec3(header_file);
-                        header_file >> text;
-                        direction = read_vec3(header_file);
-                        lights.push_back(new DirectionLight(intensity, direction));
+                        string light_option;
+                        header_file >> light_option;
+
+                        rgb intensity;
+                        vec3 direction;
+
+                        if(light_option == "DIRECTIONAL"){
+                            header_file >> text;
+                            intensity = read_vec3(header_file);
+                            header_file >> text;
+                            direction = read_vec3(header_file);
+                            lights.push_back(new DirectionLight(intensity, direction));
+                        }else if(light_option == "SPOT"){
+                            vec3 origin;
+                            float angle;
+
+                            header_file >> text;
+                            intensity = read_vec3(header_file);
+                            header_file >> text;
+                            origin = read_vec3(header_file);
+                            header_file >> text;
+                            direction = read_vec3(header_file);
+                            header_file >> text;
+                            header_file >> angle;
+                            lights.push_back(new SpotLight(intensity, origin, direction, angle));
+                        }
                     }
                     if(text == NATURAL_LIGHT){
                         header_file >> text;

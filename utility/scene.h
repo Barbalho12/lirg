@@ -14,7 +14,7 @@ using namespace std;
 class Scene{
 	private:
 		vector<Object*> objects;
-		vector<DirectionLight*> lights;
+		vector<Light*> lights;
 		rgb natural_light;
 		
 	public:
@@ -34,15 +34,15 @@ class Scene{
 			objects = objects_;
 		}
 
-		void setLights(vector<DirectionLight*> lights_){
+		void setLights(vector<Light*> lights_){
 			lights = lights_;
 		}
 
-		vector<DirectionLight*> getLights(){
+		vector<Light*> getLights(){
 			return lights;
 		}
 
-		DirectionLight* getLight(int i){
+		Light* getLight(int i){
 			return lights[i];
 		}
 

@@ -25,20 +25,20 @@ class LambertianShader : public Shader{
 		rgb color_rec(const Ray &r, int depth){
 			HitRecord ht;
 		    ht.t = scene.max_depht;
-		    vector<DirectionLight*> lights = scene.getLights();
+		    vector<Light*> lights = scene.getLights();
 
 		    if(hit_anything(ht, r)){
 		    	rgb c1;
 
 		    	for(unsigned int i = 0; i < lights.size(); i++){
 
-		    		DirectionLight *light = scene.getLight(i);
+		    		Light *light = scene.getLight(i);
 		
 				    Ray shadowRay = Ray(ht.origin, light->direction());
 				    HitRecord shadowHT;
 				    shadowHT.t = scene.getMaxDepht();
 			    	if(!hit_anything(shadowHT, shadowRay)){
-			    		c1 += (max(0.0, dot(unit_vector(light->direction()  - ht.normal), ht.normal))) * light->intensity();
+			    		c1 += (max(0.0, dot(unit_vector(light->direction()  - ht.normal), ht.normal))) * light->intensity(ht.normal);
 			    	}
 		    	}
 

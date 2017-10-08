@@ -9,14 +9,13 @@ using namespace std;
 
 class Toon : public Material{
 	private:
-		
-		
-		rgb borderColor;
+
 		rgb shadowColor;
 
 	public:
 		// vector<float> angles;
 		vector<rgb> colors;
+		rgb borderColor;
 
 		Toon(rgb bc = rgb(0,0,0), rgb sc = rgb(0.4,0.4,0.4)){
 			borderColor = bc;
