@@ -17,7 +17,7 @@ class Light{
           }
           
           virtual rgb intensity(point3 p) = 0;
-          virtual vec3 direction() = 0;
+          virtual vec3 direction(point3 p) = 0;
 };
 
 #endif

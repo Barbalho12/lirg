@@ -15,6 +15,7 @@
 #include "light.h"
 #include "direction_light.h"
 #include "spot_light.h"
+#include "point_light.h"
 
 using namespace std;
 
@@ -319,6 +320,14 @@ class Header{
                             header_file >> text;
                             header_file >> angle;
                             lights.push_back(new SpotLight(intensity, origin, direction, angle));
+                        }else if(light_option == "POINT"){
+                            vec3 origin;
+
+                            header_file >> text;
+                            intensity = read_vec3(header_file);
+                            header_file >> text;
+                            origin = read_vec3(header_file);
+                            lights.push_back(new PointLight(origin, intensity));
                         }
                     }
                     if(text == NATURAL_LIGHT){

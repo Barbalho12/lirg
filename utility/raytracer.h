@@ -98,13 +98,13 @@ class RayTracer{
 		
 		void pixel_solve(Image &frame, int width, int height_top, int height_bottom){
 			for (int row = height_top; row >= height_bottom; --row){
-		    for(int col = 0; col < width; col++){
-		        rgb colors = colorSoftened(col, row);
-		        frame.setGammaPixel(row, col, colors);
+			    for(int col = 0; col < width; col++){
+			        rgb colors = colorSoftened(col, row);
+			        frame.setGammaPixel(row, col, colors);
 
-		        progressbar.increase();
-		    }
-		}
+			        progressbar.increase();
+			    }
+			}
 		}
 		
 		Image ray_trace(){

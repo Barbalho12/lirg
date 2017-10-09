@@ -92,16 +92,16 @@ class BP_LambertianShader : public Shader{
 
 			    		Light *light = scene.getLight(i);
 
-			    		vec3 halfDir = unit_vector(unit_vector(light->direction()) - r.get_direction());
+			    		vec3 halfDir = unit_vector(unit_vector(light->direction(ht.origin)) - r.get_direction());
 		                float specular = max(0.0, dot(halfDir, ht.normal));
 		                specular = pow(specular, p);
 			
-						Ray shadowRay = Ray(ht.origin, light->direction());
+						Ray shadowRay = Ray(ht.origin, light->direction(ht.origin));
 					    HitRecord shadowHT;
 					    shadowHT.t = scene.getMaxDepht();
 				    	if(!hit_anything(shadowHT, shadowRay)){
-				    		c1 += attenuation * color_rec(scattered, depth+1) * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal)) * light->intensity(ht.normal);
-				    		c2 += ks * specular * light->intensity(ht.normal);
+				    		c1 += attenuation * color_rec(scattered, depth+1) * max(0.0, dot(unit_vector(light->direction(ht.origin)  - N), ht.normal)) * light->intensity(ht.origin);
+				    		c2 += ks * specular * light->intensity(ht.origin);
 				    	}
 			    	}
 

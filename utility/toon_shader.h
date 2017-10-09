@@ -73,7 +73,7 @@ class ToonShader : public Shader{
 			    		Light *light = scene.getLight(i);
 
 			    		//Anglo entre a luz e anormal do ponto
-			    		float angleHitLight = getAngle(light->direction(), ht.normal);
+			    		float angleHitLight = getAngle(light->direction(ht.origin), ht.normal);
 
 						//Percorre cada cor
 					    for(unsigned int color_toon = 0; color_toon < toon->colors.size(); color_toon++){
@@ -88,12 +88,12 @@ class ToonShader : public Shader{
 		                // float specular = max(0.0, dot(halfDir, ht.normal));
 		                // specular = pow(specular, p);
 			
-					    Ray shadowRay = Ray(ht.origin, light->direction());
+					    Ray shadowRay = Ray(ht.origin, light->direction(ht.origin));
 					    HitRecord shadowHT;
 					    shadowHT.t = scene.getMaxDepht();
 				    	
 				    	if(!hit_anything(shadowHT, shadowRay)){
-				    		c1 += (kd * max(0.0, dot(unit_vector(light->direction()  - N), ht.normal))) * light->intensity(ht.normal);
+				    		c1 += (kd * max(0.0, dot(unit_vector(light->direction(ht.origin)  - N), ht.normal))) * light->intensity(ht.origin);
 				    		
 				    	}
 					    	// c2 += ks * specular * light->intensity();

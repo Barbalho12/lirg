@@ -12,7 +12,7 @@ class DirectionLight : public Light {
 			return m_intensity;
 		}
 
-		vec3 direction(){
+		vec3 direction(point3 p){
 			return m_direction; 
 		}
 

@@ -34,11 +34,11 @@ class LambertianShader : public Shader{
 
 		    		Light *light = scene.getLight(i);
 		
-				    Ray shadowRay = Ray(ht.origin, light->direction());
+				    Ray shadowRay = Ray(ht.origin, light->direction(ht.origin));
 				    HitRecord shadowHT;
 				    shadowHT.t = scene.getMaxDepht();
 			    	if(!hit_anything(shadowHT, shadowRay)){
-			    		c1 += (max(0.0, dot(unit_vector(light->direction()  - ht.normal), ht.normal))) * light->intensity(ht.normal);
+			    		c1 += (max(0.0, dot(unit_vector(light->direction(ht.origin)  - ht.normal), ht.normal))) * light->intensity(ht.origin);
 			    	}
 		    	}
 
