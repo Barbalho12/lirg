@@ -59,10 +59,16 @@ class RayTracer{
 
 			progressbar.setDimension(width*height);
 
-			camera = Camera(header.lower_left_corner, // lower left corner of the view plane.
-				header.v_d_view_plane,  // Vertical dimension of the view plane.
-				header.h_d_view_plane,  // Horizontal dimension of the view plane.
-				header.camera_origin);	// the camera's origin.
+			camera = Camera(
+				vec3(-2,2,1),
+				vec3(0,0,-1),
+				vec3(0,1,0),
+				90,
+				float(width)/float(height));
+			// camera = Camera(header.lower_left_corner, // lower left corner of the view plane.
+			// 	header.v_d_view_plane,  // Vertical dimension of the view plane.
+			// 	header.h_d_view_plane,  // Horizontal dimension of the view plane.
+			// 	header.camera_origin);	// the camera's origin.
 
 			scene = Scene();
 

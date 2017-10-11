@@ -20,6 +20,24 @@ class Camera{
 			h_axis = ha;
 			origin = o;
 		}
+
+		Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect){
+			vec3 u, v, w;
+			float theta = vflow*M_PI/180;
+			float half_height = tan(theta/2);
+			float half_width = aspect * half_height;
+			origin = lookfrom;
+			w = unit_vector(lookfrom - lookat);
+			u = unit_vector(cross(vup,w));
+			v = cross(w,u);
+
+
+			lower_left_corner = vec3(-half_width, -half_height, -1.0);
+			lower_left_corner = origin - half_width*u - half_height*v - w;
+			// v_axis = origin - half_width*u - half_height*v - w;
+			h_axis = 2*half_width*u;
+			v_axis = 2*half_height*v;
+		}
 };
 
 #endif
