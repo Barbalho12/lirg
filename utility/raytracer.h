@@ -59,12 +59,26 @@ class RayTracer{
 
 			progressbar.setDimension(width*height);
 
+			vec3 lookfrom(3,3,2);
+			vec3 lookat(0,0,-1);
+			float dist_to_focus = (lookfrom-vec3(-1,0,-1)).length();
+			float aperture = 2.0;
+
 			camera = Camera(
-				vec3(-2,2,1),
-				vec3(0,0,-1),
+				lookfrom,
+				lookat,
 				vec3(0,1,0),
-				90,
-				float(width)/float(height));
+				20,
+				float(width)/float(height),
+				aperture,
+				dist_to_focus);
+
+			// camera = Camera(
+			// 	vec3(-2,2,1),
+			// 	vec3(0,0,-1),
+			// 	vec3(0,1,0),
+			// 	90,
+			// 	float(width)/float(height));
 			// camera = Camera(header.lower_left_corner, // lower left corner of the view plane.
 			// 	header.v_d_view_plane,  // Vertical dimension of the view plane.
 			// 	header.h_d_view_plane,  // Horizontal dimension of the view plane.
@@ -153,8 +167,9 @@ class RayTracer{
 		        u = float(col + generate_canonical<double, 10>(gen)) / float(width);
 		        v = float(row + generate_canonical<double, 10>(gen)) / float(height);
 
-		        point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
-		        Ray r(camera.origin, end_point - camera.origin);
+		        Ray r = camera.getRay(u, v);
+		        // point3 end_point = camera.lower_left_corner + u*camera.h_axis + v*camera.v_axis ;
+		        // Ray r(camera.origin, end_point - camera.origin);
 
 		        c += shader->color(r);
 		    }

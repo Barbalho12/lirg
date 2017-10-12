@@ -3,12 +3,23 @@
 
 #include "vec3.h"
 
+vec3 random_in_unit_disk(){
+	vec3 p;
+	do {
+		p = 2.0*vec3(drand48(),drand48(),0) - vec3(1,1,0);
+	}while (dot(p,p) >= 1.0);
+	return p;
+}
+
 class Camera{
 	public:
 		point3 lower_left_corner;
 		vec3 v_axis;
 		vec3 h_axis;
 		point3 origin;
+
+		float lens_radius;
+		vec3 u, v, w;
 
 		Camera(){
 			
@@ -21,22 +32,46 @@ class Camera{
 			origin = o;
 		}
 
-		Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect){
-			vec3 u, v, w;
+		// Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect){
+		// 	vec3 u, v, w;
+		// 	float theta = vflow*M_PI/180;
+		// 	float half_height = tan(theta/2);
+		// 	float half_width = aspect * half_height;
+		// 	origin = lookfrom;
+		// 	w = unit_vector(lookfrom - lookat);
+		// 	u = unit_vector(cross(vup,w));
+		// 	v = cross(w,u);
+
+
+		// 	lower_left_corner = vec3(-half_width, -half_height, -1.0);
+		// 	lower_left_corner = origin - half_width*u - half_height*v - w;
+		// 	h_axis = 2*half_width*u;
+		// 	v_axis = 2*half_height*v;
+		// }
+
+		Ray getRay(float s, float t){
+			vec3 rd = lens_radius*random_in_unit_disk();
+			vec3 offset = u * rd.x() + v * rd.y();
+			return Ray(origin + offset, lower_left_corner+s*h_axis + t*v_axis - origin - offset);
+		}
+
+		Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect, 
+			float aperture, float focus_dist){
+			lens_radius = aperture / 2;
 			float theta = vflow*M_PI/180;
 			float half_height = tan(theta/2);
 			float half_width = aspect * half_height;
 			origin = lookfrom;
+			
 			w = unit_vector(lookfrom - lookat);
 			u = unit_vector(cross(vup,w));
 			v = cross(w,u);
 
 
-			lower_left_corner = vec3(-half_width, -half_height, -1.0);
-			lower_left_corner = origin - half_width*u - half_height*v - w;
-			// v_axis = origin - half_width*u - half_height*v - w;
-			h_axis = 2*half_width*u;
-			v_axis = 2*half_height*v;
+			
+			lower_left_corner = origin - half_width*focus_dist*u - half_height*focus_dist*v - w*focus_dist;
+			h_axis = 2*half_width*focus_dist*u;
+			v_axis = 2*half_height*focus_dist*v;
 		}
 };
 
