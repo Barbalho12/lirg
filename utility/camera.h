@@ -32,6 +32,42 @@ class Camera{
 			origin = o;
 		}
 
+		Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect, float aperture, float focus_dist){
+			lens_radius = aperture / 2;
+			float theta = vflow*M_PI/180;
+			float half_height = tan(theta/2);
+			float half_width = aspect * half_height;
+			origin = lookfrom;
+			
+			w = unit_vector(lookfrom - lookat);
+			u = unit_vector(cross(vup,w));
+			v = cross(w,u);
+			
+			lower_left_corner = origin - half_width*focus_dist*u - half_height*focus_dist*v - w*focus_dist;
+			h_axis = 2*half_width*focus_dist*u;
+			v_axis = 2*half_height*focus_dist*v;
+
+			// std::cout << "Look from = " << lookfrom << "\n";
+   //          std::cout << "w = " << w << "\n";
+   //          std::cout << "u = " << u << "\n";
+   //          std::cout << "v = " << v << "\n";
+   //          std::cout << "Half width = " << half_width << "\n";
+   //          std::cout << "Half height = " << half_height << "\n";
+
+   //          vec3 llc = lookfrom - (half_width * u) - (half_height * v) - w;
+   //          std::cout << "Look from = " << lookfrom << "\n";
+   //          std::cout << " = " << (half_width * u) << "\n";
+   //          std::cout << " = " << (half_height * v) << "\n";
+   //          std::cout << "w = " << w << "\n";
+
+   //          vec3 horizontal = 2 * half_width  * u;
+   //          vec3 vertical   = 2 * half_height * v;
+
+   //          std::cout << "llc = " << llc << "\n";
+   //          std::cout << "horizontal = " << horizontal << "\n";
+   //          std::cout << "vertical = " << vertical << "\n";
+		}
+
 		// Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect){
 		// 	vec3 u, v, w;
 		// 	float theta = vflow*M_PI/180;
@@ -53,25 +89,6 @@ class Camera{
 			vec3 rd = lens_radius*random_in_unit_disk();
 			vec3 offset = u * rd.x() + v * rd.y();
 			return Ray(origin + offset, lower_left_corner+s*h_axis + t*v_axis - origin - offset);
-		}
-
-		Camera(point3 lookfrom, vec3 lookat, vec3 vup, float vflow, float aspect, 
-			float aperture, float focus_dist){
-			lens_radius = aperture / 2;
-			float theta = vflow*M_PI/180;
-			float half_height = tan(theta/2);
-			float half_width = aspect * half_height;
-			origin = lookfrom;
-			
-			w = unit_vector(lookfrom - lookat);
-			u = unit_vector(cross(vup,w));
-			v = cross(w,u);
-
-
-			
-			lower_left_corner = origin - half_width*focus_dist*u - half_height*focus_dist*v - w*focus_dist;
-			h_axis = 2*half_width*focus_dist*u;
-			v_axis = 2*half_height*focus_dist*v;
 		}
 };
 

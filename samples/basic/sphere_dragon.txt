@@ -17,8 +17,5 @@ SPHERE = 0 0 -1.2 0.5 LAMBERTIAN 1.0 0.64 0
 SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.8 0.8 0.0
 255,165,0
 
-LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
-H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.
-V_D_VIEW_PLANE = 0 2 0 # Vertical dimension of the view plane.
-CAMERA_ORIGIN = 0 0 0 # the camera's origin.
-
+CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
+													 # Vertical dimension of the view plane ; The camera's origin.

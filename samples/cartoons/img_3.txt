@@ -70,7 +70,4 @@ SPHERE = 0 -100.5 -1 100 TOON 0.0 0.0 0.0 ; 0 0 0 ;
 LIGHT = POINT ; 0.5 0.5 0.5 ; 0 2 -1
 #NATURAL_LIGHT = 0.4 0.4 0.4
 
-LOWER_LEFT_CORNER = -2 -1 -1 # lower left corner of the view plane.
-H_D_VIEW_PLANE = 4 0 0 # Horizontal dimension of the view plane.
-V_D_VIEW_PLANE = 0 2 0 # Vertical dimension of the view plane.
-CAMERA_ORIGIN = 0 0 0 # the camera's origin.
+CAMERA = POSITIONABLE ; 3 3 2 ; 0 0 -1 ; 0 1 0 ; 20 ; 2.0 ; -1 0 -1 # Origin ; Lookat ; vup ; vflow ; aperture ; Focus Point

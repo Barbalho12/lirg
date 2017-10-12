@@ -16,6 +16,7 @@
 #include "direction_light.h"
 #include "spot_light.h"
 #include "point_light.h"
+#include "camera.h"
 
 using namespace std;
 
@@ -58,6 +59,8 @@ using namespace std;
 
 #define NATURAL_LIGHT "NATURAL_LIGHT"
 
+#define CAMERA "CAMERA"
+
 
 typedef enum{
     NORMALS2RGB,
@@ -90,16 +93,17 @@ class Header{
         int ray_shots;
 
         SHADER shader;
+        Camera *camera;
 
         vector<Object*> objects;
         vector<Light*> lights;
 
         rgb natural_light;
 
-        point3 lower_left_corner;
-        vec3 h_d_view_plane;
-        vec3 v_d_view_plane;
-        point3 camera_origin;
+        // point3 lower_left_corner;
+        // vec3 h_d_view_plane;
+        // vec3 v_d_view_plane;
+        // point3 camera_origin;
 
         int nthreads = 1;
 
@@ -270,25 +274,25 @@ class Header{
                         }
                     }
 
-                    if(text == LOWER_LEFT_CORNER){
-                        header_file >> text;
-                        lower_left_corner = read_vec3(header_file);
-                    }
+                    // if(text == LOWER_LEFT_CORNER){
+                    //     header_file >> text;
+                    //     lower_left_corner = read_vec3(header_file);
+                    // }
 
-                    if(text == H_D_VIEW_PLANE){
-                        header_file >> text;
-                        h_d_view_plane = read_vec3(header_file);
-                    }
+                    // if(text == H_D_VIEW_PLANE){
+                    //     header_file >> text;
+                    //     h_d_view_plane = read_vec3(header_file);
+                    // }
 
-                    if(text == V_D_VIEW_PLANE){
-                        header_file >> text;
-                        v_d_view_plane = read_vec3(header_file);
-                    }
+                    // if(text == V_D_VIEW_PLANE){
+                    //     header_file >> text;
+                    //     v_d_view_plane = read_vec3(header_file);
+                    // }
 
-                    if(text == CAMERA_ORIGIN){
-                        header_file >> text;
-                        camera_origin = read_vec3(header_file);
-                    }
+                    // if(text == CAMERA_ORIGIN){
+                    //     header_file >> text;
+                    //     camera_origin = read_vec3(header_file);
+                    // }
                     if(text == THREADS){
                         header_file >> text;
                         header_file >> nthreads;
@@ -334,8 +338,41 @@ class Header{
                         header_file >> text;
                         natural_light = read_vec3(header_file);
                     }
+                    if(text == CAMERA){
+                        header_file >> text;
+                        string camera_option;
+                        header_file >> camera_option;
 
-                    
+                        point3 origin;
+
+                        if(camera_option == "DEFAULT"){
+                            header_file >> text;
+                            point3 lower_left_corner = read_vec3(header_file);
+                            header_file >> text;
+                            vec3 h_d_view_plane = read_vec3(header_file);
+                            header_file >> text;
+                            vec3 v_d_view_plane = read_vec3(header_file);
+                            header_file >> text;
+                            origin = read_vec3(header_file);
+                            camera = new Camera(lower_left_corner, v_d_view_plane, h_d_view_plane, origin);
+                        }else if(camera_option == "POSITIONABLE"){
+                            header_file >> text;
+                            origin = read_vec3(header_file);
+                            header_file >> text;
+                            vec3 lookAt = read_vec3(header_file);
+                            header_file >> text;
+                            vec3 vUp = read_vec3(header_file);
+                            header_file >> text;
+                            float vFlow;
+                            header_file >> vFlow;
+                            header_file >> text;
+                            float aperture;
+                            header_file >> aperture;
+                            header_file >> text;
+                            vec3 focusPoint = read_vec3(header_file);
+                            camera = new Camera(origin, lookAt, vUp, vFlow, float(width)/float(height), aperture, (origin-focusPoint).length());
+                        }
+                    }
                 }
             }else{
                 cout << "file is not open" << endl;
