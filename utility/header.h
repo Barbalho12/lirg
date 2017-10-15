@@ -123,6 +123,8 @@ class Header{
                 while(!header_file.eof()){
                     string text;
                     header_file >> text;
+
+                   
          
                     if (text == NAME_PARAM){
                         header_file >> text;
@@ -150,34 +152,35 @@ class Header{
                     }
 
                     if(text == UPLF_PARAM){
-                        header_file >> text;
-                        upper_left = read_vec3(header_file);
+                        header_file >> text; //=
+                        upper_left = read_color(header_file);
+                              
                     }
 
                     if(text == LWLF_PARAM){
                         header_file >> text;
-                        lower_left = read_vec3(header_file);
+                        lower_left = read_color(header_file);
                     }
 
                     if(text == UPRI_PARAM){
                         header_file >> text;
-                        upper_right = read_vec3(header_file);
+                        upper_right = read_color(header_file);
                     }
 
                     if(text == LWRI_PARAM){
                         header_file >> text;
-                        lower_right = read_vec3(header_file);
+                        lower_right = read_color(header_file);
                     }
 
-                    if(text == D_FOREGROUND_COLOR){
-                        header_file >> text;
-                        d_foreground_color = read_vec3(header_file);
-                    }
+                    // if(text == D_FOREGROUND_COLOR){
+                    //     header_file >> text;
+                    //     d_foreground_color = read_color(header_file);
+                    // }
 
-                    if(text == D_BACKGROUND_COLOR){
-                        header_file >> text;
-                        d_background_color = read_vec3(header_file);
-                    }
+                    // if(text == D_BACKGROUND_COLOR){
+                    //     header_file >> text;
+                    //     d_background_color = read_color(header_file);
+                    // }
 
                     if(text == MIN_DEPHT){
                         header_file >> text;
@@ -205,6 +208,12 @@ class Header{
                             shader = BLINNPHONG;
                         }else if(shader_option == "DEPTHCOLOR"){
                             shader = DEPTHCOLOR;
+                            header_file >> text; //;
+                            header_file >> text; //D_FOREGROUND_COLOR
+                            d_foreground_color = read_color(header_file);
+                            header_file >> text; //;
+                            header_file >> text; //D_BACKGROUND_COLOR
+                            d_background_color = read_color(header_file);
                         }else if(shader_option == "LAMBERTIAN"){
                             shader = LAMBERTIAN;
                         }else if(shader_option == "BP_LAMBERTIAN"){
@@ -212,132 +221,28 @@ class Header{
                         }else if(shader_option == "TOON"){
                             shader = TOON;
                         }
+                        header_file >> text; //;
+                        
+                        read_objects(header_file);
+                        
                     }
 
-                    if(text == SPHERE){
-                        header_file >> text;
-                        point3 c = read_vec3(header_file);
-                        float r;
-                        header_file >> r;
-                        string material;
-                        header_file >> material;
-                        if(material == "NONE"){
-                            objects.push_back(new Sphere(c, r, new Lambertian(vec3(0,0,0))));         
-                        }else if(material == "LAMBERTIAN"){
-                        	if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
-                                // cout << 1 << endl;
-                        		vec3 albedo = read_vec3(header_file);
-                        		header_file >> text;
-                        		vec3 ambient = read_vec3(header_file);
-                        		header_file >> text;
-								vec3 specular = read_vec3(header_file);
-								header_file >> text;
-								float shininess;
-								header_file >> shininess;
-								objects.push_back(new Sphere(c, r, new Lambertian(albedo,ambient,specular,shininess)));
-                        	}else{
-                        		objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
-                        	}
-                            
-                        }else if(material == "METAL"){
-                            if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
-                                // cout << 2 << endl;
-                                vec3 albedo = read_vec3(header_file);
-                                header_file >> text;
-                                vec3 ambient = read_vec3(header_file);
-                                header_file >> text;
-                                vec3 specular = read_vec3(header_file);
-                                header_file >> text;
-                                float shininess;
-                                header_file >> shininess;
-                                objects.push_back(new Sphere(c, r, new Metal(albedo,ambient,specular,shininess)));
-                            }else{
-                                objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
-                            }
-                            // objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
-                        }else if(material == "TOON"){
-                            if(shader == TOON){
-
-                                rgb borderColor = read_vec3(header_file);
-                                header_file >> text;
-
-                                rgb shadowColor = read_vec3(header_file);
-                                header_file >> text;
-
-                                vector<rgb> colors = readListColor(header_file);
-                                // header_file >> text;
-
-                                // vector<float> angles = readListFloat(header_file);
-
-                                objects.push_back(new Sphere(c, r, new Toon(colors, borderColor, shadowColor)));
-                            }
-                        }
-                    }
-
-                    // if(text == LOWER_LEFT_CORNER){
-                    //     header_file >> text;
-                    //     lower_left_corner = read_vec3(header_file);
-                    // }
-
-                    // if(text == H_D_VIEW_PLANE){
-                    //     header_file >> text;
-                    //     h_d_view_plane = read_vec3(header_file);
-                    // }
-
-                    // if(text == V_D_VIEW_PLANE){
-                    //     header_file >> text;
-                    //     v_d_view_plane = read_vec3(header_file);
-                    // }
-
-                    // if(text == CAMERA_ORIGIN){
-                    //     header_file >> text;
-                    //     camera_origin = read_vec3(header_file);
-                    // }
                     if(text == THREADS){
                         header_file >> text;
                         header_file >> nthreads;
                     }
+
                     if(text == LIGHT){
                         header_file >> text;
-                        string light_option;
-                        header_file >> light_option;
-
-                        rgb intensity;
-                        vec3 direction;
-
-                        if(light_option == "DIRECTIONAL"){
-                            header_file >> text;
-                            intensity = read_vec3(header_file);
-                            header_file >> text;
-                            direction = read_vec3(header_file);
-                            lights.push_back(new DirectionLight(intensity, direction));
-                        }else if(light_option == "SPOT"){
-                            vec3 origin;
-                            float angle;
-
-                            header_file >> text;
-                            intensity = read_vec3(header_file);
-                            header_file >> text;
-                            origin = read_vec3(header_file);
-                            header_file >> text;
-                            direction = read_vec3(header_file);
-                            header_file >> text;
-                            header_file >> angle;
-                            lights.push_back(new SpotLight(intensity, origin, direction, angle));
-                        }else if(light_option == "POINT"){
-                            vec3 origin;
-
-                            header_file >> text;
-                            intensity = read_vec3(header_file);
-                            header_file >> text;
-                            origin = read_vec3(header_file);
-                            lights.push_back(new PointLight(origin, intensity));
-                        }
+                        Light *light = read_light(header_file);
+                        lights.push_back(light);
                     }
+
                     if(text == NATURAL_LIGHT){
                         header_file >> text;
-                        natural_light = read_vec3(header_file);
+                        natural_light = read_color(header_file);
                     }
+
                     if(text == CAMERA){
                         header_file >> text;
                         string camera_option;
@@ -381,43 +286,45 @@ class Header{
             header_file.close();
         }
 
+        void read_objects(ifstream &header_file){
+            string text;
+            header_file >> text; //OBJECTS
+            header_file >> text; //{
+
+            while(true){
+                string text;
+                header_file >> text;
+
+                if(text == SPHERE){
+                    header_file >> text;
+                    Sphere *sphere = read_sphere(header_file);
+                    objects.push_back(sphere);  
+                    continue;
+                }
+
+                break;
+            }
+        }
+
         vector<rgb> readListColor(ifstream &header_file){
             char c;
             vector<rgb> colors;
             header_file.get(c);
             while(c != '{') header_file.get(c);
             while(true){
-                char value = header_file.peek();
-                if(!isdigit(value) && value != header_file.eof()){
-                    header_file.get(c);
-                    if(c == '}') break;
-                }else{
+                string type;
+                header_file >> type;
+                if(type == "RGB"){
+                    colors.push_back(read_vec3(header_file)/255.99f);
+                }else if(type == "URGB"){
                     colors.push_back(read_vec3(header_file));
+                }else{
+                    break;
                 }
-                
             }
             return colors;
         }
 
-        // vector<float> readListFloat(ifstream &header_file){
-        //     char c;
-        //     vector<float> angles;
-        //     header_file.get(c);
-        //     while(c != '{') header_file.get(c);
-        //     while(true){
-        //         char value = header_file.peek();
-        //         if(!isdigit(value) && value != header_file.eof()){
-        //             header_file.get(c);
-        //             if(c == '}') break;
-        //         }else{
-        //             float value;
-        //             header_file >> value;
-        //             angles.push_back(value);
-        //         }
-                
-        //     }
-        //     return angles;
-        // }
 
         vec3 read_vec3(ifstream &header_file){
             float a,b,c;
@@ -425,6 +332,385 @@ class Header{
             header_file >> b;
             header_file >> c;
             return vec3(a,b,c);
+        }
+
+        vec3 read_color(ifstream &header_file){
+            string type;
+            header_file >> type;
+            if(type == "RGB"){
+                return read_vec3(header_file)/255.99f;
+            }else if(type == "URGB"){
+                return read_vec3(header_file);
+            }
+        }
+
+        Light *read_light(ifstream &header_file){
+            char nullable;
+            string light_option;
+            header_file >> light_option;
+            header_file >> nullable; 
+
+            if(light_option == "DIRECTIONAL"){
+                rgb intensity;
+                vec3 direction;
+
+                int count = 2;
+                while(count > 0){ 
+
+                    string param;
+                    header_file >> param;
+
+                    if(param == "INTENSITY"){
+                        intensity = read_color(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+                    if(param == "DIRECTION"){
+                        direction = read_vec3(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+                    break;
+                }
+
+                return new DirectionLight(intensity, direction);
+            
+            }else if(light_option == "SPOT"){
+
+                rgb intensity;
+                vec3 origin;
+                vec3 direction;
+                float angle;
+
+                int count = 4;
+                while(count > 0){ 
+                    string param;
+                    header_file >> param;
+
+                    if(param == "INTENSITY"){
+                        intensity = read_color(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    if(param == "ORIGIN"){
+                        origin = read_vec3(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    if(param == "DIRECTION"){
+                        direction = read_vec3(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    if(param == "ANGLE"){
+                        header_file >> angle;
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    break;
+
+                }
+
+                return new SpotLight(intensity, origin, direction, angle);
+
+            }else if(light_option == "POINT"){
+
+                rgb intensity;
+                vec3 origin;
+
+                int count = 2;
+                while(count > 0){ 
+                    string param;
+                    header_file >> param;
+
+                    if(param == "INTENSITY"){
+                        intensity = read_color(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    if(param == "ORIGIN"){
+                        origin = read_vec3(header_file);
+                        header_file >> nullable; 
+                        count--;
+                        continue;
+                    }
+
+                    break;
+
+                }
+
+                return new PointLight(origin, intensity);
+            }
+        }
+
+        // Camera *read_camera(ifstream &header_file){
+
+        // }
+
+        Toon *read_toon_material(ifstream &header_file){
+            char nullable;
+            header_file >> nullable;
+
+            rgb border;
+            rgb shadow;
+            vector<rgb> colors;
+
+            while(true){
+                string param;
+                header_file >> param;  
+
+                if(param == "BORDER"){
+                    border = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "SHADOW"){
+                    shadow = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "COLORS"){
+                    colors = readListColor(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "}"){
+                    break;
+                }else{
+                    cout << "1. ERROR " << param  << endl;
+                    break;
+                }
+            }
+
+            return new Toon(colors, border, shadow);
+        }
+
+        Material *read_blinnphong_material(ifstream &header_file){
+            char nullable;
+            header_file >> nullable;
+
+            rgb albedo;
+            rgb ambient;
+            rgb specular;
+            float shininess;
+            string material;
+
+            while(true){
+                string param;
+                header_file >> param;  
+
+                if(param == "MATERIAL"){
+                    header_file >> material; 
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "ALBEDO"){
+                    albedo = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "AMBIENT"){
+                    ambient = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "SPECULAR"){
+                    specular = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "SHININESS"){
+                    header_file >> shininess;
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "}"){
+                    break;
+                }else{
+                    cout << "1. ERROR " << param  << endl;
+                    break;
+                }
+            }
+            
+            if(material == "METAL"){
+                return new Metal(albedo,ambient,specular,shininess);
+            }else if(material == "LAMBERTIAN"){
+                return new Lambertian(albedo,ambient,specular,shininess);
+            }
+
+        }
+
+        Material *read_lambertian_material(ifstream &header_file){
+            char nullable;
+            header_file >> nullable;
+
+            rgb albedo;
+            string material;
+
+            while(true){
+                string param;
+                header_file >> param; 
+
+                if(param == "MATERIAL"){
+                    header_file >> material; 
+                    header_file >> nullable; 
+                    continue;
+                }
+                if(param == "ALBEDO"){
+                    albedo = read_color(header_file);
+                    header_file >> nullable; 
+                    continue;
+                }
+                
+                if(param == "}"){
+                    break;
+                }else{
+                    cout << "1. ERROR " << param  << endl;
+                    break;
+                }
+            }
+            
+            cout << albedo << endl;
+            if(material == "METAL"){
+                
+                return new Metal(albedo);
+            }else if(material == "LAMBERTIAN"){
+                 
+                return new Lambertian(albedo);
+            }
+
+        }
+
+
+        Material *read_material(ifstream &header_file){
+            char nullable;
+            string type;
+            header_file >> type;
+            Material *material;
+
+            if(type == "TOON"){
+                material = read_toon_material(header_file);
+            }else if(type == "BLINNPHONG" || type == "BP_LAMBERTIAN"){
+                material = read_blinnphong_material(header_file);
+            }else if(type == "LAMBERTIAN"){
+                material = read_lambertian_material(header_file);
+            }else{ //type == "NORMALS2RGB" || type == "DEPTHCOLOR"
+                material = new Lambertian(vec3(0,0,0));  
+                
+            }
+
+            return material;
+        }
+
+        Sphere *read_sphere(ifstream &header_file){
+
+            char nullable;
+            point3 center;
+            float radius;
+            Material *material;
+
+            int count = 3;
+            while(count > 0){   
+                string param;
+                header_file >> param;
+
+
+
+                if(param == "CENTER"){
+                    center = read_vec3(header_file);
+                    header_file >> nullable; 
+                    count--;
+                    continue;
+                }
+
+                if(param == "RADIUS"){
+                    header_file >> radius;
+                    header_file >> nullable;  
+                    count--;
+                    continue;
+                }
+
+                if (param == "TYPE"){
+                    material = read_material(header_file);
+                    header_file >> nullable;  
+
+                    count--;
+                    continue;
+                }
+
+                break;
+            }
+
+            return new Sphere(center, radius, material);
+            
+
+            // float r;
+            // header_file >> r;
+            // string material;
+            // header_file >> material;
+            // if(material == "NONE"){
+            //     objects.push_back(new Sphere(c, r, new Lambertian(vec3(0,0,0))));         
+            // }else if(material == "LAMBERTIAN"){
+            //     if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
+            //         // cout << 1 << endl;
+            //         vec3 albedo = read_vec3(header_file);
+            //         header_file >> text;
+            //         vec3 ambient = read_vec3(header_file);
+            //         header_file >> text;
+            //         vec3 specular = read_vec3(header_file);
+            //         header_file >> text;
+            //         float shininess;
+            //         header_file >> shininess;
+            //         objects.push_back(new Sphere(c, r, new Lambertian(albedo,ambient,specular,shininess)));
+            //     }else{
+            //         objects.push_back(new Sphere(c, r, new Lambertian(read_vec3(header_file))));
+            //     }
+                
+            // }else if(material == "METAL"){
+            //     if( shader == BLINNPHONG || shader == BP_LAMBERTIAN){
+            //         // cout << 2 << endl;
+            //         vec3 albedo = read_vec3(header_file);
+            //         header_file >> text;
+            //         vec3 ambient = read_vec3(header_file);
+            //         header_file >> text;
+            //         vec3 specular = read_vec3(header_file);
+            //         header_file >> text;
+            //         float shininess;
+            //         header_file >> shininess;
+            //         objects.push_back(new Sphere(c, r, new Metal(albedo,ambient,specular,shininess)));
+            //     }else{
+            //         objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+            //     }
+            //     // objects.push_back(new Sphere(c, r, new Metal(read_vec3(header_file))));
+            // }else if(material == "TOON"){
+            //     if(shader == TOON){
+
+            //         rgb borderColor = read_vec3(header_file);
+            //         header_file >> text;
+
+            //         rgb shadowColor = read_vec3(header_file);
+            //         header_file >> text;
+
+            //         vector<rgb> colors = readListColor(header_file);
+            //         // header_file >> text;
+
+            //         // vector<float> angles = readListFloat(header_file);
+
+            //         objects.push_back(new Sphere(c, r, new Toon(colors, borderColor, shadowColor)));
+            //     }
+            // }
         }
 };
 
