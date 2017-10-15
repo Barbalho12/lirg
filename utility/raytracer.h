@@ -10,7 +10,7 @@
 #include "object.h"
 #include "sphere.h"
 #include "camera.h"
-#include "header.h"
+#include "io/header.h"
 #include "image.h"
 #include "progress_bar.h"
 #include "scene.h"

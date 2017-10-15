@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
-#include "header.h"
+#include "io/header.h"
 #include "vec3.h"
 #include "progress_bar.h"
 

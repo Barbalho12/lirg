@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "../utility/header.h"
+#include "../utility/io/header.h"
 #include "../utility/image.h"
 #include "../utility/raytracer.h"
 
