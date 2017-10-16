@@ -17,7 +17,9 @@ class IoUtilReader{
 
         IoUtilReader(){}
 
-     
+        /**
+        * Ler e valida um caractere, se não válido, o programa é finalizado
+        */
         void read_valid_char(ifstream &header_file, char expected_char){
             char character;
             header_file >> character; 
@@ -26,6 +28,10 @@ class IoUtilReader{
                 exit (EXIT_FAILURE);
             }
         }
+
+        /**
+        * Ler e valida uma string, se não válida, o programa é finalizado
+        */
         void read_valid_string(ifstream &header_file, string expected_string){
             string text;
             header_file >> text; 
@@ -36,6 +42,9 @@ class IoUtilReader{
 
         }
 
+        /**
+        * Valida uma string, se não válida, o programa é finalizado
+        */
         void validate_string(string text, string expected_string){
             if(text != expected_string){
                 cout << "ERRO: no expected string: '"<< text <<"',  expected: '" << expected_string << "'" << endl;
@@ -44,6 +53,10 @@ class IoUtilReader{
 
         }
 
+        /**
+        * Ler uma lista de cores
+        * EXAMPLE: {RGB 255 255 255 RGB 255 255 255 URGB 1.0 1.0 1.0}
+        */
         vector<rgb> readListColor(ifstream &header_file){
             char c;
             vector<rgb> colors;
@@ -63,7 +76,11 @@ class IoUtilReader{
             return colors;
         }
 
-
+        /**
+        * Ler um vetor 
+        * EXAMPLE: 1.0 0.5 0.0
+        * EXAMPLE: 255 177 0
+        */
         vec3 read_vec3(ifstream &header_file){
             float a,b,c;
             header_file >> a;
@@ -72,6 +89,11 @@ class IoUtilReader{
             return vec3(a,b,c);
         }
 
+        /**
+        * Ler uma cor, 
+        * (RGB) 0 ~ 255 
+        * (URGB) 0.0 ~ 1.0
+        */
         vec3 read_color(ifstream &header_file){
 
             string type;

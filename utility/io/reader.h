@@ -60,9 +60,9 @@ class Reader{
         vector<Light*> lights;
         rgb natural_light;
 
-        Header(){}
+        Reader(){}
 
-        Header(string file_name){
+        Reader(string file_name){
             readFromFile(file_name);
         }
 

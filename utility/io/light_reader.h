@@ -18,7 +18,7 @@
 #include "../point_light.h"
 #include "../camera.h"
 #include "io_util_reader.h"
-#include "basic_header.h"
+#include "basic_reader.h"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ class LightReader{
 
     private:
             IoUtilReader util_reader;
-            BasicHeader basic_header; 
+            BasicReader basic_reader; 
     public:
 
 
