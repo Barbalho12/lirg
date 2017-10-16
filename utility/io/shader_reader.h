@@ -157,7 +157,7 @@ class ShaderReader{
             float shininess;
             string material;
 
-            Material *mat;
+            Material *mat = nullptr;
 
             while(true){
                 string param;
@@ -208,7 +208,7 @@ class ShaderReader{
             rgb albedo;
             string material;
 
-            Material *mat;
+            Material *mat = nullptr;
 
             while(true){
                 string param;

@@ -53,7 +53,7 @@ class LightReader{
             header_file >> light_option;
             util_reader.read_valid_char(header_file, '{');
 
-            Light *ligh;
+            Light *ligh = nullptr;
 
             if(light_option == "DIRECTIONAL"){
                 rgb intensity;
