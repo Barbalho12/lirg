@@ -23,14 +23,8 @@
 
 using namespace std;
 
-
 #define SPHERE "SPHERE"
 #define SHADER_ "SHADER"
-
-// #define LOWER_LEFT_CORNER "LOWER_LEFT_CORNER" // lower left corner of the view plane.
-// #define H_D_VIEW_PLANE "H_D_VIEW_PLANE"       // Horizontal dimension of the view plane.
-// #define V_D_VIEW_PLANE "V_D_VIEW_PLANE"       // Vertical dimension of the view plane.
-// #define CAMERA_ORIGIN "CAMERA_ORIGIN"         // the camera's origin.
 
 #define BP_AMBIENT "AMBIENT"
 #define BP_SPECULAR "SPECULAR"
@@ -39,7 +33,6 @@ using namespace std;
 #define D_FOREGROUND_COLOR "D_FOREGROUND_COLOR" 
 #define D_BACKGROUND_COLOR "D_BACKGROUND_COLOR" 
 
-#define LIGHT "LIGHT"
 
 #define CAMERA "CAMERA"
 
