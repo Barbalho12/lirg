@@ -8,6 +8,7 @@
 #include "../vec3.h"
 #include "../ray.h"
 #include "../sphere.h"
+#include "../triangle.h"
 #include "../object.h"
 #include "../lambertian.h"
 #include "../metal.h"
@@ -19,6 +20,7 @@
 using namespace std;
 
 #define SPHERE "SPHERE"
+#define TRIANGLE "TRIANGLE"
 #define SHADER_ "SHADER"
 
 #define BP_AMBIENT "AMBIENT"
@@ -105,6 +107,13 @@ class ShaderReader{
                     util_reader.read_valid_char(header_file, '=');
                     Sphere *sphere = read_sphere(header_file);
                     objects.push_back(sphere);  
+                    continue;
+                }
+
+                if(text == TRIANGLE){
+                    util_reader.read_valid_char(header_file, '=');
+                    Triangle *triangle = read_triangle(header_file);
+                    objects.push_back(triangle);  
                     continue;
                 }
 
@@ -264,7 +273,7 @@ class ShaderReader{
             float radius;
             Material *material;
 
-            int count = 3;
+            int count = 3; //Numero de atributos que serão lidos 
             while(count > 0){   
                 string param;
                 header_file >> param;
@@ -295,8 +304,58 @@ class ShaderReader{
                 break;
             }
 
-            // cout << "Sphere read" << endl;
             return new Sphere(center, radius, material);
+        }
+
+
+        Triangle *read_triangle(ifstream &header_file){
+
+            vec3 p0;
+            vec3 p1;
+            vec3 p2;
+            Material *material;
+
+
+
+            int count = 4; //Numero de atributos que serão lidos 
+            while(count > 0){   
+                string param;
+                header_file >> param;
+
+                if(param == "P0"){
+                    p0 = util_reader.read_vec3(header_file);
+                    util_reader.read_valid_char(header_file, ';'); 
+                    count--;
+                    continue;
+                }
+
+                if(param == "P1"){
+                    p1 = util_reader.read_vec3(header_file);
+                    util_reader.read_valid_char(header_file, ';'); 
+                    count--;
+                    continue;
+                }
+
+                if(param == "P2"){
+                    p2 = util_reader.read_vec3(header_file);
+                    util_reader.read_valid_char(header_file, ';'); 
+                    count--;
+                    continue;
+                }
+
+                if (param == "TYPE"){
+                    material = read_material(header_file);
+                    util_reader.read_valid_char(header_file, ';');  
+                    count--;
+                    continue;
+                }
+
+                util_reader.validate_string(param, "**"); //Se chegar aqui é ERRO
+                break;
+            }
+
+            return new Triangle(p0, p1, p2, material);
+
         }
 };
 
