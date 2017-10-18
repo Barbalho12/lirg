@@ -20,7 +20,7 @@ class SpotLight : public Light{
 		}
 
 		rgb intensity(point3 p){
-			vec3 dir = unit_vector(p - origin);
+			vec3 dir = p - origin;
 			float angle = (180/3.14) * acos(dot(m_direction, dir) / (m_direction.length() * dir.length()));
 			//printf("%lf\n", angle);
 			if (angle < openAngle) {

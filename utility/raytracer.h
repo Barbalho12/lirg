@@ -10,7 +10,7 @@
 #include "object.h"
 #include "sphere.h"
 #include "camera.h"
-#include "header.h"
+#include "io/reader.h"
 #include "image.h"
 #include "progress_bar.h"
 #include "scene.h"
@@ -41,7 +41,7 @@ class RayTracer{
 		int width;
 		int height;
 
-		Header header;
+		Reader reader;
 
 		Shader *shader;
 
@@ -50,12 +50,12 @@ class RayTracer{
 		}
 
 		//Dá entrada dos dados
-		void init(Header header_){
+		void init(Reader reader_){
 
-			header = header_;
+			reader = reader_;
 
-			width = header_.width;
-			height = header_.height;
+			width = reader_.width;
+			height = reader_.height;
 
 			progressbar.setDimension(width*height);
 
@@ -65,7 +65,7 @@ class RayTracer{
 			// float aperture = 2.0;
 
 			// camera = Camera(lookfrom, lookat, vec3(0,1,0), 20, float(width)/float(height), aperture, dist_to_focus);
-			camera = header_.camera;
+			camera = reader_.camera;
 
 			// camera = Camera(
 			// 	vec3(-2,2,1),
@@ -73,21 +73,21 @@ class RayTracer{
 			// 	vec3(0,1,0),
 			// 	90,
 			// 	float(width)/float(height));
-			// camera = Camera(header.lower_left_corner, // lower left corner of the view plane.
-			// 	header.v_d_view_plane,  // Vertical dimension of the view plane.
-			// 	header.h_d_view_plane,  // Horizontal dimension of the view plane.
-			// 	header.camera_origin);	// the camera's origin.
+			// camera = Camera(reader.lower_left_corner, // lower left corner of the view plane.
+			// 	reader.v_d_view_plane,  // Vertical dimension of the view plane.
+			// 	reader.h_d_view_plane,  // Horizontal dimension of the view plane.
+			// 	reader.camera_origin);	// the camera's origin.
 
 			scene = Scene();
 
-			scene.setObjects(header.objects);
-			scene.setLights(header.lights);
-			scene.setNaturalLight(header.natural_light);
-			scene.setMaxDepht(header.max_depht);
-			scene.setMinDepht(header.min_depht);
-			scene.background = Background(header.upper_left, header.lower_left, header.upper_right, header.lower_right);
+			scene.setObjects(reader.objects);
+			scene.setLights(reader.lights);
+			scene.setNaturalLight(reader.natural_light);
+			scene.setMaxDepht(reader.max_depht);
+			scene.setMinDepht(reader.min_depht);
+			scene.background = Background(reader.upper_left, reader.lower_left, reader.upper_right, reader.lower_right);
 
-			switch(header.shader){
+			switch(reader.shader){
 				case LAMBERTIAN:
 					shader = new LambertianShader(scene);
 					break;
@@ -95,7 +95,7 @@ class RayTracer{
 					shader = new BlinnPhongShader(scene);
 					break;
 				case DEPTHCOLOR:
-					shader = new DepthColorShader(scene, header.d_foreground_color, header.d_background_color);
+					shader = new DepthColorShader(scene, reader.d_foreground_color, reader.d_background_color);
 					break;
 				case BP_LAMBERTIAN:
 					shader = new BP_LambertianShader(scene);
@@ -127,7 +127,7 @@ class RayTracer{
 
 			//Define numero de threads
 			// int n_threads = std::thread::hardware_concurrency();
-			int n_threads = header.nthreads;
+			int n_threads = reader.nthreads;
 
 			cout << "Threads Number: " << n_threads << endl;
 
@@ -156,7 +156,7 @@ class RayTracer{
 		    rgb c;
 		    float u, v;
 
-		    for (int i = 0; i < header.ray_shots; i++){
+		    for (int i = 0; i < reader.ray_shots; i++){
 
 		        u = float(col + generate_canonical<double, 10>(gen)) / float(width);
 		        v = float(row + generate_canonical<double, 10>(gen)) / float(height);
@@ -168,7 +168,7 @@ class RayTracer{
 		        c += shader->color(r);
 		    }
 
-		    return c / header.ray_shots;
+		    return c / reader.ray_shots;
 		}
 
 };

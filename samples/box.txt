@@ -1,0 +1,92 @@
+NAME = box.ppm
+TYPE = PPM
+CODIFICATION = ascii 
+
+WIDTH = 1200
+HEIGHT = 600
+
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255 
+
+MIN_DEPHT = 0.001
+MAX_DEPHT = 4
+RAY_SHOTS = 100
+
+THREADS = 10
+
+SHADER = LAMBERTIAN ;
+		 OBJECTS {
+
+			TRIANGLE = 	P0 -2 -1 -1 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.4 0.4 0.4 ;
+					  	} ;
+
+			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 -2 1 -1 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.4 0.4 0.4 ;
+					  	} ;
+
+			TRIANGLE = 	P0 2 -1 -1 ; P1 2 -1 -4 ; P2 2 1 -1 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.4 0.4 0.4 ;
+					  	} ;
+
+			TRIANGLE = 	P0 2 -1 -4 ; P1 2 1 -4 ; P2 2 1 -1 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.4 0.4 0.4 ;
+					  	} ;
+
+			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 2 1 -4 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.8 0.8 0.8 ;
+					  	} ;
+
+			TRIANGLE = 	P0 -2 -1 -4 ; P1 2 -1 -4 ; P2 2 1 -4 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.8 0.8 0.8 ;
+					  	} ;
+
+			TRIANGLE = 	P0 -2 1 -1 ; P1 -2 1 -4 ; P2 2 1 -4 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.2 0.2 0.2 ;
+					  	} ;
+
+			TRIANGLE = 	P0 -2 1 -1 ; P1 2 1 -1 ; P2 2 1 -4 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.2 0.2 0.2 ;
+					  	} ;
+
+			SPHERE = 	CENTER -1 -0.6 -1.5 ;
+					  	RADIUS 0.3 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL METAL ;
+				 			ALBEDO URGB 1 1 1 ;
+					  } ;
+
+			SPHERE = 	CENTER 0 -100.5 -1 ;
+					  	RADIUS 99.6 ;
+					  	TYPE LAMBERTIAN {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0 1 0 ;
+					  } ;
+		}
+
+LIGHT = POINT {
+			INTENSITY URGB 1 1 1 ;
+			ORIGIN 0 5 15 ;
+		}
+
+NATURAL_LIGHT = URGB 0.4 0.4 0.4
+
+CAMERA = POSITIONABLE ; 0 0 4 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1

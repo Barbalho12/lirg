@@ -7,21 +7,33 @@ CODIFICATION = ascii
 WIDTH = 1600
 HEIGHT = 800
 
-# Ray Tracer settings
-SHADER = DEPTHCOLOR
-D_FOREGROUND_COLOR = 1 0 0
-D_BACKGROUND_COLOR = 1 1 1
-THREADS = 10
 THREADS = 10
 MIN_DEPHT = 0
 MAX_DEPHT = 3
 RAY_SHOTS = 10
 
-# Scene Objects
-SPHERE = 0.3 0 -1 0.4 NONE
-SPHERE = 0 -100.5 -3 99 NONE
-SPHERE = 0 1 -2 0.6 NONE
-SPHERE = -0.4 0 -3 0.7 NONE
+SHADER = 	DEPTHCOLOR ;
+			D_FOREGROUND_COLOR URGB 1 0 0 ;
+			D_BACKGROUND_COLOR URGB 1 1 1 ; 
+			OBJECTS {
+				SPHERE = CENTER 0.3 0 -1 ;
+					  	RADIUS 0.4 ;
+					  	TYPE DEPTHCOLOR ;
+
+				SPHERE = CENTER 0 -100.5 -3 ;
+					  	RADIUS 99 ;
+					  	TYPE DEPTHCOLOR ;
+
+				SPHERE = CENTER 0 1 -2 ;
+					  	RADIUS 0.6 ;
+					  	TYPE DEPTHCOLOR ;
+
+				SPHERE = CENTER -0.4 0 -3 ;
+					  	RADIUS 0.7 ;
+					  	TYPE DEPTHCOLOR ;
+			}
+
 
 CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
 													 # Vertical dimension of the view plane ; The camera's origin.
+

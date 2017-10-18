@@ -3,18 +3,35 @@ TYPE = PPM
 CODIFICATION = ascii 
 WIDTH = 1920
 HEIGHT = 960
-UPPER_LEFT = 127 179 255    
-LOWER_LEFT = 255 255 255      
-UPPER_RIGHT = 127 179 255 
-LOWER_RIGHT = 255 255 255 
+
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255 
+
 MIN_DEPHT = -1
 MAX_DEPHT = 1001
 RAY_SHOTS = 1 # anti-aliasing.
-SHADER = NORMALS2RGB
-THREADS = 100
-SPHERE = 0.3 0 -1 0.4 NONE
-SPHERE = 0 -100.5 -3 99 NONE
-SPHERE = 0 1 -2 0.6 NONE
-SPHERE = -0.4 0 -3 0.7 NONE
+
+SHADER = NORMALS2RGB ;
+		 OBJECTS {
+			 SPHERE = CENTER 0.3 0 -1 ;
+					  RADIUS 0.5 ;
+					  TYPE NORMALS2RGB ;
+
+			SPHERE = CENTER 0 -100.5 -3 ;
+					  RADIUS 99 ;
+					  TYPE NORMALS2RGB ;
+
+			SPHERE = CENTER 0 1 -2 ;
+					  RADIUS 0.6 ;
+					  TYPE NORMALS2RGB ;
+
+			SPHERE = CENTER -0.4 0 -3 ;
+					  RADIUS 0.7 ;
+					  TYPE NORMALS2RGB ;
+
+		}
+
 CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
 													 # Vertical dimension of the view plane ; The camera's origin.

@@ -1,14 +1,14 @@
-NAME = img_1_.ppm
+NAME = img_1.ppm
 TYPE = PPM
 CODIFICATION = binary
 
 WIDTH = 500
 HEIGHT = 250
 
-UPPER_LEFT = 127 179 255    
-LOWER_LEFT = 255 255 255      
-UPPER_RIGHT = 127 179 255 
-LOWER_RIGHT = 255 255 255 
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255 
 
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
@@ -16,44 +16,59 @@ RAY_SHOTS = 10
 
 THREADS = 10
 
-SHADER = TOON
+SHADER = TOON ;
+		 OBJECTS {
+			 SPHERE = CENTER 0 0 -1 ;
+					  RADIUS 0.5 ;
+					  TYPE TOON {
+					 	BORDER URGB 0.0 0.0 0.0 ;
+					 	SHADOW URGB 0 0 0 ;
+						COLORS { 
+							URGB 1 0.0 0.0
+							URGB 0.9 0.0 0.0
+							URGB 0.8 0.0 0.0
+							URGB 0.7 0.0 0.0
+							URGB 0.6 0.0 0.0
+							URGB 0.5 0.0 0.0
+							URGB 0.4 0.0 0.0
+							URGB 0.3 0.0 0.0
+							URGB 0.2 0.0 0.0
+							URGB 0.1 0.0 0.0
+						} ;
+					  } ;
 
-SPHERE = 0 0 -1 0.5 TOON 0.0 0.0 0.0 ; 0 0 0 ; 
-	COLORS { 
-		1 0.0 0.0
-		0.9 0.0 0.0
-		0.8 0.0 0.0
-		0.7 0.0 0.0
-		0.6 0.0 0.0
-		0.5 0.0 0.0
-		0.4 0.0 0.0
-		0.3 0.0 0.0
-		0.2 0.0 0.0
-		0.1 0.0 0.0
-	}
+			SPHERE = CENTER 0 -100.5 -1 ;
+					 RADIUS 100 ;
+					 TYPE TOON {
+					 	BORDER URGB 0.0 0.0 0.0 ; 
+					 	SHADOW URGB 0 0 0 ; 
+						COLORS { 
+							URGB 0 1 0 
+							URGB 0 0.9 0 
+							URGB 0 0.8 0 
+							URGB 0 0.7 0 
+							URGB 0 0.6 0 
+							URGB 0 0.5 0
+							URGB 0 0.4 0
+							URGB 0 0.3 0
+							URGB 0 0.2 0
+							URGB 0 0.1 0
+							URGB 0 0.0 0  
+						} ;
+					} ;
+
+		}
 
 
-SPHERE = 0 -100.5 -1 100 TOON 0.0 0.0 0.0 ; 0 0 0 ; 
-	COLORS { 
-		0 1 0 
-		0 0.9 0 
-		0 0.8 0 
-		0 0.7 0 
-		0 0.6 0 
-		0 0.5 0
-		0 0.4 0
-		0 0.3 0
-		0 0.2 0
-		0 0.1 0
-		0 0.0 0  
-	}
-	ANGLES {
-		30
-		40
-	}
 
-LIGHT = POINT ; 1 1 1 ; 8 7 5
-#NATURAL_LIGHT = 0.4 0.4 0.4
+LIGHT = POINT {
+			INTENSITY URGB 1 1 1 ;
+			ORIGIN 8 7 5 ;
+		}
+
+NATURAL_LIGHT = URGB 0.4 0.4 0.4
 
 CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
 													 # Vertical dimension of the view plane ; The camera's origin.
+
+

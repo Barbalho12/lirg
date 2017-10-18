@@ -26,17 +26,17 @@ class Background{
 		}
 
 		Background( rgb top_left_, rgb bottom_left_, rgb top_right_, rgb bottom_right_){
-			top_left =top_left_/255.99f;
-			bottom_left = bottom_left_/255.99f;
-			top_right = top_right_/255.99f;
-			bottom_right = bottom_right_/255.99f;
+			top_left = top_left_;
+			bottom_left = bottom_left_;
+			top_right = top_right_;
+			bottom_right = bottom_right_;
 		}
 
 		Background( rgb total){
-			top_left = total/255.99f;
-			bottom_left = total/255.99f;
-			top_right = total/255.99f;
-			bottom_right = total/255.99f;
+			top_left = total;
+			bottom_left = total;
+			top_right = total;
+			bottom_right = total;
 		}
 
 

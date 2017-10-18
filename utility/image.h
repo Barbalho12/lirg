@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
-#include "header.h"
+#include "io/reader.h"
 #include "vec3.h"
 #include "progress_bar.h"
 
@@ -55,20 +55,20 @@ class Image{
             screen[row][col].b = int(255.f * sqrt(colors.b()));
 		}
 
-		void print(Header header){
+		void print(Reader reader){
 
-			if(header.type == "PPM"){
-				if(header.codi == "ascii"){
-					printPPM(header);
-				}else if (header.codi == "binary"){
-					printPPMBinary(header);
+			if(reader.type == "PPM"){
+				if(reader.codi == "ascii"){
+					printPPM(reader);
+				}else if (reader.codi == "binary"){
+					printPPMBinary(reader);
 				}
 			}
 		}
 
-		void printPPMBinary(Header header){
+		void printPPMBinary(Reader reader){
 
-			ofstream output_file(header.name, ofstream::binary);
+			ofstream output_file(reader.name, ofstream::binary);
 			char* image_buffer = new char[width*height*3];
 
 		    output_file << "P6" << endl;
@@ -92,9 +92,9 @@ class Image{
 			delete [] image_buffer;
 		}
 
-		void printPPM(Header header){
+		void printPPM(Reader reader){
 			ofstream output_file;
-		    output_file.open(header.name);
+		    output_file.open(reader.name);
 
 		    output_file << "P3" << endl;
 		    output_file << width << " " << height << endl;

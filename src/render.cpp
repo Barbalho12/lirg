@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "../utility/header.h"
+#include "../utility/io/reader.h"
 #include "../utility/image.h"
 #include "../utility/raytracer.h"
 
@@ -37,17 +37,17 @@ int main(int argc, char* argv[]){
         chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
 
         cout << "Reading Scene from file: " << file_name << endl;
-        Header header(file_name);
+        Reader reader(file_name);
 
         cout << "Init RayTracer" <<  endl;
         RayTracer raytracer;
-        raytracer.init(header);
+        raytracer.init(reader);
 
         cout << "\nRendering..." << endl;
         Image image = raytracer.ray_trace();
 
-        cout << "\nSaving in file: " << header.name << endl;
-        image.print(header);
+        cout << "\nSaving in file: " << reader.name << endl;
+        image.print(reader);
 
         chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration = t2 - t1;

@@ -1,20 +1,62 @@
 NAME = materials_show.ppm
 TYPE = PPM
-CODIFICATION = binary 
-WIDTH = 1200
-HEIGHT = 600
-UPPER_LEFT = 127 179 255    
-LOWER_LEFT = 255 255 255      
-UPPER_RIGHT = 127 179 255 
-LOWER_RIGHT = 255 255 255 
+CODIFICATION = binary
+
+WIDTH = 600
+HEIGHT = 300
+
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255
+
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
-RAY_SHOTS = 50
+RAY_SHOTS = 10
+
 THREADS = 10
-SHADER = LAMBERTIAN
-SPHERE = 0 0 -1 0.5 LAMBERTIAN 0.8 0.3 0.3
-SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.8 0.8 0.0
-SPHERE = 1 0 -1 0.5 METAL 0.8 0.6 0.2
-SPHERE = -1 0 -1 0.5 METAL 0.8 0.8 0.8
-CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
-													 # Vertical dimension of the view plane ; The camera's origin.
+
+SHADER = LAMBERTIAN ;
+		 OBJECTS {
+		 	SPHERE = CENTER 0 0 -1 ;
+					 RADIUS 0.5 ;
+					 TYPE LAMBERTIAN {
+				  		MATERIAL LAMBERTIAN ;
+				 		ALBEDO URGB 0.8 0.0 0.0 ;
+					 } ;
+			SPHERE = CENTER 0 -100.5 -1 ;
+					 RADIUS 100 ;
+					 TYPE LAMBERTIAN {
+				  		MATERIAL LAMBERTIAN ;
+				 		ALBEDO URGB 0.8 0.8 0.0 ;
+					 } ;
+
+			SPHERE = CENTER 1 0 -1 ;
+					 RADIUS 0.5 ;
+					 TYPE LAMBERTIAN {
+				  		MATERIAL METAL ;
+				 		ALBEDO URGB 0.8 0.6 0.2 ;
+					 } ;
+
+			SPHERE = CENTER -1 0 -1 ;
+					 RADIUS 0.5 ;
+					 TYPE LAMBERTIAN {
+				  		MATERIAL METAL ;
+				 		ALBEDO URGB 0.8 0.8 0.8 ;
+					 } ;
+		}
+
+LIGHT = DIRECTIONAL {
+			INTENSITY URGB 0.8 0.8 0.8 ;
+			DIRECTION -8 7 0 ;
+		}
+
+LIGHT = DIRECTIONAL {
+			INTENSITY URGB 0.5 0.5 0.5 ;
+			DIRECTION 20 10 15 ;
+		}
+
+NATURAL_LIGHT = URGB 0.2 0.2 0.2
+
+#CAMERA = POSITIONABLE ; 0 0 4 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1
+CAMERA = POSITIONABLE ; -2 2 1 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1

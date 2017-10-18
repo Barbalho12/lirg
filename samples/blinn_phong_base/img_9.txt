@@ -5,10 +5,11 @@ CODIFICATION = ascii
 WIDTH = 1200
 HEIGHT = 600
 
-UPPER_LEFT = 127 179 255    
-LOWER_LEFT = 255 255 255      
-UPPER_RIGHT = 127 179 255 
-LOWER_RIGHT = 255 255 255 
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255 
+
 
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
@@ -16,12 +17,38 @@ RAY_SHOTS = 10
 
 THREADS = 10
 
-SHADER = BLINNPHONG
-SPHERE = 0 0 -1 0.5 LAMBERTIAN 0.0 0.3 0.8 ; 0.1 0.1 0.1 ; 0.9 0.9 0.9 ; 64
-SPHERE = 0 -100.5 -1 100 LAMBERTIAN 0.8 0 0 ; 0.1 0.1 0.1 ; 1.0 1.0 1.0 ; 5
+SHADER = BLINNPHONG ;
+		 OBJECTS {
+			 SPHERE = 	CENTER 0 0 -1 ;
+					  	RADIUS 0.4 ;
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+					 		ALBEDO URGB 0.0 0.3 0.8 ;
+					 		AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0.9 0.9 0.9 ;
+							SHININESS 64 ;
+					  } ;
+			
 
-LIGHT = POINT ; 1 1 1 ; -1 1 1
-NATURAL_LIGHT = 0.4 0.4 0.4
+			SPHERE = 	CENTER 0 -100.5 -1 ;
+					  	RADIUS 100 ;
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+					 		ALBEDO URGB 0.4 0.4 0.4 ;
+					 		AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 1.0 1.0 1.0 ; 
+							SHININESS 5 ;
+					  } ;
+
+		}
+
+LIGHT = POINT {
+			INTENSITY URGB 1.0 1.0 1.0 ;
+			ORIGIN -1 1 1 ;
+		}
+
+NATURAL_LIGHT = URGB 0.4 0.4 0.4
+
 
 CAMERA = DEFAULT ; -2 -1 -1 ; 4 0 0 ; 0 2 0 ; 0 0 0 # Lower left corner of the view plane ; Horizontal dimension of the view plane ;
 													 # Vertical dimension of the view plane ; The camera's origin.

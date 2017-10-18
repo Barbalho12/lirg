@@ -1,4 +1,4 @@
-NAME = img_8_.ppm
+NAME = img_0_traingle.ppm
 TYPE = PPM
 CODIFICATION = ascii 
 
@@ -15,11 +15,22 @@ MIN_DEPHT = 0.001
 MAX_DEPHT = 4
 RAY_SHOTS = 10
 
-THREADS = 10
+THREADS = 1
 
 
 SHADER = BLINNPHONG ;
 		 OBJECTS {
+		 	TRIANGLE = 	P0 0 -0.5 -1 ;
+					  	P1 1 0 -1 ;
+					  	P2 -1 0.5 -1 ;
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+					 		ALBEDO URGB 0.9 0.4 0.4 ;
+					 		AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 1.0 1.0 1.0 ; 
+							SHININESS 5 ;
+					  } ;
+
 			 SPHERE = 	CENTER 0 0 -1 ;
 					  	RADIUS 0.4 ;
 					  	TYPE BLINNPHONG {
@@ -40,6 +51,8 @@ SHADER = BLINNPHONG ;
 					 		SPECULAR URGB 1.0 1.0 1.0 ; 
 							SHININESS 5 ;
 					  } ;
+
+			
 
 		}
 
