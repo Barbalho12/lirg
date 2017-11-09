@@ -79,7 +79,7 @@ class Transformation{
 			glm::mat4 Take2Start = glm::translate(glm::mat4(1.0f), translate);
     		auto Translate = Take2Start;
 
-    		for(int i = 0; i < obj->getPoints().size(); i++){
+    		for(unsigned int i = 0; i < obj->getPoints().size(); i++){
 				auto newPoint = Translate * toVec4Glm(*obj->getPoints()[i]);
 				*obj->getPoints()[i] = toPoint3(newPoint);
     		}

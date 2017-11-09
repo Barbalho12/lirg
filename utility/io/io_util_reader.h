@@ -18,15 +18,33 @@ class IoUtilReader{
         IoUtilReader(){}
 
         /**
+        * Verifica a exixstencia de comentários se existir, são removidos e é retornado verdadeiro
+        * Caso contrário, é retornado falso.
+        */
+        bool verify_by_coments(ifstream &header_file, char character){
+            if(character == '#'){
+                while(character != '\n'){ 
+                    header_file.get(character);
+                    // cout << character << endl;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /**
         * Ler e valida um caractere, se não válido, o programa é finalizado
         */
         void read_valid_char(ifstream &header_file, char expected_char){
             char character;
             header_file >> character; 
+            
             if(character != expected_char){
                 cout << "ERRO: no expected character: '"<< character <<"',  expected: '" << expected_char << "'" << endl;
                 exit (EXIT_FAILURE);
             }
+
+            verify_by_coments(header_file, character);
         }
 
         /**
@@ -35,11 +53,13 @@ class IoUtilReader{
         void read_valid_string(ifstream &header_file, string expected_string){
             string text;
             header_file >> text; 
+            
             if(text != expected_string){
                 cout << "ERRO: no expected string: '"<< text <<"',  expected: '" << expected_string << "'" << endl;
                 exit (EXIT_FAILURE);
             }
 
+            verify_by_coments(header_file, text.back());
         }
 
         /**

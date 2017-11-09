@@ -103,6 +103,12 @@ class ShaderReader{
                 string text;
                 header_file >> text;
 
+                //Verifica comentários
+                if(util_reader.verify_by_coments(header_file, text.back())){
+                    continue;
+                }
+
+
                 if(text == SPHERE){
                     util_reader.read_valid_char(header_file, '=');
                     Sphere *sphere = read_sphere(header_file);
