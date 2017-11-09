@@ -2,8 +2,8 @@ NAME = box.ppm
 TYPE = PPM
 CODIFICATION = ascii 
 
-WIDTH = 1200
-HEIGHT = 600
+WIDTH = 800
+HEIGHT = 400
 
 UPPER_LEFT = RGB 127 179 255    
 LOWER_LEFT = RGB 255 255 255      
@@ -12,73 +12,104 @@ LOWER_RIGHT = RGB 255 255 255
 
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
-RAY_SHOTS = 100
+RAY_SHOTS = 10
 
 THREADS = 10
 
-SHADER = LAMBERTIAN ;
+SHADER = BLINNPHONG ;
 		 OBJECTS {
 
-			TRIANGLE = 	P0 -2 -1 -1 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
-					  	TYPE LAMBERTIAN {
+			TRIANGLE = 	P0 -2 1 -1 ; P1 -2 -1 -4 ; P2 -2 -1 -1 ;
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 -2 1 -1 ;
-					  	TYPE LAMBERTIAN {
+			TRIANGLE = 	P0 -2 1 -4 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
 			TRIANGLE = 	P0 2 -1 -1 ; P1 2 -1 -4 ; P2 2 1 -1 ;
-					  	TYPE LAMBERTIAN {
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
 			TRIANGLE = 	P0 2 -1 -4 ; P1 2 1 -4 ; P2 2 1 -1 ;
-					  	TYPE LAMBERTIAN {
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 2 1 -4 ;
-					  	TYPE LAMBERTIAN {
+			TRIANGLE = 	P0 -2 1 -4 ; P1 -2 -1 -4 ; P2 2 1 -4 ;
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.8 0.8 0.8 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
 			TRIANGLE = 	P0 -2 -1 -4 ; P1 2 -1 -4 ; P2 2 1 -4 ;
-					  	TYPE LAMBERTIAN {
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.8 0.8 0.8 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 -2 1 -1 ; P1 -2 1 -4 ; P2 2 1 -4 ;
-					  	TYPE LAMBERTIAN {
+			TRIANGLE = 	P0 -2 1 -1 ; P1 2 1 -4 ; P2 -2 1 -4 ;
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.2 0.2 0.2 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
 
 			TRIANGLE = 	P0 -2 1 -1 ; P1 2 1 -1 ; P2 2 1 -4 ;
-					  	TYPE LAMBERTIAN {
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.2 0.2 0.2 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  	} ;
+
 
 			SPHERE = 	CENTER -1 -0.6 -1.5 ;
 					  	RADIUS 0.3 ;
-					  	TYPE LAMBERTIAN {
-					  		MATERIAL METAL ;
-				 			ALBEDO URGB 1 1 1 ;
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 1 0 0 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0.4 0.4 0.4 ;
+							SHININESS 4 ;
 					  } ;
 
 			SPHERE = 	CENTER 0 -100.5 -1 ;
 					  	RADIUS 99.6 ;
-					  	TYPE LAMBERTIAN {
+					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0 1 0 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
 					  } ;
 		}
 

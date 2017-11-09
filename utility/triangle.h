@@ -66,8 +66,8 @@ class Triangle : public Object {
                 ht.origin = - r.point_at(t_aux);
                
                 // ht.normal = unit_vector((p0 - p1)*(p0 - p2)); //MODE 1
-                ht.normal = unit_vector(-r.point_at(t_aux));  //MODE 2
-                 // ht.normal = cross((p0 - p1),(p0 - p2)); //MODE 1
+                // ht.normal = unit_vector(-r.point_at(t_aux));  //MODE 2
+                ht.normal = unit_vector(cross((p0 - p1),(p0 - p2))); //MODE 1
 
                 ht.material = material;
                 return true;
