@@ -3,8 +3,10 @@
 
 #include "object.h"
 #include "vec3.h"
+#include <vector>
 
-using namespace utility; 
+using namespace utility;
+using namespace std;
 
 class Triangle : public Object {
 
@@ -38,8 +40,8 @@ class Triangle : public Object {
             if (v < 0 || u + v > 1) {
                 return t_max+1;
             }
-            float a = dot(e2, qvec) * inv_det;
-            return a;
+            float t = dot(e2, qvec) * inv_det;
+            return t;
         }
 
     public:
@@ -54,6 +56,14 @@ class Triangle : public Object {
             p1 = p1_;
             p2 = p2_;
             material = material_;
+        }
+
+        vector<point3*> getPoints(){
+            vector<point3*> points;
+            points.push_back(&p0);
+            points.push_back(&p1);
+            points.push_back(&p2);
+            return points;
         }
 
         bool hit(Ray r, float t_min, float t_max, HitRecord &ht){

@@ -3,8 +3,10 @@
 
 #include "object.h"
 #include "vec3.h"
+#include <vector>
 
-using namespace utility; 
+using namespace utility;
+using namespace std;
 
 class Sphere : public Object {
 
@@ -29,6 +31,11 @@ class Sphere : public Object {
 
         point3 get_center() const { return center; }
         float get_radius() const { return radius; }
+        vector<point3*> getPoints(){
+            vector<point3*> points;
+            points.push_back(&center);
+            return points;
+        }
         bool hit(Ray r, float t_min, float t_max, HitRecord &ht){
             ht.t = t_max; 
             ht.origin = center;

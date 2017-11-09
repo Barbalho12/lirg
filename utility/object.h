@@ -4,6 +4,9 @@
 #include "material.h"
 #include "vec3.h"
 #include "ray.h"
+#include <vector>
+
+using namespace std;
 
 struct HitRecord{
 	float t;
@@ -20,6 +23,7 @@ class Object {
 
 	public:
 		virtual bool hit(Ray r, float t_min, float t_max, HitRecord &ht) = 0;
+		virtual vector<point3*> getPoints() = 0;
 };
 
 #endif

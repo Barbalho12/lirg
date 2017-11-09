@@ -23,6 +23,7 @@
 #include "light.h"
 #include "background.h"
 #include "bp_lambertian_shader.h"
+#include "transformation.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -44,6 +45,8 @@ class RayTracer{
 		Reader reader;
 
 		Shader *shader;
+
+		Transformation transformation;
 
 	public:
 		RayTracer(){
@@ -81,6 +84,8 @@ class RayTracer{
 			scene = Scene();
 
 			scene.setObjects(reader.objects);
+			transformation = Transformation();
+			transformation.translation(scene.getObject(scene.getObjects().size()-2), 2, 0, 0);
 			scene.setLights(reader.lights);
 			scene.setNaturalLight(reader.natural_light);
 			scene.setMaxDepht(reader.max_depht);
