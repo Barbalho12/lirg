@@ -19,7 +19,7 @@ THREADS = 10
 SHADER = BLINNPHONG ;
 		 OBJECTS {
 
-			TRIANGLE = 	P0 -2 1 -1 ; P1 -2 -1 -4 ; P2 -2 -1 -1 ;
+			TRIANGLE = 	P0 -2 -1 -1 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
@@ -28,7 +28,7 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 -2 1 -4 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
+			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 -2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
@@ -37,7 +37,7 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 2 -1 -1 ; P1 2 -1 -4 ; P2 2 1 -1 ;
+			TRIANGLE = 	P0 2 1 -1 ; P1 2 -1 -4 ; P2 2 -1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;
@@ -46,7 +46,7 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			TRIANGLE = 	P0 2 -1 -4 ; P1 2 1 -4 ; P2 2 1 -1 ;
+			TRIANGLE = 	P0 2 1 -4 ; P1 2 -1 -4 ; P2 2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.4 0.4 0.4 ;

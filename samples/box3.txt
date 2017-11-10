@@ -1,6 +1,6 @@
-NAME = box_complete.ppm
+NAME = box3.ppm
 TYPE = PPM
-CODIFICATION = binary 
+CODIFICATION = ascii 
 
 WIDTH = 800
 HEIGHT = 400
@@ -12,16 +12,13 @@ LOWER_RIGHT = RGB 255 255 255
 
 MIN_DEPHT = 0.001
 MAX_DEPHT = 4
-RAY_SHOTS = 10
+RAY_SHOTS = 40
 
-THREADS = 10
+THREADS = 100
 
 SHADER = BLINNPHONG ;
 		 OBJECTS {
 
-
-
-		 	# LATERAL ESQUERDA ESQUERDA
 			TRIANGLE = 	P0 -2 -1 -1 ; P1 -2 -1 -4 ; P2 -2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
@@ -31,7 +28,6 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			# LATERAL ESQUERDA DIREITA
 			TRIANGLE = 	P0 -2 -1 -4 ; P1 -2 1 -4 ; P2 -2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
@@ -41,9 +37,6 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-
-
-			# LATERAL DIREITA DIREITA
 			TRIANGLE = 	P0 2 1 -1 ; P1 2 -1 -4 ; P2 2 -1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
@@ -53,7 +46,6 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			# LATERAL DIREITA ESQUERDA
 			TRIANGLE = 	P0 2 1 -4 ; P1 2 -1 -4 ; P2 2 1 -1 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
@@ -63,58 +55,42 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			# CENTRAL ESQUERDA
 			TRIANGLE = 	P0 -2 1 -4 ; P1 -2 -1 -4 ; P2 2 1 -4 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			ALBEDO URGB 0.8 0.8 0.8 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
 					  	} ;
 
-			# CENTRAL DIREITA
 			TRIANGLE = 	P0 -2 -1 -4 ; P1 2 -1 -4 ; P2 2 1 -4 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			ALBEDO URGB 0.8 0.8 0.8 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
 					  	} ;
 
-			# SUPERIOR ESQUERDA
-			TRIANGLE = 	P0 -2 1 -1 ; P1 -2 1 -4 ; P2 2 1 -4 ;
+			TRIANGLE = 	P0 -2 1 -1 ; P1 2 1 -4 ; P2 -2 1 -4 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			ALBEDO URGB 0.2 0.2 0.2 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
 					  	} ;
 
-			# SUPERIOR DIREITA
-			TRIANGLE = 	P0 2 1 -1 ; P1 -2 1 -1 ; P2 2 1 -4 ;
+			TRIANGLE = 	P0 -2 1 -1 ; P1 2 1 -1 ; P2 2 1 -4 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.4 0.4 0.4 ;
+				 			ALBEDO URGB 0.2 0.2 0.2 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
 					  	} ;
 
-			
-			# INFERIOR DIREITA
-			TRIANGLE =  P0 -2 -1 -4 ; P1 2 -1 -1 ; P2 2 -1 -4 ;
-					  	TYPE BLINNPHONG {
-					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.2 0.6 0.2 ;
-				 			AMBIENT URGB 0.1 0.1 0.1 ;
-					 		SPECULAR URGB 0 0 0 ;
-							SHININESS 4 ;
-					  	} ;
-
-			# ESFERA 
 			SPHERE = 	CENTER -1 -0.6 -1.5 ;
 					  	RADIUS 0.3 ;
 					  	TYPE BLINNPHONG {
@@ -125,22 +101,29 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  } ;
 
-			# INFERIOR ESQUERDA
-			TRIANGLE =  P0 -2 -1 -1 ; P1 2 -1 -1 ; P2 -2 -1 -4 ;  
+			TRIANGLE = 	P0 0 -1 -2 ; P1 0.5 -1 -2 ; P2 0.25 0 -2 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0.2 0.6 0.2 ;
+				 			ALBEDO URGB 0 0 1 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
-					 		SPECULAR URGB 0 0 0 ;
+					 		SPECULAR URGB 0.4 0.4 0.4 ;
 							SHININESS 4 ;
 					  	} ;
 
-			
+			SPHERE = 	CENTER 0 -100.5 -1 ;
+					  	RADIUS 99.6 ;
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0 1 0 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
+					  } ;
 		}
 
 LIGHT = POINT {
 			INTENSITY URGB 1 1 1 ;
-			ORIGIN 0 2 5 ;
+			ORIGIN 0 5 15 ;
 		}
 
 NATURAL_LIGHT = URGB 0.4 0.4 0.4

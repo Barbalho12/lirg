@@ -70,9 +70,24 @@ class Transformation{
 		Transformation(){
 		}
 
-		// rotation(){
+		void rotation(Object *obj, int rotatePoint, float x, float y, float z){
 
-		// }
+            point3 p(obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
+            translation(obj, -obj->getPoints()[rotatePoint]->x(), -obj->getPoints()[rotatePoint]->y(), -obj->getPoints()[rotatePoint]->z());
+
+            glm::mat4 Model = glm::mat4(1.0f);
+            Model = glm::rotate(Model, (float)(x*3.141592/180), glm::vec3(1, 0, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
+            Model = glm::rotate(Model, (float)(y*3.141592/180), glm::vec3(0, 1, 0));
+            Model = glm::rotate(Model, (float)(z*3.141592/180), glm::vec3(0, 0, 1));
+            auto Rotate = Model;
+
+            for(unsigned int i = 0; i < obj->getPoints().size(); i++){
+                auto newPoint = Rotate * toVec4Glm(*obj->getPoints()[i]);
+                *obj->getPoints()[i] = toPoint3(newPoint);
+            }
+            
+            translation(obj, p.x(), p.y(), p.z());
+		}
 
 		void translation(Object *obj, float x, float y, float z){
 			glm::vec3 translate(x, y, z);
