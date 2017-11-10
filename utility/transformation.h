@@ -56,6 +56,10 @@ constexpr long double operator"" _deg ( long double deg ){
 	return deg*3.141592/180;
 }
 
+float deg(float deg){
+    return deg*3.141592/180;
+}
+
 class Transformation{
 	private:
 		glm::vec4 toVec4Glm(point3 p){
@@ -70,20 +74,15 @@ class Transformation{
 		Transformation(){
 		}
 
-		void rotation(Object *obj, point3 rotatePoint, float x, float y, float z){
-            
-            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
-            
+		void rotation(Object *obj, point3 rotatePoint, float x, float y, float z){            
             point3 p = rotatePoint;// (obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
             translation(obj, -p.x(), -p.y(), -p.z());
             //translation(obj, -obj->getPoints()[rotatePoint]->x(), -obj->getPoints()[rotatePoint]->y(), -obj->getPoints()[rotatePoint]->z());
 
-            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
-
             glm::mat4 Model = glm::mat4(1.0f);
-            Model = glm::rotate(Model, (float)(x*3.141592/180), glm::vec3(1, 0, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
-            Model = glm::rotate(Model, (float)(y*3.141592/180), glm::vec3(0, 1, 0));
-            Model = glm::rotate(Model, (float)(z*3.141592/180), glm::vec3(0, 0, 1));
+            Model = glm::rotate(Model, deg(x), glm::vec3(1, 0, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
+            Model = glm::rotate(Model, deg(y), glm::vec3(0, 1, 0));
+            Model = glm::rotate(Model, deg(z), glm::vec3(0, 0, 1));
             auto Rotate = Model;
 
             for(unsigned int i = 0; i < obj->getPoints().size(); i++){
@@ -92,14 +91,12 @@ class Transformation{
             }
 
             translation(obj, p.x(), p.y(), p.z());
-
-            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
 		}
 
 		void translation(Object *obj, float x, float y, float z){
 			glm::vec3 translate(x, y, z);
-			glm::mat4 Take2Start = glm::translate(glm::mat4(1.0f), translate);
-    		auto Translate = Take2Start;
+			glm::mat4 Model = glm::translate(glm::mat4(1.0f), translate);
+    		auto Translate = Model;
 
     		for(unsigned int i = 0; i < obj->getPoints().size(); i++){
 				auto newPoint = Translate * toVec4Glm(*obj->getPoints()[i]);
@@ -109,9 +106,19 @@ class Transformation{
     		// cout << *obj->getPoints()[0] << endl;
 		}
 
-		// scalation(){
+		void scalation(Object *obj, point3 rotatePoint, float x, float y, float z){
+            point3 p = rotatePoint;// (obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
+            translation(obj, -p.x(), -p.y(), -p.z());
 
-		// }
+            glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(x,y,z));
+            auto Scale = Model;
+            for(unsigned int i = 0; i < obj->getPoints().size(); i++){
+                auto newPoint = Scale * toVec4Glm(*obj->getPoints()[i]);
+                *obj->getPoints()[i] = toPoint3(newPoint);
+            }
+
+            translation(obj, p.x(), p.y(), p.z());
+		}
 };
 
 #endif
