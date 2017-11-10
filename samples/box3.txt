@@ -110,15 +110,23 @@ SHADER = BLINNPHONG ;
 							SHININESS 4 ;
 					  	} ;
 
-			SPHERE = 	CENTER 0 -100.5 -1 ;
-					  	RADIUS 99.6 ;
+			TRIANGLE =  P0 -2 -1 -4 ; P1 2 -1 -1 ; P2 2 -1 -4 ;
 					  	TYPE BLINNPHONG {
 					  		MATERIAL LAMBERTIAN ;
-				 			ALBEDO URGB 0 1 0 ;
+				 			ALBEDO URGB 0 0.8 0 ;
 				 			AMBIENT URGB 0.1 0.1 0.1 ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
-					  } ;
+					  	} ;
+			
+			TRIANGLE =  P0 -2 -1 -1 ; P1 2 -1 -1 ; P2 -2 -1 -4 ;  
+					  	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0 0.8 0 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
+					  	} ;
 		}
 
 LIGHT = POINT {

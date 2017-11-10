@@ -70,10 +70,15 @@ class Transformation{
 		Transformation(){
 		}
 
-		void rotation(Object *obj, int rotatePoint, float x, float y, float z){
+		void rotation(Object *obj, point3 rotatePoint, float x, float y, float z){
+            
+            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
+            
+            point3 p = rotatePoint;// (obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
+            translation(obj, -p.x(), -p.y(), -p.z());
+            //translation(obj, -obj->getPoints()[rotatePoint]->x(), -obj->getPoints()[rotatePoint]->y(), -obj->getPoints()[rotatePoint]->z());
 
-            point3 p(obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
-            translation(obj, -obj->getPoints()[rotatePoint]->x(), -obj->getPoints()[rotatePoint]->y(), -obj->getPoints()[rotatePoint]->z());
+            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
 
             glm::mat4 Model = glm::mat4(1.0f);
             Model = glm::rotate(Model, (float)(x*3.141592/180), glm::vec3(1, 0, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
@@ -85,8 +90,10 @@ class Transformation{
                 auto newPoint = Rotate * toVec4Glm(*obj->getPoints()[i]);
                 *obj->getPoints()[i] = toPoint3(newPoint);
             }
-            
+
             translation(obj, p.x(), p.y(), p.z());
+
+            printf("[%lf,%lf,%lf]\n", obj->getPoints()[0]->x(), obj->getPoints()[0]->y(), obj->getPoints()[0]->z());
 		}
 
 		void translation(Object *obj, float x, float y, float z){
