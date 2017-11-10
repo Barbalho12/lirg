@@ -1,6 +1,6 @@
-NAME = box.ppm
+NAME = box_complete.ppm
 TYPE = PPM
-CODIFICATION = ascii 
+CODIFICATION = binary 
 
 WIDTH = 800
 HEIGHT = 400
@@ -140,7 +140,7 @@ SHADER = BLINNPHONG ;
 
 LIGHT = POINT {
 			INTENSITY URGB 1 1 1 ;
-			ORIGIN 0 5 15 ;
+			ORIGIN 0 2 5 ;
 		}
 
 NATURAL_LIGHT = URGB 0.4 0.4 0.4

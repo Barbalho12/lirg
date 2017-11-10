@@ -28,16 +28,16 @@ class Triangle : public Object {
                 return t_max+1;
             }
 
-            float inv_det = 1 / det;
+            float inv_det = 1.f / det;
             vec3 tvec = r.get_origin() - p0;
             float u = dot(tvec, pvec) * inv_det;
-            if (u < 0 || u > 1) {
+            if (u < 0.f || u > 1) {
                 return t_max+1;
             }
 
             vec3 qvec = cross(tvec, e1);
             float v = dot(r.get_direction(), qvec) * inv_det;
-            if (v < 0 || u + v > 1) {
+            if (v < 0.f || u + v > 1) {
                 return t_max+1;
             }
             float t = dot(e2, qvec) * inv_det;
@@ -73,12 +73,8 @@ class Triangle : public Object {
 
             if(ht.t > t_aux && t_aux > t_min){
                 ht.t = t_aux;
-                ht.origin = - r.point_at(t_aux);
-               
-                // ht.normal = unit_vector((p0 - p1)*(p0 - p2)); //MODE 1
-                // ht.normal = unit_vector(-r.point_at(t_aux));  //MODE 2
-                ht.normal = unit_vector(cross((p0 - p1),(p0 - p2))); //MODE 1
-
+                ht.origin = r.point_at(t_aux);
+                ht.normal = unit_vector(cross((p0 - p1),(p0 - p2))); 
                 ht.material = material;
                 return true;
             }
