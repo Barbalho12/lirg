@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "object.h"
+#include "sphere.h"
 #include "vec3.h"
 
 using namespace std;
@@ -106,18 +107,22 @@ class Transformation{
     		// cout << *obj->getPoints()[0] << endl;
 		}
 
-		void scalation(Object *obj, point3 rotatePoint, float x, float y, float z){
-            point3 p = rotatePoint;// (obj->getPoints()[rotatePoint]->x(), obj->getPoints()[rotatePoint]->y(), obj->getPoints()[rotatePoint]->z());
-            translation(obj, -p.x(), -p.y(), -p.z());
+        void scalation(Object *obj, float x){
+            if(typeid(*obj) == typeid(Sphere)){
+                Sphere *s = dynamic_cast<Sphere*>(obj);
+                s->set_radius(s->get_radius() * x);
+                obj = s;
+            }
+        }
 
+		void scalation(Object *obj, float x, float y, float z){
             glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(x,y,z));
             auto Scale = Model;
+
             for(unsigned int i = 0; i < obj->getPoints().size(); i++){
                 auto newPoint = Scale * toVec4Glm(*obj->getPoints()[i]);
                 *obj->getPoints()[i] = toPoint3(newPoint);
             }
-
-            translation(obj, p.x(), p.y(), p.z());
 		}
 };
 

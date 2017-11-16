@@ -39,7 +39,7 @@ SHADER = LAMBERTIAN ;
 					  	} ;
 			
 			
-			TRIANGLE = 	P0 1 -1 -2 ; P1 1 -0.5 -2 ; P2 1.5 -0.5 -2 ;
+			TRIANGLE = 	P0 1 -1 -2 ; P1 1.5 -0.5 -2 ; P2 1 -0.5 -2 ;
 					  	TYPE LAMBERTIAN {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 1 0 0  ;
@@ -71,7 +71,7 @@ SHADER = LAMBERTIAN ;
 				 			ALBEDO URGB 0.5 0 0  ;
 					  	} ;
 
-			TRIANGLE = 	P0 1 -0.5 -2 ; P1 1 -0.5 -2.5 ; P2 1.5 -0.5 -2.5 ;
+			TRIANGLE = 	P0 1 -0.5 -2 ; P1 1.5 -0.5 -2.5 ; P2 1 -0.5 -2.5 ;
 					  	TYPE LAMBERTIAN {
 					  		MATERIAL LAMBERTIAN ;
 				 			ALBEDO URGB 0.5 0 0  ;

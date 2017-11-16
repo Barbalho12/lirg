@@ -85,9 +85,10 @@ class RayTracer{
 
 			scene.setObjects(reader.objects);
 			transformation = Transformation();
-			transformation.translation(scene.getObject(scene.getObjects().size()-3), 1, 0, 0);
-			transformation.scalation(scene.getObject(scene.getObjects().size()-3), *scene.getObject(scene.getObjects().size()-3)->getPoints()[1], 0, 0.5, 0);
-			transformation.rotation(scene.getObject(scene.getObjects().size()-3), *scene.getObject(scene.getObjects().size()-3)->getPoints()[0], 0.0, 0.0, 45.0);
+			transformation.scalation(scene.getObject(scene.getObjects().size()-4), 0.5);
+			//transformation.translation(scene.getObject(scene.getObjects().size()-3), 1, 0, 0);
+			// transformation.scalation(scene.getObject(scene.getObjects().size()-3), 1, 2, 1);
+			//transformation.rotation(scene.getObject(scene.getObjects().size()-3), *scene.getObject(scene.getObjects().size()-3)->getPoints()[0], 0.0, 0.0, 15.0);
 			scene.setLights(reader.lights);
 			scene.setNaturalLight(reader.natural_light);
 			scene.setMaxDepht(reader.max_depht);
