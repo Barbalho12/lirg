@@ -84,8 +84,8 @@ class RayTracer{
 			scene = Scene();
 
 			scene.setObjects(reader.objects);
-			transformation = Transformation();
-			transformation.scalation(scene.getObject(scene.getObjects().size()-4), 0.5);
+			// transformation = Transformation();
+			// transformation.scalation(scene.getObject(scene.getObjects().size()-4), 0.5);
 			//transformation.translation(scene.getObject(scene.getObjects().size()-3), 1, 0, 0);
 			// transformation.scalation(scene.getObject(scene.getObjects().size()-3), 1, 2, 1);
 			//transformation.rotation(scene.getObject(scene.getObjects().size()-3), *scene.getObject(scene.getObjects().size()-3)->getPoints()[0], 0.0, 0.0, 15.0);

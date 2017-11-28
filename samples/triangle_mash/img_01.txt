@@ -1,0 +1,39 @@
+NAME = img_01.ppm
+TYPE = PPM
+CODIFICATION = binary 
+
+WIDTH = 800
+HEIGHT = 400
+
+UPPER_LEFT = RGB 127 179 255    
+LOWER_LEFT = RGB 255 255 255      
+UPPER_RIGHT = RGB 127 179 255 
+LOWER_RIGHT = RGB 255 255 255 
+
+MIN_DEPHT = 0.001
+MAX_DEPHT = 4
+RAY_SHOTS = 10
+
+THREADS = 10
+
+SHADER = BLINNPHONG ;
+		 OBJECTS {
+
+		 	MASH = 	TYPE BLINNPHONG {
+					  		MATERIAL LAMBERTIAN ;
+				 			ALBEDO URGB 0.7 0 0 ;
+				 			AMBIENT URGB 0.1 0.1 0.1 ;
+					 		SPECULAR URGB 0 0 0 ;
+							SHININESS 4 ;
+					  	} ;
+					./samples/triangle_mash/cube.obj ;
+		}
+
+LIGHT = POINT {
+			INTENSITY URGB 1 1 1 ;
+			ORIGIN 0 2 5 ;
+		}
+
+NATURAL_LIGHT = URGB 0.4 0.4 0.4
+
+CAMERA = POSITIONABLE ; 0 0 4 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1

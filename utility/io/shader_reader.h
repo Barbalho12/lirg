@@ -21,6 +21,7 @@ using namespace std;
 
 #define SPHERE "SPHERE"
 #define TRIANGLE "TRIANGLE"
+#define MASH "MASH"
 #define SHADER_ "SHADER"
 
 #define BP_AMBIENT "AMBIENT"
@@ -120,6 +121,17 @@ class ShaderReader{
                     util_reader.read_valid_char(header_file, '=');
                     Triangle *triangle = read_triangle(header_file);
                     objects.push_back(triangle);  
+                    continue;
+                }
+
+                if(text == MASH){
+                    util_reader.read_valid_char(header_file, '=');
+                    vector<Triangle*> mash = read_mash(header_file);
+                    //Mash *mash = read_mash(header_file);
+                    for (int i = 0; i < mash.size(); i++){
+                        objects.push_back(mash[i]);
+                    }
+                    // objects.push_back(mash);
                     continue;
                 }
 
@@ -362,6 +374,46 @@ class ShaderReader{
 
             return new Triangle(p0, p1, p2, material);
 
+        }
+
+        vector<Triangle*> read_mash(ifstream &header_file){
+            string objectPath;
+            Material *material;
+            vector<point3> points;
+            vector<Triangle*> triangles;
+
+            string txt;
+            header_file >> txt;
+            material = read_material(header_file);
+            util_reader.read_valid_char(header_file, ';');
+
+            header_file >> objectPath;
+            util_reader.read_valid_char(header_file, ';'); 
+
+            ifstream objectDescription(objectPath);
+            while(!objectDescription.eof()){
+                objectDescription >> txt;
+
+                if(txt == "v"){
+                    float p1, p2, p3;
+                    objectDescription >> p1;
+                    objectDescription >> p2;
+                    objectDescription >> p3;
+
+                    points.push_back(point3(p1, p2, p3));
+                }
+
+                if (txt == "f"){
+                    float p1, p2, p3;
+                    objectDescription >> p1;
+                    objectDescription >> p2;
+                    objectDescription >> p3;
+
+                    triangles.push_back(new Triangle(points[p1], points[p2], points[p3], material));
+                }
+            }
+
+            return triangles;
         }
 };
 
