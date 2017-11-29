@@ -1,4 +1,4 @@
-NAME = img_01.ppm
+NAME = bunny.ppm
 TYPE = PPM
 CODIFICATION = binary 
 
@@ -11,10 +11,10 @@ UPPER_RIGHT = RGB 127 179 255
 LOWER_RIGHT = RGB 255 255 255 
 
 MIN_DEPHT = 0.001
-MAX_DEPHT = 4
+MAX_DEPHT = 30
 RAY_SHOTS = 10
 
-THREADS = 10
+THREADS = 4
 
 SHADER = BLINNPHONG ;
 		 OBJECTS {
@@ -26,7 +26,7 @@ SHADER = BLINNPHONG ;
 					 		SPECULAR URGB 0 0 0 ;
 							SHININESS 4 ;
 					  	} ;
-					./samples/triangle_mash/cube.obj ;
+					./samples/triangle_mash/bunny.obj ;
 		}
 
 LIGHT = POINT {
@@ -36,4 +36,4 @@ LIGHT = POINT {
 
 NATURAL_LIGHT = URGB 0.4 0.4 0.4
 
-CAMERA = POSITIONABLE ; 0 0 4 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1
+CAMERA = POSITIONABLE ; 0 0 2 ; 0 0 -1 ; 0 1 0 ; 20 ; 0 ; 0 0 -1

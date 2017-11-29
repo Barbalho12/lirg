@@ -127,11 +127,9 @@ class ShaderReader{
                 if(text == MASH){
                     util_reader.read_valid_char(header_file, '=');
                     vector<Triangle*> mash = read_mash(header_file);
-                    //Mash *mash = read_mash(header_file);
                     for (int i = 0; i < mash.size(); i++){
                         objects.push_back(mash[i]);
                     }
-                    // objects.push_back(mash);
                     continue;
                 }
 
@@ -409,7 +407,7 @@ class ShaderReader{
                     objectDescription >> p2;
                     objectDescription >> p3;
 
-                    triangles.push_back(new Triangle(points[p1], points[p2], points[p3], material));
+                    triangles.push_back(new Triangle(points[p1-1], points[p2-1], points[p3-1], material));
                 }
             }
 
