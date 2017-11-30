@@ -17,14 +17,31 @@ class Mash : public Object {
         vector<Triangle*> mash;
         Sphere* sphere;
 
+        vector<point3*> points;
+
 
         Mash(vector<Triangle*> mash_, Sphere* sphere_){
             mash = mash_;
             sphere = sphere_;
+
+            setPoints();
+        }
+
+        void setPoints(){
+            vector<point3*> points;
+
+            points.push_back(sphere->getPoints()[0]);
+
+            for(unsigned int i = 0; i < mash.size(); i++){
+                points.push_back(mash[i]->getPoints()[0]);
+                points.push_back(mash[i]->getPoints()[1]);
+                points.push_back(mash[i]->getPoints()[2]);
+            }
+            cout << "ok" << endl;
         }
 
         vector<point3*> getPoints(){
-            return sphere->getPoints();
+            return points;
         }
 
         bool hit(Ray r, float t_min, float t_max, HitRecord &ht){
