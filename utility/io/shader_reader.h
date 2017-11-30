@@ -8,11 +8,13 @@
 #include "../vec3.h"
 #include "../ray.h"
 #include "../sphere.h"
+#include "../mash.h"
 #include "../triangle.h"
 #include "../object.h"
 #include "../lambertian.h"
 #include "../metal.h"
 #include "../toon.h"
+#include <cmath>        // sqrt, fabs
 
 #include "io_util_reader.h"
 #include "basic_reader.h"
@@ -126,10 +128,21 @@ class ShaderReader{
 
                 if(text == MASH){
                     util_reader.read_valid_char(header_file, '=');
-                    vector<Triangle*> mash = read_mash(header_file);
-                    for (int i = 0; i < mash.size(); i++){
-                        objects.push_back(mash[i]);
-                    }
+                    // vector<Triangle*> mash = read_mash(header_file);
+                    // for (int i = 0; i < mash.size(); i++){
+                    //     objects.push_back(mash[i]);
+                    // }
+
+
+                    // Mash *mash = read_mash(header_file);
+                    // for (int i = 0; i < mash->mash.size(); i++){
+                    //     objects.push_back(mash->mash[i]);
+                    // }
+
+
+                    Mash *mash = read_mash(header_file);
+                    objects.push_back(mash);
+
                     continue;
                 }
 
@@ -374,7 +387,7 @@ class ShaderReader{
 
         }
 
-        vector<Triangle*> read_mash(ifstream &header_file){
+        Mash *read_mash(ifstream &header_file){
             string objectPath;
             Material *material;
             vector<point3> points;
@@ -389,16 +402,52 @@ class ShaderReader{
             util_reader.read_valid_char(header_file, ';'); 
 
             ifstream objectDescription(objectPath);
+
+            float x_max =-100000;
+            float x_min =100000;
+            float y_max =-100000;
+            float y_min =100000;
+            float z_max =-100000;
+            float z_min =100000;
+
             while(!objectDescription.eof()){
                 objectDescription >> txt;
 
                 if(txt == "v"){
-                    float p1, p2, p3;
-                    objectDescription >> p1;
-                    objectDescription >> p2;
-                    objectDescription >> p3;
+                    float x, y, z;
+                    objectDescription >> x;
+                    objectDescription >> y;
+                    objectDescription >> z;
 
-                    points.push_back(point3(p1, p2, p3));
+                    points.push_back(point3(x, y, z));
+
+                    if(x > x_max){
+                        x_max = x;
+                    }
+                    if(y > y_max){
+                        y_max = y;
+                    }
+                    if(z > z_max){
+                        z_max = z;
+                    }
+                    if(x < x_min){
+                        x_min = x;
+                    }
+                    if(y < y_min){
+                        y_min = y;
+                    }
+                    if(z < z_min){
+                        z_min = z;
+                    }
+                    //pontos do cubo que irá delimitar o box_Tree
+                    // point3(x_max, y_max, z_max)
+                    // point3(y_max, y_max, z_min)
+                    // point3(y_max, y_min, z_max)
+                    // point3(y_max, y_min, z_min)
+                    // point3(x_min, y_max, z_max)
+                    // point3(x_min, y_max, z_min)
+                    // point3(x_min, y_min, z_max)
+                    // point3(x_min, y_min, z_min)
                 }
 
                 if (txt == "f"){
@@ -411,7 +460,13 @@ class ShaderReader{
                 }
             }
 
-            return triangles;
+            //centro da esfera
+            point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
+
+            //raio
+            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2));
+
+            return new Mash(triangles, new Sphere(center, radius));
         }
 };
 

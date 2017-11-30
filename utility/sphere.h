@@ -29,6 +29,11 @@ class Sphere : public Object {
             material = material_;
         }
 
+        Sphere(point3 c, float r){
+            center = c;
+            radius = r;
+        }
+
         point3 get_center() const { return center; }
         float get_radius() const { return radius; }
         
