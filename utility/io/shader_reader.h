@@ -464,7 +464,7 @@ class ShaderReader{
             point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
 
             //raio
-            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2));
+            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2))/2;
 
             return new Mash(triangles, new Sphere(center, radius));
         }
