@@ -1,4 +1,7 @@
-g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/box_complete.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/triangle_mash/bunny.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/triangle_mash/teaPot.txt
+g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt
+# g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/box_complete.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/cartoons/img_1.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/mapdepht_red_basic.txt
 # g++ -std=c++11 -pthread -Wall src/render.cpp -o render && ./render samples/basic/materials_show.txt
