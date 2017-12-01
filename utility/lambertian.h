@@ -2,23 +2,43 @@
 #define _LAMBERTIAN_H_
 #include "material.h"
 #include "object.h"
+#include "texture.h"
 
 class Lambertian : public Material{
 	public:
 		vec3 albedo;
+		texture *albedo_;
+
 		vec3 ambient;
 		vec3 specular;
 		float shininess;
 		
+		// Lambertian(const vec3 &attenuation, vec3 & ambient_, vec3 & specular_, float shininess_){
+		// 	albedo = attenuation;
+		// 	ambient = ambient_;
+		// 	specular = specular_;
+		// 	shininess = shininess_;
+		// }
+
+		// Lambertian(texture *albedo__){
+		// 	albedo_ = albedo__;
+		// }
+
 		Lambertian(const vec3 &attenuation, vec3 & ambient_, vec3 & specular_, float shininess_){
 			albedo = attenuation;
 			ambient = ambient_;
 			specular = specular_;
 			shininess = shininess_;
+
+			albedo_ = new constant_texture(vec3(1, 0, 0)); 
 		}
 
 		Lambertian(const vec3 &attenuation){
 			albedo = attenuation;
+
+			texture* t1 = new constant_texture(vec3(1, 0, 0)); 
+			texture* t2 = new constant_texture(vec3(0, 0, 1)); 
+			albedo_ = new checker_texture(t1,t2); 
 		}
 
 		vec3 random_in_unit_sphere() const{
@@ -33,7 +53,9 @@ class Lambertian : public Material{
 			(void) (r);
 			vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
 			scattered = Ray(ht.origin, target-ht.origin);
-			attenuation = albedo;
+			// attenuation = albedo;
+			// cout << ht.u << ", " << ht.v << ", " << ht.origin << endl;
+			attenuation = albedo_->value(ht.origin);
 			return true;
 		}
 };
