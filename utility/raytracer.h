@@ -89,7 +89,7 @@ class RayTracer{
 			transformation.translation(scene.getObject(0), 0, -0.1, 0);
 			// transformation.translation(scene.getObject(scene.getObjects().size()-3), 1, 0, 0);
 			transformation.scalation(scene.getObject(0), 2, 2, 2);
-			transformation.rotation(scene.getObject(0), *scene.getObject(0)->getPoints()[0], 0.0, 0.0, 15.0);
+			transformation.rotation(scene.getObject(0), *scene.getObject(0)->getPoints()[0], 0.0, 15.0, 0.0);
 			scene.setLights(reader.lights);
 			scene.setNaturalLight(reader.natural_light);
 			scene.setMaxDepht(reader.max_depht);
