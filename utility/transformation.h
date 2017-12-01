@@ -89,7 +89,7 @@ class Transformation{
             if(typeid(*obj) == typeid(Mash)){
                 Mash *s = dynamic_cast<Mash*>(obj);
 
-                for (int i = 0; i < s->mash.size(); i++){
+                for (unsigned int i = 0; i < s->mash.size(); i++){
                     for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
                         auto newPoint = Rotate * toVec4Glm(*s->mash[i]->getPoints()[j]);
                         *s->mash[i]->getPoints()[j] = toPoint3(newPoint);
@@ -116,7 +116,7 @@ class Transformation{
                 auto newPointSphere = Translate * toVec4Glm(*s->sphere->getPoints()[0]);
                 *s->sphere->getPoints()[0] = toPoint3(newPointSphere);
 
-                for (int i = 0; i < s->mash.size(); i++){
+                for (unsigned int i = 0; i < s->mash.size(); i++){
                     for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
                         auto newPoint = Translate * toVec4Glm(*s->mash[i]->getPoints()[j]);
                         *s->mash[i]->getPoints()[j] = toPoint3(newPoint);
@@ -152,7 +152,7 @@ class Transformation{
                 // auto newPointSphere = Scale * toVec4Glm(*s->sphere->getPoints()[0]);
                 // *s->sphere->getPoints()[0] = toPoint3(newPointSphere);
 
-                for (int i = 0; i < s->mash.size(); i++){
+                for (unsigned int i = 0; i < s->mash.size(); i++){
                     for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
                         auto newPoint = Scale * toVec4Glm(*s->mash[i]->getPoints()[j]);
                         *s->mash[i]->getPoints()[j] = toPoint3(newPoint);

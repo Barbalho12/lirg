@@ -43,7 +43,7 @@ class Mash : public Object {
             float z_max =-100000;
             float z_min =100000;
 
-            for(int i = 0; i < points.size(); i++){
+            for(unsigned int i = 0; i < points.size(); i++){
                 if(points[i]->x() > x_max){
                     x_max = points[i]->x();
                 }

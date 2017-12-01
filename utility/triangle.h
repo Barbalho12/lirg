@@ -16,32 +16,44 @@ class Triangle : public Object {
         //MOLLER_TRUMBORE 
         //https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
         float hit_triangle(Ray r, float t_max){
+        	float t;
+        	float u;
+        	float v;
+        	float inv_det;
 
-            vec3 e1 = p1 - p0;
-            vec3 e2 = p2 - p0;
+			vec3 e1 = p1 - p0;
+			vec3 e2 = p2 - p0;
 
-            // Calculate planes normal vector
-            vec3 pvec = cross(r.get_direction(), e2);
-            float det = dot(e1, pvec);
+			vec3 qvec;
+			vec3 pvec = cross(r.get_direction(), e2);
+			float det = dot(e1, pvec);
 
-            if (det < 1e-8 && det > -1e-8) {
-                return t_max+1;
-            }
+			if (det < 1e-8) {
+			    return t_max+1;
+			}
 
-            float inv_det = 1.f / det;
-            vec3 tvec = r.get_origin() - p0;
-            float u = dot(tvec, pvec) * inv_det;
-            if (u < 0.f || u > 1) {
-                return t_max+1;
-            }
+			vec3 tvec = r.get_origin() - p0;
+			u = dot(tvec, pvec);
 
-            vec3 qvec = cross(tvec, e1);
-            float v = dot(r.get_direction(), qvec) * inv_det;
-            if (v < 0.f || u + v > 1) {
-                return t_max+1;
-            }
-            float t = dot(e2, qvec) * inv_det;
-            return t;
+			if ((u < 0.f) || (u > det)){
+				return t_max+1;
+			}
+
+			qvec = cross(tvec, e1);
+			v = dot(r.get_direction(), qvec);
+
+			if (v < 0.f || ((u + v) > det)){
+				return t_max+1;
+			}
+
+			t = dot(e2, qvec);
+			inv_det = 1.f / det;
+
+			t *= inv_det;
+			// u *= inv_det;
+			// v *= inv_det;
+
+			return t;
         }
 
     public:
@@ -79,6 +91,43 @@ class Triangle : public Object {
                 return true;
             }
             return false;
+
+
+
+//     } else {
+//         // Check if the determinant is between the interval (-EPSILON, EPSILON)
+//         if ((det > -EPSILON) && (det < EPSILON)) {
+//             return false;
+//         }
+//         // Inverse determinant
+//         inv_det = 1.f / det;
+//         // Get distance from v0 to ray origin
+//         tvec = r.get_origin() - this->v0;
+//         // Calculates u parameter
+//         u = dot(tvec, pvec) * inv_det;
+//         // Check u parameter is within the bounds
+//         if ((u < 0.f) || (u > 1.f)) {
+//             return false;
+//         }
+//         // Prepare to test v parameter
+//         qvec = cross(tvec, e1);
+//         v = dot(r.get_direction(), qvec) * inv_det;
+//         // Check v parameter is within the bounds
+//         if ((v < 0.f) || ((u + v) > 1.f)) {
+//             return false;
+//         }
+//         // Calculates t parameter
+//         t = dot(e2, qvec) * inv_det;
+//     }
+//     // Check if the triangle is within the limits of the scene
+//     if ((t > EPSILON) && ((t > t_min) && (t < t_max))) {
+//         hr.t        = t;
+//         hr.point    = r.point_at(t);
+//         hr.normal   = unit_vector(cross(e1, e2));
+//         hr.material = this->material;
+//         return true;
+//     }
+// return false;
         }
 };
 
