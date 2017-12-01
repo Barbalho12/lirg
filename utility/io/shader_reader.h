@@ -439,15 +439,6 @@ class ShaderReader{
                     if(z < z_min){
                         z_min = z;
                     }
-                    //pontos do cubo que irá delimitar o box_Tree
-                    // point3(x_max, y_max, z_max)
-                    // point3(y_max, y_max, z_min)
-                    // point3(y_max, y_min, z_max)
-                    // point3(y_max, y_min, z_min)
-                    // point3(x_min, y_max, z_max)
-                    // point3(x_min, y_max, z_min)
-                    // point3(x_min, y_min, z_max)
-                    // point3(x_min, y_min, z_min)
                 }
 
                 if (txt == "f"){

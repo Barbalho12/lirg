@@ -28,16 +28,49 @@ class Mash : public Object {
         }
 
         void setPoints(){
-            vector<point3*> points;
-
-            points.push_back(sphere->getPoints()[0]);
-
             for(unsigned int i = 0; i < mash.size(); i++){
                 points.push_back(mash[i]->getPoints()[0]);
                 points.push_back(mash[i]->getPoints()[1]);
                 points.push_back(mash[i]->getPoints()[2]);
             }
-            cout << "ok" << endl;
+        }
+
+        void resizeSphere(){
+            float x_max =-100000;
+            float x_min =100000;
+            float y_max =-100000;
+            float y_min =100000;
+            float z_max =-100000;
+            float z_min =100000;
+
+            for(int i = 0; i < points.size(); i++){
+                if(points[i]->x() > x_max){
+                    x_max = points[i]->x();
+                }
+                if(points[i]->y() > y_max){
+                    y_max = points[i]->y();
+                }
+                if(points[i]->z() > z_max){
+                    z_max = points[i]->z();
+                }
+                if(points[i]->x() < x_min){
+                    x_min = points[i]->x();
+                }
+                if(points[i]->y() < y_min){
+                    y_min = points[i]->y();
+                }
+                if(points[i]->z() < z_min){
+                    z_min = points[i]->z();
+                }
+            }
+
+            //centro da esfera
+            point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
+
+            //raio
+            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2))/2;
+
+            sphere = new Sphere(center, radius);
         }
 
         vector<point3*> getPoints(){

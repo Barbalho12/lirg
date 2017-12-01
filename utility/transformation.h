@@ -86,23 +86,50 @@ class Transformation{
             Model = glm::rotate(Model, deg(z), glm::vec3(0, 0, 1));
             auto Rotate = Model;
 
-            for(unsigned int i = 0; i < obj->getPoints().size(); i++){
-                auto newPoint = Rotate * toVec4Glm(*obj->getPoints()[i]);
-                *obj->getPoints()[i] = toPoint3(newPoint);
+            if(typeid(*obj) == typeid(Mash)){
+                Mash *s = dynamic_cast<Mash*>(obj);
+
+                for (int i = 0; i < s->mash.size(); i++){
+                    for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
+                        auto newPoint = Rotate * toVec4Glm(*s->mash[i]->getPoints()[j]);
+                        *s->mash[i]->getPoints()[j] = toPoint3(newPoint);
+                    }
+                }
+            }else{
+                for(unsigned int i = 0; i < obj->getPoints().size(); i++){
+                    auto newPoint = Rotate * toVec4Glm(*obj->getPoints()[i]);
+                    *obj->getPoints()[i] = toPoint3(newPoint);
+                }
             }
 
             translation(obj, p.x(), p.y(), p.z());
 		}
 
 		void translation(Object *obj, float x, float y, float z){
-			glm::vec3 translate(x, y, z);
-			glm::mat4 Model = glm::translate(glm::mat4(1.0f), translate);
-    		auto Translate = Model;
+            glm::vec3 translate(x, y, z);
+            glm::mat4 Model = glm::translate(glm::mat4(1.0f), translate);
+            auto Translate = Model;
 
-    		for(unsigned int i = 0; i < obj->getPoints().size(); i++){
-				auto newPoint = Translate * toVec4Glm(*obj->getPoints()[i]);
-				*obj->getPoints()[i] = toPoint3(newPoint);
-    		}
+            if(typeid(*obj) == typeid(Mash)){
+                Mash *s = dynamic_cast<Mash*>(obj);
+                
+                auto newPointSphere = Translate * toVec4Glm(*s->sphere->getPoints()[0]);
+                *s->sphere->getPoints()[0] = toPoint3(newPointSphere);
+
+                for (int i = 0; i < s->mash.size(); i++){
+                    for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
+                        auto newPoint = Translate * toVec4Glm(*s->mash[i]->getPoints()[j]);
+                        *s->mash[i]->getPoints()[j] = toPoint3(newPoint);
+                    }
+                }
+
+                obj = s;
+            }else{
+                for(unsigned int i = 0; i < obj->getPoints().size(); i++){
+                    auto newPoint = Translate * toVec4Glm(*obj->getPoints()[i]);
+                    *obj->getPoints()[i] = toPoint3(newPoint);
+                }
+            }
 
     		// cout << *obj->getPoints()[0] << endl;
 		}
@@ -119,9 +146,27 @@ class Transformation{
             glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(x,y,z));
             auto Scale = Model;
 
-            for(unsigned int i = 0; i < obj->getPoints().size(); i++){
-                auto newPoint = Scale * toVec4Glm(*obj->getPoints()[i]);
-                *obj->getPoints()[i] = toPoint3(newPoint);
+            if(typeid(*obj) == typeid(Mash)){
+                Mash *s = dynamic_cast<Mash*>(obj);
+
+                // auto newPointSphere = Scale * toVec4Glm(*s->sphere->getPoints()[0]);
+                // *s->sphere->getPoints()[0] = toPoint3(newPointSphere);
+
+                for (int i = 0; i < s->mash.size(); i++){
+                    for(unsigned int j = 0; j < s->mash[i]->getPoints().size(); j++){
+                        auto newPoint = Scale * toVec4Glm(*s->mash[i]->getPoints()[j]);
+                        *s->mash[i]->getPoints()[j] = toPoint3(newPoint);
+                    }
+                }
+
+                s->resizeSphere();
+
+                obj = s;
+            }else{
+                for(unsigned int i = 0; i < obj->getPoints().size(); i++){
+                    auto newPoint = Scale * toVec4Glm(*obj->getPoints()[i]);
+                    *obj->getPoints()[i] = toPoint3(newPoint);
+                }
             }
 		}
 };
