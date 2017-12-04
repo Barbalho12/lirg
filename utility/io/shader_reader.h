@@ -14,6 +14,7 @@
 #include "../object.h"
 #include "../lambertian.h"
 #include "../metal.h"
+#include "../dielectric.h"
 #include "../toon.h"
 #include <cmath>        // sqrt, fabs
 
@@ -253,7 +254,9 @@ class ShaderReader{
             util_reader.read_valid_char(header_file, '{');
 
             rgb albedo;
+            float rd;
             string material;
+            bool texture;
 
             Material *mat = nullptr;
 
@@ -266,8 +269,29 @@ class ShaderReader{
                     util_reader.read_valid_char(header_file, ';');
                     continue;
                 }
+
                 if(param == "ALBEDO"){
                     albedo = util_reader.read_color(header_file);
+                    util_reader.read_valid_char(header_file, ';');
+                    continue;
+                }
+
+                if(param == "ENABLE_TEXTURE"){
+                    string text;
+                    header_file >> text;
+                    
+                    if(text == "True"){
+                        texture = true;
+                    }else{
+                        texture = false;
+                    }
+                    
+                    util_reader.read_valid_char(header_file, ';');
+                    continue;
+                }
+
+                if(param == "REFRACT_DEGREE"){
+                    header_file >> rd;
                     util_reader.read_valid_char(header_file, ';');
                     continue;
                 }
@@ -279,12 +303,13 @@ class ShaderReader{
             if(material == "METAL"){
                 mat = new Metal(albedo);
             }else if(material == "LAMBERTIAN"){
-                mat = new Lambertian(albedo);
+                mat = new Lambertian(albedo, texture);
+            }else if(material == "DIELECTRIC"){
+                mat = new Dielectric(albedo, rd);
             }
 
             return mat;
         }
-
 
         Material *read_material(ifstream &header_file){
             string type;
@@ -298,7 +323,7 @@ class ShaderReader{
             }else if(type == "LAMBERTIAN"){
                 material = read_lambertian_material(header_file);
             }else{ //type == "NORMALS2RGB" || type == "DEPTHCOLOR"
-                material = new Lambertian(vec3(0,0,0));  
+                material = new Lambertian(vec3(0,0,0), false);
                 
             }
 

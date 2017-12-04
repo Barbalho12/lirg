@@ -12,6 +12,7 @@ class Lambertian : public Material{
 		vec3 ambient;
 		vec3 specular;
 		float shininess;
+		bool textureEnable;
 		
 		// Lambertian(const vec3 &attenuation, vec3 & ambient_, vec3 & specular_, float shininess_){
 		// 	albedo = attenuation;
@@ -33,8 +34,9 @@ class Lambertian : public Material{
 			albedo_ = new constant_texture(vec3(1, 0, 0)); 
 		}
 
-		Lambertian(const vec3 &attenuation){
+		Lambertian(const vec3 &attenuation, bool textureEnable_){
 			albedo = attenuation;
+			textureEnable = textureEnable_;
 
 			texture* t1 = new constant_texture(vec3(1, 0, 0)); 
 			texture* t2 = new constant_texture(vec3(0, 0, 1)); 
@@ -53,9 +55,14 @@ class Lambertian : public Material{
 			(void) (r);
 			vec3 target = ht.origin + ht.normal + random_in_unit_sphere();
 			scattered = Ray(ht.origin, target-ht.origin);
-			// attenuation = albedo;
+			if (textureEnable){
+				attenuation = albedo_->value(ht.origin);	
+			}else{
+				attenuation = albedo;
+			}
+
 			// cout << ht.u << ", " << ht.v << ", " << ht.origin << endl;
-			attenuation = albedo_->value(ht.origin);
+			
 			return true;
 		}
 };
