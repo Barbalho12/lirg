@@ -24,6 +24,7 @@
 #include "background.h"
 #include "bp_lambertian_shader.h"
 #include "transformation.h"
+#include "box.h"
 
 using namespace std::chrono;
 using namespace utility;
@@ -84,12 +85,15 @@ class RayTracer{
 			scene = Scene();
 
 			scene.setObjects(reader.objects);
+
+			// scene.addObject(new Box(point3(1,1,1), point3(-1,-1,-1), new Lambertian(rgb(1,0,0))));
+
 			transformation = Transformation();
-			// transformation.scalation(scene.getObject(scene.getObjects().size()-4), 0.5);
-			transformation.translation(scene.getObject(0), 0, -0.1, 0);
+			transformation.scalation(scene.getObject(scene.getObjects().size()-4), 0.5);
+			// transformation.translation(scene.getObject(3), 0, -0.1, 0);
 			// transformation.translation(scene.getObject(scene.getObjects().size()-3), 1, 0, 0);
-			transformation.scalation(scene.getObject(0), 2, 2, 2);
-			transformation.rotation(scene.getObject(0), *scene.getObject(0)->getPoints()[0], 0.0, 15.0, 0.0);
+			// transformation.scalation(scene.getObject(0), 2, 2, 2);
+			// transformation.rotation(scene.getObject(3), *scene.getObject(0)->getPoints()[0], 0.0, 15.0, 0.0);
 			scene.setLights(reader.lights);
 			scene.setNaturalLight(reader.natural_light);
 			scene.setMaxDepht(reader.max_depht);
