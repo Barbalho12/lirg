@@ -455,13 +455,6 @@ class ShaderReader{
 
             ifstream objectDescription(objectPath);
 
-            float x_max =-100000;
-            float x_min =100000;
-            float y_max =-100000;
-            float y_min =100000;
-            float z_max =-100000;
-            float z_min =100000;
-
             while(!objectDescription.eof()){
                 objectDescription >> txt;
 
@@ -472,25 +465,6 @@ class ShaderReader{
                     objectDescription >> z;
 
                     points.push_back(point3(x, y, z));
-
-                    if(x > x_max){
-                        x_max = x;
-                    }
-                    if(y > y_max){
-                        y_max = y;
-                    }
-                    if(z > z_max){
-                        z_max = z;
-                    }
-                    if(x < x_min){
-                        x_min = x;
-                    }
-                    if(y < y_min){
-                        y_min = y;
-                    }
-                    if(z < z_min){
-                        z_min = z;
-                    }
                 }
 
                 if (txt == "f"){
@@ -503,13 +477,9 @@ class ShaderReader{
                 }
             }
 
-            //centro da esfera
-            point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
-
-            //raio
-            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2))/2;
-
-            return new Mash(triangles, new Sphere(center, radius));
+            Mash* mash = new Mash(triangles, "BOX");
+            // Mash* mash = new Mash(triangles, "SPHERE");
+            return mash;
         }
 };
 

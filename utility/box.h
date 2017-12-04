@@ -53,6 +53,21 @@ class Box : public Object {
             material = material_;
         }
 
+        bool its_inside(Object* object){
+            for(unsigned int i = 0; i < object->getPoints().size(); i++){
+
+                point3* p = object->getPoints()[i];
+                bool vx = p->x() <= vertices[0].x() && p->x() >= vertices[7].x();
+                bool vy = p->y() <= vertices[0].y() && p->y() >= vertices[7].y();
+                bool vz = p->z() <= vertices[0].z() && p->z() >= vertices[7].z();
+                if(!(vx && vy && vz)){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
         vector<point3*> getPoints(){
             vector<point3*> points;
             for(unsigned int i = 0; i < triangles.size(); i++){
@@ -61,6 +76,16 @@ class Box : public Object {
                 points.push_back(triangles[i]->getPoints()[2]);
             }
             return points;
+        }
+
+        vector<Object*> content;
+
+        void add_inside(Object* obj){
+            content.push_back(obj);
+        }
+
+        vector<Object*> getContent(){
+            return content;
         }
 
         bool hit(Ray r, float t_min, float t_max, HitRecord &ht){
