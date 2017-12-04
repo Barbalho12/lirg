@@ -1,6 +1,7 @@
 #ifndef _MASH_H_
 #define _MASH_H_
 
+#include <typeinfo>
 #include "object.h"
 #include "vec3.h"
 #include "triangle.h"
@@ -15,17 +16,25 @@ class Mash : public Object {
     public:
 
         vector<Triangle*> mash;
-        Sphere* sphere;
+        // Sphere* sphere;
+        Object* object;
 
         vector<point3*> points;
 
-
-        Mash(vector<Triangle*> mash_, Sphere* sphere_){
+        Mash(vector<Triangle*> mash_, Object* object_){
             mash = mash_;
-            sphere = sphere_;
+            object = object_;
 
             setPoints();
         }
+
+
+        // Mash(vector<Triangle*> mash_, Sphere* sphere_){
+        //     mash = mash_;
+        //     sphere = sphere_;
+
+        //     setPoints();
+        // }
 
         void setPoints(){
             for(unsigned int i = 0; i < mash.size(); i++){
@@ -35,7 +44,13 @@ class Mash : public Object {
             }
         }
 
-        void resizeSphere(){
+        // for(unsigned int i = 0; i < object->getPoints; i++){
+        //         points.push_back(mash[i]->getPoints()[0]);
+        //         points.push_back(mash[i]->getPoints()[1]);
+        //         points.push_back(mash[i]->getPoints()[2]);
+        //     }
+
+        void resizeContainer(){
             float x_max =-100000;
             float x_min =100000;
             float y_max =-100000;
@@ -64,13 +79,18 @@ class Mash : public Object {
                 }
             }
 
-            //centro da esfera
-            point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
+            if(typeid(*object) == typeid(Sphere)){
+                //centro da esfera
+                point3 center = point3((x_max+x_min)/2, (y_max+y_min)/2, (z_max+z_min)/2);
 
-            //raio
-            float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2))/2;
+                //raio
+                float radius = sqrt( pow(x_max - x_min, 2) + pow(y_max-y_min, 2) + pow(z_max-z_min, 2))/2;
 
-            sphere = new Sphere(center, radius);
+                object = new Sphere(center, radius);
+
+            }
+
+            
         }
 
         vector<point3*> getPoints(){
@@ -79,7 +99,7 @@ class Mash : public Object {
 
         bool hit(Ray r, float t_min, float t_max, HitRecord &ht){
             bool result = false;
-            if(sphere->hit(r, t_min, t_max, ht)){
+            if(object->hit(r, t_min, t_max, ht)){
                 for (unsigned int i = 0; i < mash.size(); i++){
                     result =  mash[i]->hit(r, t_min, t_max, ht);
                     if(result){
