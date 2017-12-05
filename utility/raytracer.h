@@ -85,6 +85,7 @@ class RayTracer{
 			scene = Scene();
 
 			scene.setObjects(reader.objects);
+			//scene.addObject(new Sphere(point3(-0.7, 0.5, -1), 0.5, new Diffuse_Light(new constant_texture(vec3(4,4,4)))));
 
 			// scene.addObject(new Box(point3(1,1,1), point3(-1,-1,-1), new Lambertian(rgb(1,0,0))));
 

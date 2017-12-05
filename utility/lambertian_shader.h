@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "shader.h"
+#include "diffuse_light.h"
 
 using namespace utility;
 using namespace std;
@@ -44,10 +45,13 @@ class LambertianShader : public Shader{
 
 		    	Ray scattered;
 		    	vec3 attenuation;
+		    	vec3 emitted = ht.material->emitted(ht.origin);
 		    	if(depth < scene.max_depht && ht.material->scatter(r, ht, attenuation, scattered)){
-		    		return normalize_min_max(attenuation*color_rec(scattered, depth+1)*c1);
+		    		// return normalize_min_max(attenuation*color_rec(scattered, depth+1)*c1);
+		    		return normalize_min_max(emitted + attenuation*color_rec(scattered, depth+1));
 		    	}else{
-		    		return rgb(0,0,0);
+		    		// return rgb(0,0,0);
+		    		return emitted;
 		    	}
 		    }else{
 		    	return scene.background.getColor(r);

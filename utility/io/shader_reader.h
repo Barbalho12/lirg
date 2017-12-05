@@ -16,6 +16,7 @@
 #include "../metal.h"
 #include "../dielectric.h"
 #include "../toon.h"
+#include "../diffuse_light.h"
 #include <cmath>        // sqrt, fabs
 
 #include "io_util_reader.h"
@@ -306,6 +307,8 @@ class ShaderReader{
                 mat = new Lambertian(albedo, texture);
             }else if(material == "DIELECTRIC"){
                 mat = new Dielectric(albedo, rd);
+            }else if(material == "DIFFUSE_LIGHT"){
+                mat = new Diffuse_Light(new constant_texture(albedo));
             }
 
             return mat;
