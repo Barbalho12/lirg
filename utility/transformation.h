@@ -8,8 +8,10 @@
 
 // vec3, vec4, ivec4, mat4
 #include <glm/glm.hpp>
+#include "../glm/glm.hpp"
 // translate, rotate, scale, perspective
-#include <glm/gtc/matrix_transform.hpp>
+// #include <glm/gtc/matrix_transform.hpp>
+#include "../glm/gtc/matrix_transform.hpp"
 
 #include "object.h"
 #include "sphere.h"

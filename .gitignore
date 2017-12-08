@@ -1,4 +1,5 @@
 
+
 build/*
 render
 *.ppm
@@ -38,3 +39,4 @@ render
 # Others
 .DS_Store
 Outras/
+output/

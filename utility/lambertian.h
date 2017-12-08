@@ -38,9 +38,10 @@ class Lambertian : public Material{
 			albedo = attenuation;
 			textureEnable = textureEnable_;
 
-			texture* t1 = new constant_texture(vec3(1, 0, 0)); 
-			texture* t2 = new constant_texture(vec3(0, 0, 1)); 
-			albedo_ = new checker_texture(t1,t2); 
+			// texture* t1 = new constant_texture(vec3(1, 0, 0)); 
+			// texture* t2 = new constant_texture(vec3(0, 0, 1)); 
+			// albedo_ = new checker_texture(t1,t2); 
+			albedo_ = new noise_texture(0.5); 
 		}
 
 		vec3 random_in_unit_sphere() const{
